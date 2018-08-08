@@ -50,6 +50,9 @@
 <!--== responsive -->
 <link href="css/responsive.css" rel="stylesheet" type="text/css" />
 
+<!--== color-customizer -->
+<link href="css/theme-color/theme-yale-blue.css" data-style="styles" rel="stylesheet">
+
 <!-- inject css end -->
 
 </head>
@@ -71,7 +74,7 @@
 
 <!--header start-->
 
-<header id="site-header" class="header">
+<header id="site-header" class="header header-2">
   <div class="top-bar">
     <div class="container">
       <div class="row align-items-center">
@@ -87,13 +90,9 @@
           </div>
         </div>
         <div class="col-md-4 col-sm-6 text-center">
-          <div class="search-box">
-            <form action="contact.html" method="post" class="form-inline my-2 my-lg-0">
-              <input class="form-control" required="" type="search" placeholder="Search">
-              <button class="btn" type="submit"><i class="fas fa-search"></i>
-              </button>
-            </form>
-          </div>
+          <a class="navbar-brand logo mr-0" href="index-default.html">
+              <img id="logo-img2" class="img-center" src="images/logo-yale-blue.png" alt="">
+            </a>          
         </div>
         <div class="col-md-4 col-sm-6 text-right">
           <div class="social-icons social-hover top-social-list text-right">
@@ -119,14 +118,14 @@
           <!-- Navbar -->
           <nav class="navbar navbar-expand-lg">
             <a class="navbar-brand logo" href="index-default.html">
-              <img id="logo-img" class="img-center" src="images/logo.png" alt="">
+              <img id="logo-img" class="img-center" src="images/logo-yale-blue.png" alt="">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
               <!-- Left nav -->
               <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#"><span class="menu-label">Home</span></a>
+                <li class="nav-item active dropdown"> <a class="nav-link dropdown-toggle" href="#"><span class="menu-label">Home</span></a>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="index-default.html">Home 1</a>
                     </li>
@@ -172,7 +171,7 @@
                     </li>
                   </ul>
                 </li>
-                <li class="nav-item active dropdown fullwidth">
+                <li class="nav-item dropdown fullwidth">
                   <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <span class="menu-label">Element</span>
                   </a>
                   <ul class="dropdown-menu grid-12">
@@ -319,71 +318,239 @@
 <!--header end-->
 
 
-<!--page title start-->
+<!--hero section start-->
 
-<section class="page-title o-hidden text-center jarallax" data-overlay="7" data-bg-img="images/bg/02.jpg" data-speed="-0.2">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-md-12 ml-auto mr-auto">
-        <h1 class="title mb-0">Shortcode <span>Counter</span></h1>
+<section class="fullscreen-banner p-0 o-hidden">
+  <div id="slider" class="sl-slider-wrapper">
+    <div class="sl-slider">
+      <div class="sl-slide sl-trans-elems" data-orientation="horizontal" data-slice1-rotation="-25" data-slice2-rotation="-25" data-slice1-scale="2" data-slice2-scale="2">
+        <div class="sl-slide-inner" data-bg-img="images/bg/05.jpg" data-overlay="7"></div>
+      </div>
+      <div class="sl-slide" data-orientation="vertical" data-slice1-rotation="10" data-slice2-rotation="-15" data-slice1-scale="1.5" data-slice2-scale="1.5">
+        <div class="sl-slide-inner" data-bg-img="images/bg/04.jpg" data-overlay="7"></div>
+      </div>
+      <div class="sl-slide" data-orientation="horizontal" data-slice1-rotation="3" data-slice2-rotation="3" data-slice1-scale="2" data-slice2-scale="1">
+        <div class="sl-slide-inner" data-bg-img="images/bg/06.jpg" data-overlay="7"></div>
       </div>
     </div>
-    <nav aria-label="breadcrumb" class="page-breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="index-default.html"><i class="fas fa-home"></i></a>
-        </li>
-        <li class="breadcrumb-item"><a href="#">Element</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Shortcode Counter</li>
-      </ol>
-    </nav>
+    <!-- /sl-slider -->
+  </div>
+  <!-- /slider-wrapper -->
+  <div class="align-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-10 col-lg-10 col-md-12 ml-auto mr-auto">
+          <div class="banner-text">
+            <img id="bnr-logo" class="img-center animated11" src="images/logo-m.png" alt="">
+            <h1 class="text-white mb-4 animated6">The Largest Industrial <span>Company</span></h1> 
+            <p class="lead text-white animated5">Misto has provide Best Service our dolor sit amet,
+              <br>consectetur adipisicing elit.</p> <a class="btn btn-theme btn-radius animated7" href="about-us.html">Learn More</a>
+            <a class="btn btn-border btn-radius animated6" href="contact-1.html">Contact US</a>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
-<!--page title end-->
+<!--hero section end-->
 
 
 <!--body content start-->
 
 <div class="page-content">
 
-<!--counter style1 start-->
+<!--service start-->
 
-<section class="text-center">
+<section>
   <div class="container">
     <div class="row">
-      <div class="col-lg-3 col-sm-6">
-        <div class="counter"> <i class="flaticon-innovation"></i>
-          <span class="count-number" data-to="150" data-speed="10000">150</span>
-          <label>Projects</label>
+      <div class="col-lg-4 col-md-6">
+        <div class="service-box">
+          <div class="service-flip theme-bg">
+          <div class="service-flip-images service-flip-front" data-bg-img="images/service/01.jpg">
+            <div class="service-flip-title">
+              <h5>Chemical Research</h5>
+            </div>
+            <div class="flip-icon"> <i class="flaticon-industrial-robot"></i>
+            </div>
+          </div>
+          <div class="service-flip-desc service-flip-back">
+            <div class="service-flip-text"> <i class="flaticon-industrial-robot"></i>
+              <p>Modern society consumes, consectetur adipisicing elit. Id quae quos cum consequuntur maiores possimus fugiat repellat totam.</p> <a class="btn-simple" href="chemical-research.html">Read More <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
-        <div class="counter"> <i class="flaticon-pencil"></i>
-          <span class="count-number" data-to="175" data-speed="10000">175</span>
-          <label>Success Project</label>
+      </div>
+      <div class="col-lg-4 col-md-6 sm-mt-5">
+        <div class="service-box">
+          <div class="service-flip theme-bg">
+          <div class="service-flip-images service-flip-front" data-bg-img="images/service/02.jpg">
+            <div class="service-flip-title">
+              <h5>Energy & Power Engineering</h5>
+            </div>
+            <div class="flip-icon"> <i class="flaticon-maintenance"></i>
+            </div>
+          </div>
+          <div class="service-flip-desc service-flip-back">
+            <div class="service-flip-text"> <i class="flaticon-maintenance"></i>
+              <p>Modern society consumes, consectetur adipisicing elit. Id quae quos cum consequuntur maiores possimus fugiat repellat totam.</p> <a class="btn-simple" href="energy-&-power-engineering.html">Read More <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
-        <div class="counter md-mt-3"> <i class="flaticon-coffee-cup"></i>
-          <span class="count-number" data-to="344" data-speed="10000">344</span>
-          <label>Coffee Cup</label>
+      <div class="col-lg-4 col-md-6 md-mt-5">
+        <div class="service-box">
+          <div class="service-flip theme-bg">
+          <div class="service-flip-images service-flip-front" data-bg-img="images/service/03.jpg">
+            <div class="service-flip-title">
+              <h5>Petroleum and Gas</h5>
+            </div>
+            <div class="flip-icon"> <i class="flaticon-fuel-station"></i>
+            </div>
+          </div>
+          <div class="service-flip-desc service-flip-back">
+            <div class="service-flip-text"> <i class="flaticon-fuel-station"></i>
+              <p>Modern society consumes, consectetur adipisicing elit. Id quae quos cum consequuntur maiores possimus fugiat repellat totam.</p> <a class="btn-simple" href="petroleum-and-gas.html">Read More <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
-        <div class="counter md-mt-3"> <i class="flaticon-employee"></i>
-          <span class="count-number" data-to="125" data-speed="10000">125</span>
-          <label>Happy Clients</label>
+      <div class="col-lg-4 col-md-6 mt-5">
+        <div class="service-box">
+          <div class="service-flip theme-bg">
+          <div class="service-flip-images service-flip-front" data-bg-img="images/service/04.jpg">
+            <div class="service-flip-title">
+              <h5>Agriculture Engineering</h5>
+            </div>
+            <div class="flip-icon"> <i class="flaticon-growth"></i>
+            </div>
+          </div>
+          <div class="service-flip-desc service-flip-back">
+            <div class="service-flip-text"> <i class="flaticon-growth"></i>
+              <p>Modern society consumes, consectetur adipisicing elit. Id quae quos cum consequuntur maiores possimus fugiat repellat totam.</p> <a class="btn-simple" href="agriculture-engineering.html">Read More <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mt-5">
+        <div class="service-box">
+          <div class="service-flip theme-bg">
+          <div class="service-flip-images service-flip-front" data-bg-img="images/service/05.jpg">
+            <div class="service-flip-title">
+              <h5>Mechanical Engineering</h5>
+            </div>
+            <div class="flip-icon"> <i class="flaticon-settings"></i>
+            </div>
+          </div>
+          <div class="service-flip-desc service-flip-back">
+            <div class="service-flip-text"> <i class="flaticon-settings"></i>
+              <p>Modern society consumes, consectetur adipisicing elit. Id quae quos cum consequuntur maiores possimus fugiat repellat totam.</p> <a class="btn-simple" href="mechanical-engineering.html">Read More <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mt-5">
+        <div class="service-box">
+          <div class="service-flip theme-bg">
+          <div class="service-flip-images service-flip-front" data-bg-img="images/service/06.jpg">
+            <div class="service-flip-title">
+              <h5>Civil Engineering</h5>
+            </div>
+            <div class="flip-icon"> <i class="flaticon-worker"></i>
+            </div>
+          </div>
+          <div class="service-flip-desc service-flip-back">
+            <div class="service-flip-text"> <i class="flaticon-worker"></i>
+              <p>Modern society consumes, consectetur adipisicing elit. Id quae quos cum consequuntur maiores possimus fugiat repellat totam.</p> <a class="btn-simple" href="civil-engineering.html">Read More <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!--counter style1 end-->
+<!--service end-->
 
 
-<!--counter style2 start-->
+<!--about us start-->
+
+<section class="grey-bg">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-lg-8 col-md-10 ml-auto mr-auto">
+        <div class="section-title">
+          <h2 class="title">about <span>Company</span></h2>
+          <p>Misto Provide Greate Services for elit. Excepturi vero aliquam id. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <div class="col-lg-6 col-md-12">
+        <div class="owl-carousel box-shadow owl-theme no-pb" data-dots="false" data-nav="true" data-items="1" data-autoplay="true">
+          <div class="item">
+            <img class="img-fluid w-100" src="images/about/02.jpg" alt="">
+          </div>
+          <div class="item">
+            <img class="img-fluid w-100" src="images/about/04.jpg" alt="">
+          </div>
+          <div class="item">
+            <img class="img-fluid w-100" src="images/about/03.jpg" alt="">
+          </div>
+          <div class="item">
+            <img class="img-fluid w-100" src="images/about/01.jpg" alt="">
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-12 md-mt-5">
+        <div id="accordion" class="accordion style-1">
+          <div class="card active">
+            <div class="card-header">
+              <h6 class="mb-0">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" aria-expanded="true">consectetur adipisicing elit, sed ?</a>
+              </h6>
+            </div>
+            <div id="collapse1" class="collapse show" data-parent="#accordion">
+              <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmodas temporo incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, Duis aute dolor in reprehenderit.</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">temporo incididunt ut labore et dolore ?</a>
+              </h6>
+            </div>
+            <div id="collapse2" class="collapse" data-parent="#accordion">
+              <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmodas temporo incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, Duis aute dolor in reprehenderit.</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">
+              <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">quis nostrd exercitation ullamco laboris ?</a>
+              </h6>
+            </div>
+            <div id="collapse3" class="collapse" data-parent="#accordion">
+              <div class="card-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmodas temporo incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, Duis aute dolor in reprehenderit.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--about us end-->
+
+
+<!--counter start-->
 
 <section class="text-center grey-bg">
   <div class="container">
@@ -416,43 +583,170 @@
   </div>
 </section>
 
-<!--counter style2 end-->
+<!--counter end-->
 
 
-<!--counter style3 start-->
+<!--progress start-->
 
-<section class="pb-17 sm-pb-8">
+<section class="dark-bg pos-r">
+  <div class="side-background side-image">
+    <div class="row">
+      <div class="col-lg-6 img-side img-left" style="background: url(images/bg/03.jpg) no-repeat left center; background-size: cover;"></div>
+    </div>
+  </div>
   <div class="container">
     <div class="row">
-      <div class="col-lg-3 col-sm-6">
-        <div class="counter style-3 md-mt-3"> <i class="flaticon-innovation"></i>
-          <span class="count-number" data-to="150" data-speed="10000">150</span>
-          <label>Projects</label>
+      <div class="col-lg-6 col-md-12 ml-auto pl-lg-5">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="section-title mb-4">
+              <h2 class="title">Core <span>Feuture</span></h2>
+            </div>
+            <p class="line-h-3 text-white">Misto have facility to produce adipisicing elit, Excepturi vero aliquam id. Lorem ipsum dolor sit amet, consectetur adipisicing elit, Excepturi vero minima impedit adipisicing elit, impedit aliquam systems.</p>
+            <div class="row text-white mt-5">
+      <div class="col-md-6 col-sm-6">
+        <div class="featured-item text-left p-0">
+          <div class="featured-icon"> <i class="flaticon-innovation text-theme"></i>
+          </div>
+          <div class="featured-title text-uppercase">
+            <h5>Latest Technology</h5>
+          </div>
+          <div class="featured-desc">
+            <p>Fringilla augue at maximus vestibulum. Nam pulvinar vitae neque et porttitor. Praesent sed nisi eleifend.</p>
+          </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
-        <div class="counter style-3 md-mt-3"> <i class="flaticon-pencil"></i>
-          <span class="count-number" data-to="175" data-speed="10000">175</span>
-          <label>Success Project</label>
+      <div class="col-md-6 col-sm-6 xs-mt-5">
+        <div class="featured-item text-left p-0">
+          <div class="featured-icon"> <i class="flaticon-innovation-1 text-theme"></i>
+          </div>
+          <div class="featured-title text-uppercase">
+            <h5>Easy And Fast</h5>
+          </div>
+          <div class="featured-desc">
+            <p>Fringilla augue at maximus vestibulum. Nam pulvinar vitae neque et porttitor. Praesent sed nisi eleifend.</p>
+          </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
-        <div class="counter style-3 md-mt-3"> <i class="flaticon-coffee-cup"></i>
-          <span class="count-number" data-to="344" data-speed="10000">344</span>
-          <label>Coffee Cup</label>
+      <div class="col-md-6 col-sm-6 mt-5">
+        <div class="featured-item text-left p-0">
+          <div class="featured-icon"> <i class="flaticon-employee text-theme"></i>
+          </div>
+          <div class="featured-title text-uppercase">
+            <h5>Expert Team</h5>
+          </div>
+          <div class="featured-desc">
+            <p>Fringilla augue at maximus vestibulum. Nam pulvinar vitae neque et porttitor. Praesent sed nisi eleifend.</p>
+          </div>
         </div>
       </div>
-      <div class="col-lg-3 col-sm-6">
-        <div class="counter style-3 md-mt-3"> <i class="flaticon-employee"></i>
-          <span class="count-number" data-to="125" data-speed="10000">125</span>
-          <label>Happy Clients</label>
+      <div class="col-md-6 col-sm-6 mt-5">
+        <div class="featured-item text-left p-0">
+          <div class="featured-icon"> <i class="flaticon-chat-bubble text-theme"></i>
+          </div>
+          <div class="featured-title text-uppercase">
+            <h5>Always Connected</h5>
+          </div>
+          <div class="featured-desc">
+            <p>Fringilla augue at maximus vestibulum. Nam pulvinar vitae neque et porttitor. Praesent sed nisi eleifend.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!--counter style3 end-->
+<!--progress end-->
+
+
+<!--team start-->
+
+<section>
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-lg-8 col-md-10 ml-auto mr-auto">
+        <div class="section-title">
+          <h2 class="title">Our <span> Engineers</span></h2>
+          <p class="mb-0">Misto Engineers Services for elit. Excepturi vero aliquam id. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-md-12">
+        <div class="team-member text-center style-2">
+          <div class="team-images">
+            <img class="img-fluid" src="images/team/01.jpg" alt="">
+          </div>
+          <div class="team-description"> <span>Architect</span>
+            <h5><a href="team-single.html">John Maxwell</a></h5> 
+            <div class="team-social-icon">
+              <ul>
+                <li><a href="#"><i class="fab fa-facebook-f"></i></a>
+                </li>
+                <li><a href="#"><i class="fab fa-twitter"></i></a>
+                </li>
+                <li><a href="#"><i class="fab fa-google-plus-g"></i></a>
+                </li>
+                <li><a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-12 md-mt-5">
+        <div class="team-member text-center style-2">
+          <div class="team-images">
+            <img class="img-fluid" src="images/team/04.jpg" alt="">
+          </div>
+          <div class="team-description"> <span>Mechanical</span>
+            <h5><a href="team-single.html">Matthew Doe</a></h5> 
+            <div class="team-social-icon">
+              <ul>
+                <li><a href="#"><i class="fab fa-facebook-f"></i></a>
+                </li>
+                <li><a href="#"><i class="fab fa-twitter"></i></a>
+                </li>
+                <li><a href="#"><i class="fab fa-google-plus-g"></i></a>
+                </li>
+                <li><a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-12 md-mt-5">
+        <div class="team-member text-center style-2">
+          <div class="team-images">
+            <img class="img-fluid" src="images/team/03.jpg" alt="">
+          </div>
+          <div class="team-description"> <span>Manager</span>
+            <h5><a href="team-single.html">Romi Keely</a></h5> 
+            <div class="team-social-icon">
+              <ul>
+                <li><a href="#"><i class="fab fa-facebook-f"></i></a>
+                </li>
+                <li><a href="#"><i class="fab fa-twitter"></i></a>
+                </li>
+                <li><a href="#"><i class="fab fa-google-plus-g"></i></a>
+                </li>
+                <li><a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!--team end-->
 
 </div>
 
@@ -461,37 +755,36 @@
 
 <!--footer start-->
 
-<footer class="footer dark-bg pt-10 sm-pt-8 pos-r" data-bg-img="images/bg/09.png" style="background-size: contain; background-repeat: no-repeat;">
-  <div class="contact-media">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <ul class="media-icon style-2 list-inline theme-bg">
-            <li> <i class="flaticon-paper-plane"></i>
-              <span>Address:</span>
-              <p class="mb-0">423B, Road Wordwide Country, USA</p>
-            </li>
-            <li> <i class="flaticon-phone-call"></i>
-              <span>Phone:</span>
-              <a href="tel:+912345678900">+91-234-567-8900</a>
-            </li>
-            <li> <i class="flaticon-message"></i>
-              <span>Email:</span>
-              <a href="mailto:htinfotech7@gmail.com">htinfotech7@gmail.com</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+<footer class="footer footer-2 dark-bg pos-r">
   <div class="primary-footer">
     <div class="container">
       <div class="row">
         <div class="col-lg-3 col-md-6">
-          <h5>About <span class="text-theme"> Industrial</span></h5>
-          <p class="mb-3">Misto Industrial is fully responsible, Performance oriented theme. Build whatever you like with the Misto. Misto is the creative, modern and multipurpose HTML5 Template suitable for Your business.</p> <a class="btn-simple" href="#"><span>Read More <i class="ml-2 fas fa-long-arrow-alt-right"></i></span></a>
+          <div class="footer-logo mb-3">
+            <img id="footer-logo-img" class="img-center" src="images/logo-yale-blue.png" alt="">
+          </div>
+          <p class="mb-3">Misto Industrial is fully responsible, Performance oriented theme. Misto is the creative, modern and multipurpose HTML5 Template suitable for Your business.</p>
+          <ul class="list-unstyled working-hours clearfix">
+            <li><span>Monday - Friday</span> 10:00 to 6:00</li>
+            <li><span>Sunday</span> Closed</li>
+          </ul>
         </div>
-        <div class="col-lg-3 col-md-6 sm-mt-5 footer-list">
+        <div class="col-lg-3 col-md-6 sm-mt-5 footer-list pl-md-5">
+          <h5>Quick <span class="text-theme"> Link</span></h5>          
+          <ul class="list-unstyled">
+            <li><a href="#"><i class="fas fa-angle-right"></i> About Us</a>
+            </li>
+            <li><a href="#"><i class="fas fa-angle-right"></i> Contact Us</a>
+            </li>
+            <li><a href="#"><i class="fas fa-angle-right"></i> Our Team</a>
+            </li>
+            <li><a href="#"><i class="fas fa-angle-right"></i> Privacy Policy</a>
+            </li>
+            <li><a href="#"><i class="fas fa-angle-right"></i> Terms And Conditions</a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-lg-3 col-md-6 md-mt-5 footer-list">
           <h5>Our <span class="text-theme"> Solutions</span></h5>
           <ul class="list-unstyled">
             <li><a href="chemical-research.html"><i class="fas fa-angle-right"></i> Chemical Research</a>
@@ -531,25 +824,20 @@
             </ul>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 md-mt-5">
-          <h5>Working <span class="text-theme"> hours</span></h5>
-          <p>Misto Working Hours amet elit, sed do eiusmod tempor dolore.</p>
-          <ul class="list-unstyled working-hours clearfix">
-            <li><span>Monday - Friday</span> 10:00 to 6:00</li>
-            <li><span>Sunday</span> Closed</li>
+      </div>
+      <div class="row mt-5 ">
+        <div class="col-md-12">
+          <ul class="media-icon style-2 list-inline theme-bg">
+            <li> <span>Address:</span>
+              <p class="mb-0">423B, Road Wordwide Country, USA</p>
+            </li>
+            <li class="white-bg"> <span>Phone:</span>
+              <a href="tel:+912345678900">+91-234-567-8900</a>
+            </li>
+            <li> <span>Email:</span>
+              <a href="mailto:htinfotech7@gmail.com">htinfotech7@gmail.com</a>
+            </li>
           </ul>
-          <div class="social-icons social-colored mt-3">
-              <ul class="list-inline mb-0">
-                <li class="social-facebook"><a href="#"><i class="fab fa-facebook-f" aria-hidden="true"></i></a>
-                </li>
-                <li class="social-twitter"><a href="#"><i class="fab fa-twitter" aria-hidden="true"></i></a>
-                </li>
-                <li class="social-gplus"><a href="#"><i class="fab fa-google-plus-g" aria-hidden="true"></i></a>
-                </li>
-                <li class="social-linkedin"><a href="#"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
-                </li>
-              </ul>
-            </div>
         </div>
       </div>
     </div>
@@ -557,15 +845,8 @@
   <div class="secondary-footer">
     <div class="container">
       <div class="copyright">
-        <div class="row align-items-center">
-          <div class="col-md-7">
-           <span>Copyright 2018 Misto Theme by <a target="_blank" href="www.themeht.com"> ThemeHt </a> | All Rights Reserved</span>
-          </div>
-          <div class="col-md-5 text-md-right sm-mt-3 footer-list">
-            <ul class="list-inline">
-              <li><a href="terms-and-conditions.html">Terms & Condition</a></li>
-              <li><a href="privacy-policy.html">Privacy Policy</a></li>
-            </ul>
+        <div class="row text-center">
+          <div class="col-md-12"> <span>Copyright 2018 Misto Theme by <a target="_blank" href="www.themeht.com"> ThemeHt </a> | All Rights Reserved</span>
           </div>
         </div>
       </div>
@@ -578,7 +859,7 @@
 
 </div>
 
-<!--page wrapper end-->
+<!-- page wrapper end -->
 
 
 <!-- get a quote start -->
@@ -686,4 +967,5 @@
 <!-- inject js end -->
 
 </body>
+
 </html>
