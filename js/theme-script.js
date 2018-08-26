@@ -200,7 +200,7 @@ function magnificpopup() {
     image: {
       tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
       titleSrc: function (item) {
-        return item.el.attr('title') + '<small>by Marsel Van Oosten</small>';
+        return item.el.attr('title') + '<small>by 태양천 그루빙</small>';
       }
     }
   });
