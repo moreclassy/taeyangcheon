@@ -101,9 +101,10 @@
         <div class="col-lg-12">
           <!-- Navbar -->
           <nav class="navbar navbar-expand-lg">
-            <!--<a class="navbar-brand logo" href="index.html">
-              <img id="logo-img" class="img-center" src="images/logo-yale-blue.png" alt="">
-            </a>-->
+            <a class="navbar-brand logo" href="index.html">
+              <h1>태양천 그루빙</h1>
+              <!-- <img id="logo-img" class="img-center" src="images/logo-yale-blue.png" alt=""> -->
+            </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -155,26 +156,24 @@
           <div class="contact-main">
             <h2 class="title mb-4">Contact Us For <span>Help</span></h2> 
             <form id="contact-form" method="post" action="php/contact.php">
-              <!-- "bruno" 브루 밑에 data-error, placeholder들 전부다 한글로 바꿔주삼!! -->
               <div class="messages"></div>
               <div class="form-group">
-                <input id="form_name" type="text" name="name" class="form-control" placeholder="User Name" required="required" data-error="Username is required.">
+                <input id="form_name" type="text" name="name" class="form-control" placeholder="이름" required="required" data-error="Username is required.">
                 <div class="help-block with-errors"></div>
               </div>
               <div class="form-group">
-                <input id="form_email" type="email" name="email" class="form-control" placeholder="Email" required="required" data-error="Valid email is required.">
+                <input id="form_email" type="email" name="email" class="form-control" placeholder="이메일" required="required" data-error="Valid email is required.">
                 <div class="help-block with-errors"></div>
               </div>
               <div class="form-group">
-                <input id="form_phone" type="tel" name="phone" class="form-control" placeholder="Phone" required="required" data-error="Phone is required">
+                <input id="form_phone" type="tel" name="phone" class="form-control" placeholder="전화번호" required="required" data-error="Phone is required">
                 <div class="help-block with-errors"></div>
               </div>
               <div class="form-group">
-                <textarea id="form_message" name="message" class="form-control" placeholder="Message" rows="4" required="required" data-error="Please,leave us a message."></textarea>
+                <textarea id="form_message" name="message" class="form-control" placeholder="문의내용" rows="4" required="required" data-error="Please,leave us a message."></textarea>
                 <div class="help-block with-errors"></div>
               </div>
-              <!-- "bruno" Submit Now도 메일 보내기 등으로 바꾸기!! -->
-              <button class="btn btn-border btn-radius"><span>Submit Now</span></button>
+              <button class="btn btn-border btn-radius"><span>문의하기</span></button>
             </form>
           </div>
         </div>
