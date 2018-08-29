@@ -155,6 +155,7 @@
           <div class="contact-main">
             <h2 class="title mb-4">Contact Us For <span>Help</span></h2> 
             <form id="contact-form" method="post" action="php/contact.php">
+              <!-- "bruno" 브루 밑에 data-error, placeholder들 전부다 한글로 바꿔주삼!! -->
               <div class="messages"></div>
               <div class="form-group">
                 <input id="form_name" type="text" name="name" class="form-control" placeholder="User Name" required="required" data-error="Username is required.">
@@ -172,7 +173,8 @@
                 <textarea id="form_message" name="message" class="form-control" placeholder="Message" rows="4" required="required" data-error="Please,leave us a message."></textarea>
                 <div class="help-block with-errors"></div>
               </div>
-              <!--<button class="btn btn-border btn-radius"><span>Submit Now</span></button>-->
+              <!-- "bruno" Submit Now도 메일 보내기 등으로 바꾸기!! -->
+              <button class="btn btn-border btn-radius"><span>Submit Now</span></button>
             </form>
           </div>
         </div>

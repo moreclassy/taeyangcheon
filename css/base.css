@@ -393,3 +393,5 @@ font-style: normal;
 .flaticon-trophy:before { content: "\f125"; }
 .flaticon-growth:before { content: "\f126"; }
 .flaticon-innovation:before { content: "\f127"; }
+.paddingleft20 { padding-left: 20px; }
+.bottom20 { margin-bottom: 20px; }

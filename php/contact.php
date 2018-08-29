@@ -4,23 +4,28 @@
  */
 
 // an email address that will be in the From field of the email.
-$from = 'Demo contact form <demo@domain.com>';
+// "bruno" 100win12@naver.com -> 받을 메일주소 넣기
+$from = 'Demo contact form <100win12@naver.com>';
 
 // an email address that will receive the email with the output of the form
-$sendTo = 'Demo contact form <demo@domain.com>';
+// "bruno" 100win12@naver.com -> 받을 메일주소 넣기
+$sendTo = 'Demo contact form <100win12@naver.com>';
 
 // subject of the email
-$subject = 'New message from contact form';
+// "bruno" 홈페이지에서 보낸 메일 제목 !! 
+$subject = '홈페이지 Contact이 왔습니다.';
 
 // form field names and their translations.
 // array variable name => Text to appear in the email
 $fields = array('name' => 'Name', 'surname' => 'Surname', 'phone' => 'Phone', 'email' => 'Email', 'message' => 'Message'); 
 
 // message that will be displayed when everything is OK :)
-$okMessage = 'Contact form successfully submitted. Thank you, I will get back to you soon!';
+// "bruno" 메일 보내기 성공시 멘트!!
+$okMessage = '감사합니다!';
 
 // If something goes wrong, we will display this message.
-$errorMessage = 'There was an error while submitting the form. Please try again later';
+// "bruno" 메일 보내기 실패시 멘트
+$errorMessage = '다시 작성해주세요!';
 
 /*
  *  LET'S DO THE SENDING

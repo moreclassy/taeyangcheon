@@ -523,7 +523,7 @@ transform: translateX(-50%); -webkit-transform: translateX(-50%) translateY(50%)
 /* ------------------------
     Portfolio
 ------------------------*/
-.portfolio-filter {overflow: hidden; display: inline-block; margin:0 auto 50px; text-align: center;}
+.portfolio-filter {overflow: hidden; display: inline-block; width: 100%; margin:0 auto 50px; text-align: center;}
 .portfolio-filter button {position: relative; cursor: pointer; padding: 8px 10px; border:none; border-bottom: 2px solid transparent; font-size: 16px; font-weight: 600; background: transparent; color: #282925; float: left; text-transform: uppercase;}
 .portfolio-filter button:focus {outline: none; outline-style: none; outline-offset:0; }
 .portfolio-filter button.is-checked, .portfolio-filter button:hover {color: #f9a305; border-color: #f9a305}
