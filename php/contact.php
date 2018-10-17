@@ -4,10 +4,10 @@
  */
 
 // an email address that will be in the From field of the email.
-$from = 'Demo contact form <taeyangcheun@naver.com>';
+$from = 'taeyangcheun@naver.com';
 
 // an email address that will receive the email with the output of the form
-$sendTo = 'Demo contact form <taeyangcheun@naver.com>';
+$sendTo = 'taeyangcheun@naver.com';
 
 // subject of the email
 $subject = '홈페이지 태양천 문의';
