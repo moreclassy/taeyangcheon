@@ -83,4 +83,7 @@ ssh taeyang 'PW=$(sed -n "s/.*'"'"'pass'"'"' => '"'"'\([^'"'"']*\)'"'"'.*/\1/p" 
 - 이미지는 커밋 전에 긴 변 1920px(갤러리 large는 1600px), JPEG 품질 82 정도로 줄여서 넣기. 원본 촬영 파일을 그대로 올리지 말 것
 - 갤러리 그리드의 폴백 `<img>`에는 `loading="lazy"`를 넣지 말 것 (isotope가 높이를 계산하기 전에 로드돼야 함). 그 외 본문 이미지는 lazy 사용
 - 페이지별 `<title>`/`description`/canonical/OG 태그가 있으니 페이지를 추가하면 같이 채우고 `sitemap.xml`에도 URL 추가
+- `cases.html`(현장 유형별 시공 사례)은 `images/portfolio/field/` 사진을 앵커 `#school #curve #slope #busstop #golf #parking #harbor` 7개 섹션으로 묶은 정적 페이지. 페이지 전용 CSS는 파일 안 `<style>`에 있음. 갤러리 DB와 연동되지 않으므로 사례를 추가하려면 HTML 직접 수정
+- 교통사고 통계 문구(`index.html` 아코디언, `about.html`)는 2024년 사망자 2,521명·10만 명당 5.3명, 2025년 2,549명 기준(2026-09-18 갱신). 매년 초 도로교통공단 발표 후 갱신
+- `.htaccess` 보안 헤더: HSTS(1년, includeSubDomains 없음), nosniff, X-Frame-Options SAMEORIGIN, Permissions-Policy. Referrer-Policy 는 정적 파일에만 걸어 `admin/index.php` 의 PHP 헤더와 충돌하지 않게 함
 - 로컬 미리보기: `.claude/launch.json`의 `static` (python http.server 8765). PHP(갤러리 API, 문의 폼)는 로컬에서 동작하지 않고 HTML 폴백만 보임
