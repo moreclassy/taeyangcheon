@@ -8,6 +8,10 @@
  *   POST action=delete   (id)
  *   POST action=password (current, new)
  *   POST action=logout
+ *   GET  ?action=records            시공 실적 전체(비공개 포함)
+ *   POST action=record_save         (id[0=신규], work_month, site_name, location, client, site_type, method, scale, note, photo_id, is_public)
+ *   POST action=record_public       (id, is_public)
+ *   POST action=record_delete       (id)
  */
 declare(strict_types=1);
 require __DIR__ . '/../php/gallery/lib.php';
@@ -24,6 +28,9 @@ try {
     if ($method === 'GET') {
         if ($action === 'list') {
             gallery_json(['items' => gallery_list(), 'categories' => gallery_categories()]);
+        }
+        if ($action === 'records') {
+            gallery_json(['items' => gallery_records_list(false), 'types' => gallery_record_types(), 'methods' => gallery_record_methods()]);
         }
         gallery_json(['error' => '알 수 없는 요청'], 400);
     }
@@ -56,6 +63,18 @@ try {
 
         case 'delete':
             gallery_delete((int) ($_POST['id'] ?? 0));
+            gallery_json(['ok' => true]);
+
+        case 'record_save':
+            $id = gallery_record_save($_POST);
+            gallery_json(['ok' => true, 'item' => gallery_record_get($id)]);
+
+        case 'record_public':
+            gallery_record_set_public((int) ($_POST['id'] ?? 0), !empty($_POST['is_public']));
+            gallery_json(['ok' => true, 'item' => gallery_record_get((int) ($_POST['id'] ?? 0))]);
+
+        case 'record_delete':
+            gallery_record_delete((int) ($_POST['id'] ?? 0));
             gallery_json(['ok' => true]);
 
         case 'password':

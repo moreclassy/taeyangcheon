@@ -1,4 +1,4 @@
-/* 갤러리 관리자 UI */
+/* 갤러리 · 시공 실적 관리자 UI */
 (function () {
   'use strict';
   var body = document.body;
@@ -238,5 +238,115 @@
     api('logout').then(function () { location.reload(); }).catch(function () { location.reload(); });
   });
 
-  loadList();
+  // ---------- 시공 실적 ----------
+  var recTypes = JSON.parse(body.dataset.recordTypes || '{}');
+  var recMethods = JSON.parse(body.dataset.recordMethods || '{}');
+  var records = [];
+  var recFilter = '';
+  var recForm = $('#rec-form'), recList = $('#rec-list'), recTpl = $('#record-tpl'), recStatus = $('#rec-status');
+
+  function fillSelect(sel, map, selected) {
+    sel.innerHTML = '';
+    Object.keys(map).forEach(function (k) {
+      var o = document.createElement('option'); o.value = k; o.textContent = map[k]; o.selected = k === selected; sel.appendChild(o);
+    });
+  }
+  function fillPhotoSelect(selectedId) {
+    var sel = recForm.photo_id;
+    sel.innerHTML = '<option value="0">(없음)</option>';
+    items.forEach(function (it) {
+      var o = document.createElement('option'); o.value = it.id;
+      o.textContent = (it.title || '(제목 없음)') + ' · ' + it.label;
+      o.selected = it.id === selectedId; sel.appendChild(o);
+    });
+  }
+  function ym(m) { return m ? m.replace('-', '.') : '시기 미정'; }
+
+  (function () {
+    var c = $('#rec-filter');
+    [['', '전체'], ['pub', '공개'], ['draft', '비공개']].forEach(function (pair) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip' + (pair[0] === '' ? ' on' : ''); b.textContent = pair[1];
+      b.addEventListener('click', function () {
+        $$('.chip', c).forEach(function (x) { x.classList.toggle('on', x === b); });
+        recFilter = pair[0]; renderRecords();
+      });
+      c.appendChild(b);
+    });
+  })();
+
+  function openRecForm(rec) {
+    rec = rec || {};
+    recForm.id.value = rec.id || 0;
+    recForm.site_name.value = rec.site_name || '';
+    recForm.work_month.value = rec.work_month || '';
+    recForm.location.value = rec.location || '';
+    recForm.client.value = rec.client || '';
+    fillSelect(recForm.site_type, recTypes, rec.site_type || 'other');
+    fillSelect(recForm.method, recMethods, rec.method || 'long');
+    recForm.scale.value = rec.scale || '';
+    recForm.note.value = rec.note || '';
+    fillPhotoSelect(rec.photo_id || 0);
+    recForm.is_public.checked = rec.id ? !!rec.is_public : true;
+    recStatus.className = 'status'; recStatus.textContent = '';
+    recForm.hidden = false;
+    recForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    recForm.site_name.focus();
+  }
+  $('#rec-add').addEventListener('click', function () { openRecForm(null); });
+  $('#rec-cancel').addEventListener('click', function () { recForm.hidden = true; });
+
+  recForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var fd = new FormData(recForm);
+    fd.set('is_public', recForm.is_public.checked ? '1' : '0');
+    recStatus.className = 'status'; recStatus.textContent = '저장 중…';
+    api('record_save', fd).then(function () {
+      recForm.hidden = true; toast('저장했습니다'); return loadRecords();
+    }).catch(function (err) { recStatus.className = 'status err'; recStatus.textContent = err.message; });
+  });
+
+  function loadRecords() {
+    return api('records', null, { method: 'GET' }).then(function (j) {
+      records = j.items || []; renderRecords();
+    }).catch(function (e) { recList.innerHTML = '<p class="empty">' + esc(e.message) + '</p>'; });
+  }
+
+  function renderRecords() {
+    var shown = records.filter(function (r) { return !recFilter || (recFilter === 'pub' ? r.is_public : !r.is_public); });
+    var pub = records.filter(function (r) { return r.is_public; }).length;
+    $('#rec-count').textContent = '공개 ' + pub + ' / 전체 ' + records.length;
+    recList.innerHTML = '';
+    if (!shown.length) { recList.innerHTML = '<p class="empty">실적이 없습니다.</p>'; return; }
+    shown.forEach(function (r) { recList.appendChild(renderRecord(r)); });
+  }
+
+  function renderRecord(r) {
+    var node = recTpl.content.firstElementChild.cloneNode(true);
+    node.dataset.id = r.id;
+    node.classList.toggle('draft', !r.is_public);
+    var a = $('.thumb', node);
+    if (r.thumb) { a.href = '../' + r.large; $('img', a).src = '../' + r.thumb; }
+    else { a.classList.add('none'); a.removeAttribute('href'); }
+    $('.when', node).textContent = ym(r.work_month);
+    $('.pub', node).textContent = r.is_public ? '공개' : '비공개';
+    $('.rname', node).textContent = r.site_name;
+    $('.rsub', node).textContent = [r.location, r.client, r.type_label, r.method_label, r.scale].filter(Boolean).join(' · ');
+    $('.toggle', node).textContent = r.is_public ? '비공개로' : '공개하기';
+    $('.edit', node).addEventListener('click', function () { openRecForm(r); });
+    $('.toggle', node).addEventListener('click', function () {
+      busy(node, api('record_public', { id: r.id, is_public: r.is_public ? '0' : '1' }).then(function () {
+        toast(r.is_public ? '비공개로 바꿨습니다' : '공개했습니다'); return loadRecords();
+      }));
+    });
+    $('.del', node).addEventListener('click', function () {
+      if (!confirm('이 실적을 삭제할까요?\n' + r.site_name)) return;
+      busy(node, api('record_delete', { id: r.id }).then(function () {
+        records = records.filter(function (x) { return x.id !== r.id; }); renderRecords(); toast('삭제했습니다');
+      }));
+    });
+    return node;
+  }
+
+  loadList().then(loadRecords);
 })();

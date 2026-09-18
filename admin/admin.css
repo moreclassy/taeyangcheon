@@ -96,3 +96,31 @@ details form { margin-top: 12px; }
   background: rgba(20,25,35,.92); color: #fff; padding: 10px 16px; border-radius: 999px; font-size: 14px; z-index: 20; max-width: 90vw;
 }
 @media (min-width: 600px) { .photos { grid-template-columns: 1fr 1fr; } }
+
+/* 시공 실적 */
+.rec-form { border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin-bottom: 14px; background: #fafbfe; }
+.rec-form label { margin-bottom: 10px; }
+.rec-form input[type=month], .rec-form select {
+  display: block; width: 100%; margin-top: 6px; padding: 12px 14px; font-size: 16px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--text); -webkit-appearance: none; appearance: none; min-height: 48px;
+}
+.rec-form label.check { display: flex; align-items: center; gap: 8px; color: var(--text); font-size: 15px; }
+.rec-form label.check input { width: 20px; height: 20px; margin: 0; }
+.rec-form .actions { display: flex; gap: 12px; align-items: center; }
+.grid2 { display: grid; gap: 0 12px; }
+@media (min-width: 600px) { .grid2 { grid-template-columns: 1fr 1fr; } }
+#rec-filter { margin-bottom: 12px; }
+.records { display: grid; gap: 10px; }
+.record { display: grid; grid-template-columns: 72px 1fr; gap: 12px; padding: 10px; border: 1px solid var(--line); border-radius: 12px; align-items: start; }
+.record.draft { background: #fbfbfc; }
+.record .thumb { display: block; width: 72px; height: 72px; border-radius: 8px; overflow: hidden; background: #e9edf3; }
+.record .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.record .thumb.none img { display: none; }
+.record .rec-head { display: flex; gap: 8px; align-items: center; font-size: 13px; }
+.record .when { font-weight: 700; color: var(--navy); }
+.record .pub { font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px; background: #e6f4ec; color: var(--ok); }
+.record.draft .pub { background: #f1f2f5; color: var(--muted); }
+.record .rname { margin: 4px 0 2px; font-weight: 600; word-break: keep-all; }
+.record .rsub { margin: 0 0 6px; }
+.record .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.record.busy { opacity: .5; pointer-events: none; }
+.records .empty { color: var(--muted); text-align: center; padding: 20px; }

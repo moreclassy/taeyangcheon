@@ -62,6 +62,15 @@ scp -r css js images taeyang:~/www/
 - Google Analytics: `js/analytics.js`의 `GA4_ID`에 측정 ID(`G-...`)를 넣으면 전 페이지 활성화. 비어 있으면 아무것도 로드하지 않음. 예전 UA-127663147-1은 2023-07 수집 종료로 제거함 (2026-09-18)
 - 연락처 지도: API 키 없이 동작하는 Google Maps 임베드 iframe(`output=embed`) + 네이버 지도/카카오맵 링크 버튼. 예전 `js/map.js`(Maps JavaScript API, 키 없음 → 에러)와 MailChimp용 `php/subscribe.php`, `php/MCAPI.class.php`는 2026-09-18 삭제
 
+## 시공 실적 (DB 기반, records.html)
+
+- `records.html`은 `js/records.js`가 `php/gallery/records_api.php`에서 공개 실적(JSON)을 받아 연도별 표로 그림. 실적이 없거나 API가 실패하면 HTML에 있는 "정리 중" 안내와 갤러리·사례 링크가 그대로 보임
+- 테이블 `gallery_records`(`php/gallery/lib.php`의 `gallery_records_ensure_schema`가 자동 생성). 컬럼: `work_month`(YYYY-MM, NULL 가능), `site_name`, `location`, `client`, `site_type`, `method`, `scale`, `note`, `photo_id`(갤러리 사진 FK, 삭제 시 NULL), `is_public`
+- 현장 유형(`gallery_record_types`)과 공법(`gallery_record_methods`) 목록은 lib.php에 하드코딩. 유형 key는 `cases.html`의 앵커(school/curve/slope/busstop/golf/parking/harbor)와 맞춰 두었고 highway/other 추가
+- 최초 1회 시딩: 갤러리 `field` 사진 제목으로 **비공개 초안**을 만들어 둠(`gallery_settings.records_seeded`). 관리자가 시기·위치·발주처를 채우고 "공개하기"를 눌러야 사이트에 노출됨. 임의로 만든 날짜·발주처는 없음
+- 관리: https://taeyang1000.com/admin/ 의 "시공 실적" 카드 (추가/수정/공개 전환/삭제). API는 `admin/api.php`의 `records`, `record_save`, `record_public`, `record_delete`
+- 배포: `scp php/gallery/lib.php php/gallery/records_api.php taeyang:~/www/php/gallery/ && scp admin/* taeyang:~/www/admin/`. PHP CLI가 로컬·서버 모두 없어 문법 검사를 못 하므로, lib.php는 `lib_next.php` 같은 임시 이름으로 올려 임시 엔드포인트로 200 확인 후 교체할 것 (2026-09-18 이 방식으로 배포). admin.css/admin.js 수정 시 `admin/index.php`의 `?v=` 올리기
+
 ## 도메인 / SSL
 
 - taeyang1000.com은 2026-09-18 가비아에서 카페24로 기관이전됨 (카페24 `나의 서비스 관리 > 도메인관리`에서 관리, 만료 2029-03-11)

@@ -81,6 +81,8 @@ function gallery_ensure_schema(PDO $pdo): void
         }
         gallery_setting_set($pdo, 'seeded', '1');
     }
+
+    gallery_records_ensure_schema($pdo);
 }
 
 function gallery_setting_get(PDO $pdo, string $k): ?string
@@ -176,6 +178,8 @@ function gallery_delete(int $id): void
     }
     $st = gallery_db()->prepare('DELETE FROM gallery_photos WHERE id = ?');
     $st->execute([$id]);
+    // 이 사진을 대표 사진으로 쓰던 시공 실적은 사진 연결만 해제
+    gallery_db()->prepare('UPDATE gallery_records SET photo_id = NULL WHERE photo_id = ?')->execute([$id]);
     // 업로드 폴더 안의 파일만 실제 삭제 (레포에 있는 기존 이미지는 건드리지 않음)
     foreach ([$item['thumb'], $item['large']] as $rel) {
         gallery_unlink_uploaded($rel);
@@ -418,6 +422,213 @@ function gallery_csrf_token(): string
 function gallery_csrf_check(?string $token): bool
 {
     return is_string($token) && $token !== '' && hash_equals(gallery_csrf_token(), $token);
+}
+
+// ---------- 시공 실적 (records.html / 관리자) ----------
+
+function gallery_record_types(): array
+{
+    return [
+        'school'  => '어린이 보호구역',
+        'curve'   => '급커브 · 산악도로',
+        'slope'   => '급경사 이면도로',
+        'busstop' => '버스 정류장 · 교차로',
+        'golf'    => '골프장 카트길',
+        'parking' => '주차장 램프',
+        'harbor'  => '항만 · 교량 대면적',
+        'highway' => '고속도로 · 국도',
+        'other'   => '기타',
+    ];
+}
+
+function gallery_record_methods(): array
+{
+    return [
+        'long'   => '종방향 그루빙',
+        'cross'  => '횡방향 그루빙',
+        'both'   => '종·횡 복합',
+        'rumble' => '감속 경고음 요철',
+        'other'  => '기타',
+    ];
+}
+
+function gallery_records_ensure_schema(PDO $pdo): void
+{
+    $pdo->exec("CREATE TABLE IF NOT EXISTS gallery_records (
+        id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        work_month CHAR(7)      NULL,
+        site_name  VARCHAR(200) NOT NULL,
+        location   VARCHAR(200) NOT NULL DEFAULT '',
+        client     VARCHAR(200) NOT NULL DEFAULT '',
+        site_type  VARCHAR(32)  NOT NULL DEFAULT 'other',
+        method     VARCHAR(32)  NOT NULL DEFAULT 'other',
+        scale      VARCHAR(200) NOT NULL DEFAULT '',
+        note       VARCHAR(500) NOT NULL DEFAULT '',
+        photo_id   INT UNSIGNED NULL,
+        is_public  TINYINT(1)   NOT NULL DEFAULT 1,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        KEY idx_pub (is_public, work_month)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+
+    // 최초 1회: 시공 현장 사진을 비공개 초안으로 넣어 둔다 (관리자에서 시기·위치를 채운 뒤 공개로 전환)
+    if (gallery_setting_get($pdo, 'records_seeded') === null) {
+        $count = (int) $pdo->query('SELECT COUNT(*) FROM gallery_records')->fetchColumn();
+        if ($count === 0) {
+            $photos = $pdo->query("SELECT id, title FROM gallery_photos WHERE category = 'field' ORDER BY sort_order DESC, id DESC")->fetchAll();
+            $st = $pdo->prepare('INSERT INTO gallery_records (site_name, site_type, method, photo_id, is_public) VALUES (?, ?, ?, ?, 0)');
+            foreach ($photos as $p) {
+                $title = trim((string) $p['title']);
+                if ($title === '') {
+                    continue;
+                }
+                $st->execute([$title, gallery_record_guess_type($title), gallery_record_guess_method($title), (int) $p['id']]);
+            }
+        }
+        gallery_setting_set($pdo, 'records_seeded', '1');
+    }
+}
+
+/** 사진 제목에서 현장 유형 추정 (초안 생성용) */
+function gallery_record_guess_type(string $title): string
+{
+    $map = [
+        'school'  => ['학교'],
+        'busstop' => ['버스', '정류장'],
+        'golf'    => ['골프'],
+        'parking' => ['주차장'],
+        'harbor'  => ['선착장', '항만', '교량'],
+        'curve'   => ['산악', '급회전', '급경사로'],
+        'slope'   => ['주택가', '경사로', '열선'],
+        'highway' => ['고속도로', '국도'],
+    ];
+    foreach ($map as $type => $words) {
+        foreach ($words as $w) {
+            if (mb_strpos($title, $w) !== false) {
+                return $type;
+            }
+        }
+    }
+    return 'other';
+}
+
+/** 사진 제목에서 공법 추정 (초안 생성용) */
+function gallery_record_guess_method(string $title): string
+{
+    $long  = mb_strpos($title, '종') !== false;
+    $cross = mb_strpos($title, '횡') !== false;
+    if ($long && $cross) {
+        return 'both';
+    }
+    if ($long) {
+        return 'long';
+    }
+    if ($cross) {
+        return 'cross';
+    }
+    return 'other';
+}
+
+function gallery_record_format(array $r): array
+{
+    $types   = gallery_record_types();
+    $methods = gallery_record_methods();
+    return [
+        'id'           => (int) $r['id'],
+        'work_month'   => $r['work_month'],
+        'site_name'    => $r['site_name'],
+        'location'     => $r['location'],
+        'client'       => $r['client'],
+        'site_type'    => $r['site_type'],
+        'type_label'   => $types[$r['site_type']] ?? $r['site_type'],
+        'method'       => $r['method'],
+        'method_label' => $methods[$r['method']] ?? $r['method'],
+        'scale'        => $r['scale'],
+        'note'         => $r['note'],
+        'photo_id'     => $r['photo_id'] !== null ? (int) $r['photo_id'] : null,
+        'thumb'        => $r['thumb_path'] ?? null,
+        'large'        => $r['large_path'] ?? null,
+        'is_public'    => (bool) $r['is_public'],
+    ];
+}
+
+const GALLERY_RECORD_SELECT = 'SELECT r.*, p.thumb_path, p.large_path FROM gallery_records r LEFT JOIN gallery_photos p ON p.id = r.photo_id';
+
+/** 시공 시기 내림차순 (시기 없는 항목은 뒤로) */
+function gallery_records_list(bool $publicOnly): array
+{
+    $sql = GALLERY_RECORD_SELECT . ($publicOnly ? ' WHERE r.is_public = 1' : '')
+         . ' ORDER BY (r.work_month IS NULL), r.work_month DESC, r.id DESC';
+    return array_map('gallery_record_format', gallery_db()->query($sql)->fetchAll());
+}
+
+function gallery_record_get(int $id): ?array
+{
+    $st = gallery_db()->prepare(GALLERY_RECORD_SELECT . ' WHERE r.id = ?');
+    $st->execute([$id]);
+    $r = $st->fetch();
+    return $r ? gallery_record_format($r) : null;
+}
+
+/** 관리자 입력을 검증해 저장. id 가 0 이면 새로 만든다. 저장된 id 를 반환 */
+function gallery_record_save(array $in): int
+{
+    $id = (int) ($in['id'] ?? 0);
+    $text = static function (string $k, int $max) use ($in): string {
+        return trim(mb_substr((string) ($in[$k] ?? ''), 0, $max));
+    };
+    $siteName = $text('site_name', 200);
+    if ($siteName === '') {
+        throw new GalleryUserError('현장명을 입력하세요.');
+    }
+    $month = $text('work_month', 7);
+    if ($month !== '' && !preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $month)) {
+        throw new GalleryUserError('시공 시기는 YYYY-MM 형식이어야 합니다.');
+    }
+    $type = (string) ($in['site_type'] ?? 'other');
+    if (!isset(gallery_record_types()[$type])) {
+        throw new GalleryUserError('알 수 없는 현장 유형입니다.');
+    }
+    $method = (string) ($in['method'] ?? 'other');
+    if (!isset(gallery_record_methods()[$method])) {
+        throw new GalleryUserError('알 수 없는 공법입니다.');
+    }
+    $photoId = (int) ($in['photo_id'] ?? 0);
+    if ($photoId > 0 && gallery_get($photoId) === null) {
+        throw new GalleryUserError('선택한 사진이 없습니다.');
+    }
+    $params = [
+        $month === '' ? null : $month,
+        $siteName,
+        $text('location', 200),
+        $text('client', 200),
+        $type,
+        $method,
+        $text('scale', 200),
+        $text('note', 500),
+        $photoId > 0 ? $photoId : null,
+        !empty($in['is_public']) ? 1 : 0,
+    ];
+    $pdo = gallery_db();
+    if ($id > 0) {
+        $params[] = $id;
+        $pdo->prepare('UPDATE gallery_records SET work_month = ?, site_name = ?, location = ?, client = ?, site_type = ?, method = ?, scale = ?, note = ?, photo_id = ?, is_public = ? WHERE id = ?')
+            ->execute($params);
+        return $id;
+    }
+    $pdo->prepare('INSERT INTO gallery_records (work_month, site_name, location, client, site_type, method, scale, note, photo_id, is_public) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)')
+        ->execute($params);
+    return (int) $pdo->lastInsertId();
+}
+
+function gallery_record_set_public(int $id, bool $public): void
+{
+    gallery_db()->prepare('UPDATE gallery_records SET is_public = ? WHERE id = ?')->execute([$public ? 1 : 0, $id]);
+}
+
+function gallery_record_delete(int $id): void
+{
+    gallery_db()->prepare('DELETE FROM gallery_records WHERE id = ?')->execute([$id]);
 }
 
 // ---------- 응답 도우미 ----------

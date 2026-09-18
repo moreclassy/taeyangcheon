@@ -67,6 +67,7 @@ JS = {
     'contact-form': ['js/contact-form/contact-form.js'],
     'theme-script': ['js/theme-script.js'],
     'gallery': ['js/gallery.js'],
+    'records': ['js/records.js'],
 }
 JS_COMMON_BEFORE = ['jquery', 'popper', 'bootstrap']
 
@@ -76,6 +77,7 @@ NAV = [
     ('about', 'about.html', '회사소개'),
     ('project', 'project.html', '갤러리'),
     ('cases', 'cases.html', '시공 사례'),
+    ('records', 'records.html', '시공 실적'),
     ('info', 'info.html', '그루빙이란?'),
     ('contact', 'contact.html', '연락처'),
 ]
