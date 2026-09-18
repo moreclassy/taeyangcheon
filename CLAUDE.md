@@ -44,7 +44,16 @@ scp -r css js images taeyang:~/www/
 - `.pem` 파일은 절대 커밋하지 않기
 - `backup/`은 서버 전체 백업 tarball 보관용 (`.gitignore`로 제외). 서버에는 레포에 없는 이미지가 있으므로 서버를 초기화하는 작업 전에는 항상 `ssh taeyang 'cd ~ && tar czf - www' > backup/www-backup-YYYYMMDD.tar.gz`로 받아둘 것
 - macOS `tar`로 서버에 올리면 `._*` 메타파일이 함께 생기므로 `COPYFILE_DISABLE=1 tar ...`로 만들거나 업로드 후 `find ~/www -name '._*' -exec rm -f {} +`로 정리
-- 공통 CSS/JS(`css/default-theme.css`, `js/theme-script.js`)를 고치면 5개 HTML의 링크 뒤 `?v=YYYYMMDD` 버전 문자열도 함께 올려야 방문자 브라우저 캐시가 갱신됨
+- 공통 CSS/JS(`css/default-theme.css`, `js/theme-script.js`)를 고치면 `build.py`의 `VERSION`/`VERSION_OVERRIDE`를 올리고 다시 빌드해야 방문자 브라우저 캐시가 갱신됨
+
+## 페이지 편집 / 빌드 (헤더·푸터 공통화)
+
+- 루트의 `*.html` 6개는 **생성 파일**이다. 직접 고치지 말고 `src/`를 고친 뒤 `python3 build.py`를 실행해 다시 만든다 (PHP 없이 정적 파일로 배포하기 위해 빌드 방식 사용. 로컬·서버 모두 PHP CLI 없음)
+  - `src/pages/<이름>.html`: 페이지 본문(`<!--header end-->`~`<!--footer start-->` 사이) + 맨 위 `<!--page ... -->` 메타 블록(title, description, canonical, og_image, preload, nav, css, js, js_after). 선택적으로 `<!--head-extra-->…<!--/head-extra-->` 에 JSON-LD·페이지 전용 `<style>`
+  - `src/partials/head.html`, `header.html`, `footer.html`: 공통 head, 헤더(네비 포함), 푸터·스크립트. 연락처·주소·저작권 문구는 여기 한 곳만 수정
+  - `build.py`: 네비게이션 목록(`NAV`), CSS/JS 경로 목록(`CSS`, `JS`), 캐시 버전(`VERSION`, `VERSION_OVERRIDE`). 새 페이지는 `src/pages/`에 파일 추가 + `NAV`에 항목 추가 + `sitemap.xml` 등록
+  - `python3 build.py --check` 는 루트 HTML이 최신 빌드와 다르면 종료 코드 1. 커밋 전에 실행해 생성 파일 누락을 막을 것
+- 배포는 그대로 생성된 루트 `*.html`을 `scp`로 올린다. `src/`, `build.py`는 서버에 올리지 않음
 
 ## 문의 폼 / 애널리틱스 / 지도
 
@@ -78,12 +87,12 @@ ssh taeyang 'PW=$(sed -n "s/.*'"'"'pass'"'"' => '"'"'\([^'"'"']*\)'"'"'.*/\1/p" 
 
 ## 성능 / SEO 규칙 (2026-09-18)
 
-- 각 HTML은 실제로 쓰는 CSS/JS만 로드함 (예: slit-slider·modernizr는 `index.html`만, jarallax는 서브페이지만, contact-form.js는 `contact.html`만). `js/theme-script.js`는 플러그인이 없으면 건너뛰도록 가드가 있으므로 새 페이지에 플러그인을 빼도 오류 없음
+- 각 HTML은 실제로 쓰는 CSS/JS만 로드함 (페이지 메타의 `css:`/`js:` 목록. 예: slit-slider·modernizr는 `index.html`만, jarallax는 서브페이지만, contact-form은 `contact.html`만). `js/theme-script.js`는 플러그인이 없으면 건너뛰도록 가드가 있으므로 새 페이지에 플러그인을 빼도 오류 없음
 - CSS/JS 링크에는 `?v=YYYYMMDD` 버전 문자열이 붙어 있음. `.htaccess`가 css/js 7일, 이미지 30일 브라우저 캐시를 걸므로 CSS/JS를 수정하면 5개 HTML의 `?v=` 값을 함께 올릴 것
 - 이미지는 커밋 전에 긴 변 1920px(갤러리 large는 1600px), JPEG 품질 82 정도로 줄여서 넣기. 원본 촬영 파일을 그대로 올리지 말 것
 - 갤러리 그리드의 폴백 `<img>`에는 `loading="lazy"`를 넣지 말 것 (isotope가 높이를 계산하기 전에 로드돼야 함). 그 외 본문 이미지는 lazy 사용
-- 페이지별 `<title>`/`description`/canonical/OG 태그가 있으니 페이지를 추가하면 같이 채우고 `sitemap.xml`에도 URL 추가
-- `cases.html`(현장 유형별 시공 사례)은 `images/portfolio/field/` 사진을 앵커 `#school #curve #slope #busstop #golf #parking #harbor` 7개 섹션으로 묶은 정적 페이지. 페이지 전용 CSS는 파일 안 `<style>`에 있음. 갤러리 DB와 연동되지 않으므로 사례를 추가하려면 HTML 직접 수정
+- 페이지별 `<title>`/`description`/canonical/OG 태그는 `src/pages/*.html` 메타 블록에서 채워지고 `build.py`가 생성. 페이지를 추가하면 메타 블록을 채우고 `sitemap.xml`에도 URL 추가
+- `cases.html`(현장 유형별 시공 사례)은 `images/portfolio/field/` 사진을 앵커 `#school #curve #slope #busstop #golf #parking #harbor` 7개 섹션으로 묶은 정적 페이지. 페이지 전용 CSS는 `src/pages/cases.html`의 `<!--head-extra-->` 안 `<style>`. 갤러리 DB와 연동되지 않으므로 사례를 추가하려면 `src/pages/cases.html` 수정 후 빌드
 - 교통사고 통계 문구(`index.html` 아코디언, `about.html`)는 2024년 사망자 2,521명·10만 명당 5.3명, 2025년 2,549명 기준(2026-09-18 갱신). 매년 초 도로교통공단 발표 후 갱신
 - `.htaccess` 보안 헤더: HSTS(1년, includeSubDomains 없음), nosniff, X-Frame-Options SAMEORIGIN, Permissions-Policy. Referrer-Policy 는 정적 파일에만 걸어 `admin/index.php` 의 PHP 헤더와 충돌하지 않게 함
 - 로컬 미리보기: `.claude/launch.json`의 `static` (python http.server 8765). PHP(갤러리 API, 문의 폼)는 로컬에서 동작하지 않고 HTML 폴백만 보임
