@@ -36,10 +36,14 @@ class MCAPI {
      * @param string $apikey Your MailChimp apikey
      * @param string $secure Whether or not this should use a secure connection
      */
-    function MCAPI($apikey, $secure=false) {
+    function __construct($apikey, $secure=false) {
         $this->secure = $secure;
         $this->apiUrl = parse_url("http://api.mailchimp.com/" . $this->version . "/?output=php");
         $this->api_key = $apikey;
+    }
+    // PHP 4 스타일 생성자: PHP 8에서는 생성자로 인식되지 않아 __construct로 위임
+    function MCAPI($apikey, $secure=false) {
+        $this->__construct($apikey, $secure);
     }
     function setTimeout($seconds){
         if (is_int($seconds)){
