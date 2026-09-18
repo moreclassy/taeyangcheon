@@ -1,3 +1,8 @@
 *.pem
 .DS_store
 backup/
+
+# 갤러리 관리 기능
+php/gallery/config.php
+images/uploads/*
+!images/uploads/.htaccess

@@ -51,3 +51,20 @@ scp -r css js images taeyang:~/www/
 - taeyang1000.com은 2026-09-18 가비아에서 카페24로 기관이전됨 (카페24 `나의 서비스 관리 > 도메인관리`에서 관리, 만료 2029-03-11)
 - SSL은 카페24 `SSL Basic`(Let's Encrypt, apex + www 포함) 사용. 카페24가 호스팅 종료일까지 자동 갱신하므로 직접 갱신 작업 없음
 - 레포 루트 `.htaccess`가 http → https 301 리다이렉트를 담당하며 `~/www/.htaccess`로 배포됨. 인증서가 없는 상태에서 올리면 사이트가 끊기므로 주의
+
+## 갤러리 관리 (DB 기반 사진 업로드)
+
+- 갤러리(`index.html` 최신 9장, `project.html` 전체)는 `js/gallery.js`가 `php/gallery/api.php`에서 JSON을 받아 그림. HTML에 남아 있는 하드코딩 항목은 API 실패 시 폴백용
+- DB: 카페24 MariaDB(`localhost`, DB/계정 `qudgk02`). 테이블 `gallery_photos`, `gallery_settings`는 `php/gallery/lib.php`가 첫 접속 때 자동 생성하고, 비어 있으면 `php/gallery/seed.php`(기존 25장)를 넣음
+- 설정: 서버의 `php/gallery/config.php` (커밋 금지, `config.sample.php` 참고). DB 비밀번호와 쿠키 서명용 `secret`이 들어 있음. 권한 600
+- 관리자 페이지: 레포 `admin/` → 서버 `~/www/admin/` (https://taeyang1000.com/admin/). 배포: `scp admin/* taeyang:~/www/admin/`
+- 관리자 인증: 최초 접속 시 비밀번호 설정 → `gallery_settings`에 해시 저장. 로그인 쿠키 30일, 5회 실패 시 15분 잠금, 비밀번호 변경 시 기존 쿠키 전부 무효화
+- 업로드 이미지는 `images/uploads/YYYY/MM/`에 `*.jpg`(긴 변 1600) + `*_t.jpg`(600x600 썸네일)로 저장. GD로 재인코딩하므로 원본 메타데이터는 남지 않음. 이 폴더는 `.gitignore`로 제외되며 서버에만 존재 → 백업 시 반드시 포함
+- 기존 `images/portfolio/` 사진은 DB에 경로만 등록되어 있고, 관리자 페이지에서 삭제해도 파일은 지우지 않음 (업로드 폴더 안의 파일만 실제 삭제)
+- 로그인 잠금 해제 / 비밀번호 초기화는 SSH에서 mysql CLI로 (`gallery_settings` 테이블). DB 비밀번호는 서버 `config.php`에서 읽어 서버 안에서만 사용:
+
+```bash
+ssh taeyang 'PW=$(sed -n "s/.*'"'"'pass'"'"' => '"'"'\([^'"'"']*\)'"'"'.*/\1/p" ~/www/php/gallery/config.php); mysql -u qudgk02 -p"$PW" qudgk02 -e "UPDATE gallery_settings SET v=0 WHERE k IN (\"login_lock_until\",\"login_fail_count\")"'
+# 비밀번호를 아예 초기화(다음 접속 때 다시 설정 화면): ... -e "DELETE FROM gallery_settings WHERE k=\"admin_password_hash\""
+```
+- 관리자 페이지는 `Referrer-Policy: same-origin`을 써야 함. `no-referrer`로 두면 브라우저가 폼 POST에 `Origin: null`을 보내 동일 출처 검사에 걸림 (2026-09-18 실제로 겪은 버그)

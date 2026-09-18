@@ -1,0 +1,30 @@
+<?php
+// 기존 project.html 에 하드코딩되어 있던 갤러리 사진. DB 테이블이 처음 만들어질 때 한 번만 삽입된다.
+// 순서 = 기존 갤러리 표시 순서.
+return [
+    ['category' => 'equipment', 'title' => '그루빙 장비 전면', 'thumb' => 'images/portfolio/equipment/eq_front.jpg', 'large' => 'images/portfolio/equipment/large/eq_front.jpg'],
+    ['category' => 'field', 'title' => '버스 정류장 종그루빙 작업', 'thumb' => 'images/portfolio/field/busstop.jpeg', 'large' => 'images/portfolio/field/large/busstop.jpeg'],
+    ['category' => 'field', 'title' => '산악길 급회전 구간', 'thumb' => 'images/portfolio/field/curve3.jpeg', 'large' => 'images/portfolio/field/large/curve3.jpeg'],
+    ['category' => 'field', 'title' => '국도 급회전 구간, 두 대 동시 작업', 'thumb' => 'images/portfolio/field/curve.jpeg', 'large' => 'images/portfolio/field/large/curve.jpeg'],
+    ['category' => 'field', 'title' => '산악길 급경사로', 'thumb' => 'images/portfolio/field/curve2.jpeg', 'large' => 'images/portfolio/field/large/curve2.jpeg'],
+    ['category' => 'equipment', 'title' => '그루빙 장비 후면', 'thumb' => 'images/portfolio/equipment/eq_back.jpg', 'large' => 'images/portfolio/equipment/large/eq_back.jpg'],
+    ['category' => 'field', 'title' => '골프장 카트길', 'thumb' => 'images/portfolio/field/golf.jpg', 'large' => 'images/portfolio/field/large/golf.jpg'],
+    ['category' => 'equipment', 'title' => '그루빙 장비 측면', 'thumb' => 'images/portfolio/equipment/eq_side.jpg', 'large' => 'images/portfolio/equipment/large/eq_side.jpg'],
+    ['category' => 'field', 'title' => '골프장 카트길', 'thumb' => 'images/portfolio/field/golf2.jpg', 'large' => 'images/portfolio/field/large/golf2.jpg'],
+    ['category' => 'field', 'title' => '산악길 종방향 작업', 'thumb' => 'images/portfolio/field/mountain2.jpeg', 'large' => 'images/portfolio/field/large/mountain2.jpeg'],
+    ['category' => 'field', 'title' => '선착장 45도 작업', 'thumb' => 'images/portfolio/field/harbor.jpeg', 'large' => 'images/portfolio/field/large/harbor.jpeg'],
+    ['category' => 'field', 'title' => '선착장 콘트리트 횡작업', 'thumb' => 'images/portfolio/field/harbor2.jpeg', 'large' => 'images/portfolio/field/large/harbor2.jpeg'],
+    ['category' => 'field', 'title' => '선착장 횡작업 시공', 'thumb' => 'images/portfolio/field/harbor3.jpeg', 'large' => 'images/portfolio/field/large/harbor3.jpeg'],
+    ['category' => 'equipment', 'title' => '그루빙 장비 측면', 'thumb' => 'images/portfolio/equipment/eq_side2.jpg', 'large' => 'images/portfolio/equipment/large/eq_side2.jpg'],
+    ['category' => 'field', 'title' => '수작업 시공', 'thumb' => 'images/portfolio/field/hand.jpeg', 'large' => 'images/portfolio/field/large/hand.jpeg'],
+    ['category' => 'field', 'title' => '안전지대 미끄럼 방지', 'thumb' => 'images/portfolio/field/safty.jpeg', 'large' => 'images/portfolio/field/large/safty.jpeg'],
+    ['category' => 'field', 'title' => '콘크리트 종방향 작업', 'thumb' => 'images/portfolio/field/vertical.jpeg', 'large' => 'images/portfolio/field/large/vertical.jpeg'],
+    ['category' => 'field', 'title' => '주차장 내리막길', 'thumb' => 'images/portfolio/field/parking.jpeg', 'large' => 'images/portfolio/field/large/parking.jpeg'],
+    ['category' => 'field', 'title' => '주차장 진입로', 'thumb' => 'images/portfolio/field/parking2.jpeg', 'large' => 'images/portfolio/field/large/parking2.jpeg'],
+    ['category' => 'field', 'title' => '주택가 급경사', 'thumb' => 'images/portfolio/field/residence.jpeg', 'large' => 'images/portfolio/field/large/residence.jpeg'],
+    ['category' => 'field', 'title' => '콘크리트 열선', 'thumb' => 'images/portfolio/field/hotline.jpeg', 'large' => 'images/portfolio/field/large/hotline.jpeg'],
+    ['category' => 'field', 'title' => '학교 앞 안전지대', 'thumb' => 'images/portfolio/field/school.jpeg', 'large' => 'images/portfolio/field/large/school.jpeg'],
+    ['category' => 'field', 'title' => '학교 앞 안전지대', 'thumb' => 'images/portfolio/field/school2.jpeg', 'large' => 'images/portfolio/field/large/school2.jpeg'],
+    ['category' => 'field', 'title' => '경사로 횡작업', 'thumb' => 'images/portfolio/field/horizontal.jpeg', 'large' => 'images/portfolio/field/large/horizontal.jpeg'],
+    ['category' => 'field', 'title' => '산악길 두 대 동시 작업', 'thumb' => 'images/portfolio/field/mountain.jpeg', 'large' => 'images/portfolio/field/large/mountain.jpeg'],
+];
