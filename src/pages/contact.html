@@ -50,6 +50,24 @@ js: jarallax, contact-form
                 <div class="help-block with-errors"></div>
               </div>
               <div class="form-group">
+                <select id="form_site_type" name="site_type" class="form-control" required="required" data-error="현장 유형을 선택해주세요.">
+                  <option value="" selected disabled>현장 유형 선택</option>
+                  <option value="school">어린이 보호구역 · 통학로</option>
+                  <option value="curve">급커브 · 산악도로</option>
+                  <option value="slope">급경사 이면도로 · 주택가</option>
+                  <option value="busstop">버스 정류장 · 교차로</option>
+                  <option value="golf">골프장 카트길</option>
+                  <option value="parking">주차장 램프 · 지하주차장</option>
+                  <option value="harbor">항만 · 교량 대면적</option>
+                  <option value="highway">고속도로 · 국도</option>
+                  <option value="other">기타</option>
+                </select>
+                <div class="help-block with-errors"></div>
+              </div>
+              <div class="form-group">
+                <input id="form_location" type="text" name="location" class="form-control" placeholder="현장 위치 (예: 경기 용인시 · 선택)" maxlength="100">
+              </div>
+              <div class="form-group">
                 <textarea id="form_message" name="message" class="form-control" placeholder="문의내용" rows="4" required="required" data-error="문의내용을 입력해주세요."></textarea>
                 <div class="help-block with-errors"></div>
               </div>
@@ -67,7 +85,7 @@ js: jarallax, contact-form
               <li class="mb-4"><i class="flaticon-paper-plane"></i><span>주소:</span>
                 <p>서울특별시 강남구 삼성로107길 11-6 101호</p>
               </li>
-              <li class="mb-4"><i class="flaticon-phone-call"></i><span>전화:</span><a href="tel:01051522253">010-5152-2253 / 010-7363-1008</a>
+              <li class="mb-4"><i class="flaticon-phone-call"></i><span>전화:</span><a href="tel:01051522253">010-5152-2253</a> / <a href="tel:01073631008">010-7363-1008</a>
               </li>
               <li><i class="flaticon-message"></i><span>이메일</span><a href="mailto:taeyangcheun@naver.com">taeyangcheun@naver.com</a>
               </li>
@@ -91,6 +109,15 @@ js: jarallax, contact-form
 </section>
 
 <!--contact end-->
+
+<script>
+/* 시공 사례·광고 링크의 ?type=school 등으로 현장 유형을 미리 선택 */
+(function () {
+  var m = /[?&]type=([a-z]+)/.exec(window.location.search);
+  var s = document.getElementById('form_site_type');
+  if (m && s && s.querySelector('option[value="' + m[1] + '"]')) s.value = m[1];
+})();
+</script>
 
 </div>
 

@@ -33,10 +33,25 @@ SRC = ROOT / 'src'
 SITE = 'https://taeyang1000.com'
 
 # CSS/JS 를 수정하면 여기 버전을 올린다 (.htaccess 가 css/js 를 7일 캐시함)
-VERSION = '20260918'
+VERSION = '20260919'
 VERSION_OVERRIDE = {
-    'css/default-theme.css': '20260918b',
+    'css/default-theme.css': '20260919',
 }
+
+# 검색엔진 사이트 소유 확인 메타태그. 값이 비어 있으면 출력하지 않는다.
+#  - 네이버 서치어드바이저(searchadvisor.naver.com) → 사이트 등록 → "HTML 태그" 방식의 content 값
+#  - Google Search Console → 소유권 확인 → "HTML 태그" 방식의 content 값
+SITE_VERIFICATION = {
+    'naver-site-verification': '',
+    'google-site-verification': '',
+}
+
+# 푸터에 표시할 외부 채널 링크 (아이콘 클래스, 표시 이름, URL). 비어 있으면 출력하지 않는다.
+# 예: ('fab fa-youtube', '유튜브', 'https://www.youtube.com/@...'),
+#     ('fas fa-pen-nib', '네이버 블로그', 'https://blog.naver.com/...'),
+#     ('fab fa-instagram', '인스타그램', 'https://www.instagram.com/...'),
+SOCIAL = [
+]
 
 CSS = {
     'bootstrap': 'css/bootstrap.min.css',
@@ -51,7 +66,7 @@ CSS = {
     'default-theme': 'css/default-theme.css',
     'responsive': 'css/responsive.css',
 }
-CSS_COMMON_BEFORE = ['bootstrap', 'fontawesome']
+CSS_COMMON_BEFORE = ['bootstrap', 'fontawesome', 'themify-icons']  # themify: 모바일 메뉴(navbar-toggler) 아이콘이 모든 페이지에서 사용
 CSS_COMMON_AFTER = ['base', 'shortcodes', 'default-theme', 'responsive']
 
 JS = {
@@ -129,6 +144,23 @@ def render_js(keys, after):
     return '\n'.join(lines)
 
 
+def render_verification():
+    return '\n'.join(
+        f'<meta name="{k}" content="{html.escape(v)}" />' for k, v in SITE_VERIFICATION.items() if v
+    )
+
+
+def render_social():
+    if not SOCIAL:
+        return ''
+    items = ''.join(
+        f'<li><a href="{html.escape(url)}" target="_blank" rel="noopener" title="{html.escape(label)}">'
+        f'<i class="{icon}"></i> {html.escape(label)}</a></li>'
+        for icon, label, url in SOCIAL
+    )
+    return f'<ul class="list-inline footer-social">{items}</ul>'
+
+
 def render_nav(active: str):
     items = []
     for key, href, label in NAV:
@@ -168,6 +200,8 @@ def build_page(src_path: Path) -> str:
         'og_image': SITE + '/' + meta['og_image'].lstrip('/'),
         'preload': f'<link rel="preload" as="image" href="{preload}" />' if preload else '',
         'head_extra': ('\n' + extra + '\n') if extra else '',
+        'verification': render_verification(),
+        'social': render_social(),
         'css': render_css(split_list(meta.get('css', ''))),
         'nav': render_nav(meta['nav']),
         'js': render_js(split_list(meta.get('js', '')), split_list(meta.get('js_after', ''))),

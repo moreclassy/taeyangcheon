@@ -238,3 +238,14 @@ transform: translateY(-50%) rotate(90deg); -webkit-transform: translateY(-50%) r
 @media (max-width:767px){.map-embed{height:300px}.map-links{padding-bottom:20px}}
 /* 문의 폼 스팸 방지용 숨김 필드 (사람에게는 보이지 않음) */
 .hp-field{position:absolute !important;left:-9999px !important;width:1px;height:1px;overflow:hidden;opacity:0}
+/* 모바일 하단 고정 문의 바 (footer.html .call-bar, lg 이상은 d-lg-none 으로 숨김) */
+.call-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:998;box-shadow:0 -2px 12px rgba(0,0,0,.18)}
+.call-bar a{flex:1;text-align:center;padding:14px 8px;font-weight:600;font-size:15px;color:#fff;background:#f9a305}
+.call-bar a.call-bar-form{background:#1d1d1d}
+.call-bar a i{margin-right:6px}
+.call-bar a:hover{color:#fff;opacity:.92}
+@media (max-width:991px){body{padding-bottom:52px}#scroll-top .top{bottom:70px}}
+/* 푸터 외부 채널 링크 (build.py SOCIAL) */
+.footer-social{margin-bottom:8px}
+.footer-social li{display:inline-block;padding:0 12px}
+.footer-social li a i{margin-right:4px;font-size:14px}

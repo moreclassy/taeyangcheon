@@ -346,6 +346,7 @@ function contactform() {
       // POST values in the background the the script URL
       var $form = $(this);
       var $btn = $form.find('button[type="submit"]').prop('disabled', true);
+      var siteType = $form.find('[name="site_type"]').val() || '';
       var showAlert = function (type, text) {
         $form.find('.messages').html('<div class="alert alert-' + type + ' alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + text + '</div>');
       };
@@ -372,6 +373,10 @@ function contactform() {
             $('#contact-form, #queto-form').find('.messages').html(alertBox);
             // empty the form
             $('#contact-form, #queto-form')[0].reset();
+            // GA4 전환 이벤트 (js/analytics.js 에 측정 ID가 설정된 경우에만 동작)
+            if (data.type === 'success' && typeof window.gtag === 'function') {
+              window.gtag('event', 'generate_lead', { site_type: siteType });
+            }
           }
         }
       });

@@ -15,22 +15,24 @@
 <meta property="og:url" content="https://taeyang1000.com/contact.html" />
 <meta property="og:image" content="https://taeyang1000.com/images/bg/contact.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
+
 <link rel="preload" as="image" href="images/bg/contact.jpg" />
 
 <!-- favicon icon -->
 <link rel="shortcut icon" href="images/favicon.ico" />
 
 <!-- inject css start -->
-<link href="css/bootstrap.min.css?v=20260918" rel="stylesheet" type="text/css" />
-<link href="css/fontawesome-all.css?v=20260918" rel="stylesheet" type="text/css" />
-<link href="css/base.css?v=20260918" rel="stylesheet" type="text/css" />
-<link href="css/shortcodes.css?v=20260918" rel="stylesheet" type="text/css" />
-<link href="css/default-theme.css?v=20260918b" rel="stylesheet" type="text/css" />
-<link href="css/responsive.css?v=20260918" rel="stylesheet" type="text/css" />
+<link href="css/bootstrap.min.css?v=20260919" rel="stylesheet" type="text/css" />
+<link href="css/fontawesome-all.css?v=20260919" rel="stylesheet" type="text/css" />
+<link href="css/themify-icons.css?v=20260919" rel="stylesheet" type="text/css" />
+<link href="css/base.css?v=20260919" rel="stylesheet" type="text/css" />
+<link href="css/shortcodes.css?v=20260919" rel="stylesheet" type="text/css" />
+<link href="css/default-theme.css?v=20260919" rel="stylesheet" type="text/css" />
+<link href="css/responsive.css?v=20260919" rel="stylesheet" type="text/css" />
 <!-- inject css end -->
 
 <!-- Google Analytics 4 (측정 ID는 js/analytics.js 에서 설정) -->
-<script src="js/analytics.js"></script>
+<script src="js/analytics.js?v=20260919"></script>
 
 </head>
 
@@ -61,7 +63,7 @@
                 <li class="list-inline-item"><a href="mailto:taeyangcheun@naver.com"><i class="far fa-envelope-open"></i>taeyangcheun@naver.com</a>
                 </li>
                 <li class="list-inline-item">
-                  <a href="tel:01051522253"> <i class="fas fa-mobile-alt"></i>010-5152-2253 / 010-7363-1008</a>
+                  <a href="tel:01051522253"> <i class="fas fa-mobile-alt"></i>010-5152-2253</a> / <a href="tel:01073631008">010-7363-1008</a>
                 </li>
               </ul>
             </div>
@@ -149,6 +151,24 @@
                 <div class="help-block with-errors"></div>
               </div>
               <div class="form-group">
+                <select id="form_site_type" name="site_type" class="form-control" required="required" data-error="현장 유형을 선택해주세요.">
+                  <option value="" selected disabled>현장 유형 선택</option>
+                  <option value="school">어린이 보호구역 · 통학로</option>
+                  <option value="curve">급커브 · 산악도로</option>
+                  <option value="slope">급경사 이면도로 · 주택가</option>
+                  <option value="busstop">버스 정류장 · 교차로</option>
+                  <option value="golf">골프장 카트길</option>
+                  <option value="parking">주차장 램프 · 지하주차장</option>
+                  <option value="harbor">항만 · 교량 대면적</option>
+                  <option value="highway">고속도로 · 국도</option>
+                  <option value="other">기타</option>
+                </select>
+                <div class="help-block with-errors"></div>
+              </div>
+              <div class="form-group">
+                <input id="form_location" type="text" name="location" class="form-control" placeholder="현장 위치 (예: 경기 용인시 · 선택)" maxlength="100">
+              </div>
+              <div class="form-group">
                 <textarea id="form_message" name="message" class="form-control" placeholder="문의내용" rows="4" required="required" data-error="문의내용을 입력해주세요."></textarea>
                 <div class="help-block with-errors"></div>
               </div>
@@ -166,7 +186,7 @@
               <li class="mb-4"><i class="flaticon-paper-plane"></i><span>주소:</span>
                 <p>서울특별시 강남구 삼성로107길 11-6 101호</p>
               </li>
-              <li class="mb-4"><i class="flaticon-phone-call"></i><span>전화:</span><a href="tel:01051522253">010-5152-2253 / 010-7363-1008</a>
+              <li class="mb-4"><i class="flaticon-phone-call"></i><span>전화:</span><a href="tel:01051522253">010-5152-2253</a> / <a href="tel:01073631008">010-7363-1008</a>
               </li>
               <li><i class="flaticon-message"></i><span>이메일</span><a href="mailto:taeyangcheun@naver.com">taeyangcheun@naver.com</a>
               </li>
@@ -191,6 +211,15 @@
 
 <!--contact end-->
 
+<script>
+/* 시공 사례·광고 링크의 ?type=school 등으로 현장 유형을 미리 선택 */
+(function () {
+  var m = /[?&]type=([a-z]+)/.exec(window.location.search);
+  var s = document.getElementById('form_site_type');
+  if (m && s && s.querySelector('option[value="' + m[1] + '"]')) s.value = m[1];
+})();
+</script>
+
 </div>
 
 <!--body content end--> 
@@ -209,7 +238,7 @@
             </li>
             <li> <i class="flaticon-phone-call"></i>
               <span>전화</span>
-              <a href="tel:01051522253">010-5152-2253 / 010-7363-1008</a>
+              <a href="tel:01051522253">010-5152-2253</a> / <a href="tel:01073631008">010-7363-1008</a>
             </li>
             <li> <i class="flaticon-message"></i>
               <span>이메일</span>
@@ -228,6 +257,7 @@
            <span>Copyright 2018-2026 태양천 그루빙 | All Rights Reserved</span>
           </div>
           <div class="col-md-5 text-md-right sm-mt-3 footer-list">
+
             <ul class="list-inline">
               <li>사업자등록번호 : 575-59-00157</li>
             </ul>
@@ -239,6 +269,15 @@
 </footer>
 
 <!--footer end-->
+
+<!--mobile call bar start (lg 이상에서는 숨김)-->
+
+<div class="call-bar d-lg-none" role="navigation" aria-label="빠른 문의">
+  <a href="tel:01051522253"><i class="fas fa-phone"></i> 전화 상담</a>
+  <a class="call-bar-form" href="contact.html"><i class="far fa-envelope"></i> 온라인 문의</a>
+</div>
+
+<!--mobile call bar end-->
 
 
 </div>
@@ -254,12 +293,12 @@
 
 
 <!-- inject js start -->
-<script src="js/jquery.3.3.1.min.js?v=20260918"></script>
-<script src="js/popper.min.js?v=20260918"></script>
-<script src="js/bootstrap.min.js?v=20260918"></script>
-<script src="js/jarallax/jarallax.min.js?v=20260918"></script>
-<script src="js/contact-form/contact-form.js?v=20260918"></script>
-<script src="js/theme-script.js?v=20260918"></script>
+<script src="js/jquery.3.3.1.min.js?v=20260919"></script>
+<script src="js/popper.min.js?v=20260919"></script>
+<script src="js/bootstrap.min.js?v=20260919"></script>
+<script src="js/jarallax/jarallax.min.js?v=20260919"></script>
+<script src="js/contact-form/contact-form.js?v=20260919"></script>
+<script src="js/theme-script.js?v=20260919"></script>
 <!-- inject js end -->
 
 </body>

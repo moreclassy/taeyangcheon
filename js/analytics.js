@@ -13,4 +13,9 @@
   window.gtag = function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
   window.gtag('config', GA4_ID);
+  // 전화 링크 클릭을 전환 이벤트로 기록 (헤더·푸터·하단 문의 바·본문 공통)
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
+    if (a) window.gtag('event', 'phone_call', { phone_number: a.getAttribute('href').slice(4) });
+  });
 })();

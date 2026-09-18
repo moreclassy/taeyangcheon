@@ -58,6 +58,12 @@ scp -r css js images taeyang:~/www/
 ## 문의 폼 / 애널리틱스 / 지도
 
 - 문의 폼: `contact.html` → `js/theme-script.js`의 `contactform()`이 `php/contact.php`로 AJAX POST, 응답은 항상 JSON. From은 `noreply@taeyang1000.com`(도메인 SPF에 서버 IP가 등록되어 있음), Reply-To는 문의자 이메일, 수신은 `taeyangcheun@naver.com`
+- 문의 폼의 `site_type`(현장 유형 select, 필수)·`location`(현장 위치, 선택)은 문의 분류용. 유형 key 목록은 `contact.html`의 option 과 `php/contact.php`의 `$siteTypes` 두 곳에 있으며 `lib.php`의 `gallery_record_types`와 같은 key를 씀. `contact.html?type=parking` 처럼 `?type=` 으로 미리 선택되므로 시공 사례 섹션·블로그·광고 링크에 활용 (2026-09-19)
+- `php/contact.php`는 로컬에 PHP CLI가 없어 문법 검사를 못 함. `contact_next.php`로 올린 뒤 허니팟 필드 `website`를 채운 POST(메일을 보내지 않고 success JSON만 반환)로 200을 확인하고 `mv`로 교체할 것
+- 검색엔진 소유 확인 메타태그는 `build.py`의 `SITE_VERIFICATION`(네이버 서치어드바이저 / Google Search Console HTML 태그 content 값)에 넣고 빌드. 비어 있으면 출력 안 됨
+- 푸터 외부 채널(유튜브·네이버 블로그 등) 링크는 `build.py`의 `SOCIAL` 목록에 추가하고 빌드
+- 모바일(lg 미만)에서는 `footer.html`의 `.call-bar`(전화 상담 / 온라인 문의) 하단 고정 바가 모든 페이지에 표시됨. 스타일은 `css/default-theme.css` 끝부분
+- GA4 측정 ID가 설정되면 전화 링크 클릭(`phone_call`, `js/analytics.js`)과 문의 폼 성공(`generate_lead`, `site_type` 파라미터, `theme-script.js`)이 이벤트로 기록됨. GA4에서 두 이벤트를 전환으로 표시하면 됨
 - 스팸 방지: 숨김 필드 `website`(허니팟, 채워져 있으면 성공한 척 응답 후 버림), 동일 출처 검사, IP당 1시간 5건 제한(`sys_get_temp_dir()` 파일)
 - Google Analytics: `js/analytics.js`의 `GA4_ID`에 측정 ID(`G-...`)를 넣으면 전 페이지 활성화. 비어 있으면 아무것도 로드하지 않음. 예전 UA-127663147-1은 2023-07 수집 종료로 제거함 (2026-09-18)
 - 연락처 지도: API 키 없이 동작하는 Google Maps 임베드 iframe(`output=embed`) + 네이버 지도/카카오맵 링크 버튼. 예전 `js/map.js`(Maps JavaScript API, 키 없음 → 에러)와 MailChimp용 `php/subscribe.php`, `php/MCAPI.class.php`는 2026-09-18 삭제
@@ -96,7 +102,7 @@ ssh taeyang 'PW=$(sed -n "s/.*'"'"'pass'"'"' => '"'"'\([^'"'"']*\)'"'"'.*/\1/p" 
 
 ## 성능 / SEO 규칙 (2026-09-18)
 
-- 각 HTML은 실제로 쓰는 CSS/JS만 로드함 (페이지 메타의 `css:`/`js:` 목록. 예: slit-slider·modernizr는 `index.html`만, jarallax는 서브페이지만, contact-form은 `contact.html`만). `js/theme-script.js`는 플러그인이 없으면 건너뛰도록 가드가 있으므로 새 페이지에 플러그인을 빼도 오류 없음
+- 각 HTML은 실제로 쓰는 CSS/JS만 로드함 (페이지 메타의 `css:`/`js:` 목록. 예: slit-slider·modernizr는 `index.html`만, jarallax는 서브페이지만, contact-form은 `contact.html`만). `themify-icons`는 모바일 메뉴 아이콘(`.navbar-toggler-icon`, `responsive.css`)이 쓰므로 공통 CSS에 포함 (2026-09-19 서브페이지에서 아이콘이 깨지던 문제 수정). `js/theme-script.js`는 플러그인이 없으면 건너뛰도록 가드가 있으므로 새 페이지에 플러그인을 빼도 오류 없음
 - CSS/JS 링크에는 `?v=YYYYMMDD` 버전 문자열이 붙어 있음. `.htaccess`가 css/js 7일, 이미지 30일 브라우저 캐시를 걸므로 CSS/JS를 수정하면 5개 HTML의 `?v=` 값을 함께 올릴 것
 - 이미지는 커밋 전에 긴 변 1920px(갤러리 large는 1600px), JPEG 품질 82 정도로 줄여서 넣기. 원본 촬영 파일을 그대로 올리지 말 것
 - 갤러리 그리드의 폴백 `<img>`에는 `loading="lazy"`를 넣지 말 것 (isotope가 높이를 계산하기 전에 로드돼야 함). 그 외 본문 이미지는 lazy 사용

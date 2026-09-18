@@ -15,6 +15,17 @@ $from     = 'noreply@taeyang1000.com';
 $fromName = '태양천 홈페이지';
 $subject  = '[태양천 홈페이지] 문의';
 $okMessage    = '태양천 그루빙에 문의해주셔서 감사합니다! 내용 확인 후 답장 드리도록 하겠습니다.';
+$siteTypes = [  // contact.html 의 select 와 맞춘다
+    'school' => '어린이 보호구역 · 통학로',
+    'curve' => '급커브 · 산악도로',
+    'slope' => '급경사 이면도로 · 주택가',
+    'busstop' => '버스 정류장 · 교차로',
+    'golf' => '골프장 카트길',
+    'parking' => '주차장 램프 · 지하주차장',
+    'harbor' => '항만 · 교량 대면적',
+    'highway' => '고속도로 · 국도',
+    'other' => '기타',
+];
 $rateLimitMax = 5;     // 건
 $rateLimitWin = 3600;  // 초
 
@@ -76,6 +87,9 @@ if (count($recent) >= $rateLimitMax) {
 $name    = line_field('name', 100);
 $email   = line_field('email', 200);
 $phone   = line_field('phone', 50);
+$siteType = line_field('site_type', 20);
+$siteTypeLabel = $siteTypes[$siteType] ?? '(미선택)';
+$location = line_field('location', 100);
 $message = $_POST['message'] ?? '';
 $message = is_string($message) ? mb_substr(trim(str_replace(["\r\n", "\r"], "\n", $message)), 0, 5000) : '';
 
@@ -92,6 +106,8 @@ $body = "홈페이지 문의 폼으로 새 문의가 접수되었습니다.\n"
       . "이름: {$name}\n"
       . "이메일: " . ($email !== '' ? $email : '(미입력)') . "\n"
       . "전화번호: " . ($phone !== '' ? $phone : '(미입력)') . "\n"
+      . "현장 유형: {$siteTypeLabel}\n"
+      . "현장 위치: " . ($location !== '' ? $location : '(미입력)') . "\n"
       . "\n문의내용:\n{$message}\n"
       . "\n-----------------------------\n"
       . "접수 시각: " . date('Y-m-d H:i:s') . "\n"
@@ -107,7 +123,7 @@ $headers = [
 if ($email !== '') {
     $headers[] = 'Reply-To: ' . $email;
 }
-$encSubject = mb_encode_mimeheader($subject . ' - ' . $name, 'UTF-8', 'B');
+$encSubject = mb_encode_mimeheader($subject . ' - ' . ($siteTypes[$siteType] ?? '일반') . ' - ' . $name, 'UTF-8', 'B');
 
 // -f 로 봉투 발신자(Return-Path)도 도메인 주소로 맞춰 SPF 가 통과되게 한다. 거부되면 기본값으로 재시도.
 $sent = @mail($sendTo, $encSubject, $body, implode("\r\n", $headers), '-f' . $from)
