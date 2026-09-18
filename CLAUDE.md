@@ -44,7 +44,14 @@ scp -r css js images taeyang:~/www/
 - `.pem` 파일은 절대 커밋하지 않기
 - `backup/`은 서버 전체 백업 tarball 보관용 (`.gitignore`로 제외). 서버에는 레포에 없는 이미지가 있으므로 서버를 초기화하는 작업 전에는 항상 `ssh taeyang 'cd ~ && tar czf - www' > backup/www-backup-YYYYMMDD.tar.gz`로 받아둘 것
 - macOS `tar`로 서버에 올리면 `._*` 메타파일이 함께 생기므로 `COPYFILE_DISABLE=1 tar ...`로 만들거나 업로드 후 `find ~/www -name '._*' -exec rm -f {} +`로 정리
-- `php/MCAPI.class.php`는 PHP 8 호환을 위해 `__construct`가 추가되어 있음 (원본은 PHP 4 스타일 생성자)
+- 공통 CSS/JS(`css/default-theme.css`, `js/theme-script.js`)를 고치면 5개 HTML의 링크 뒤 `?v=YYYYMMDD` 버전 문자열도 함께 올려야 방문자 브라우저 캐시가 갱신됨
+
+## 문의 폼 / 애널리틱스 / 지도
+
+- 문의 폼: `contact.html` → `js/theme-script.js`의 `contactform()`이 `php/contact.php`로 AJAX POST, 응답은 항상 JSON. From은 `noreply@taeyang1000.com`(도메인 SPF에 서버 IP가 등록되어 있음), Reply-To는 문의자 이메일, 수신은 `taeyangcheun@naver.com`
+- 스팸 방지: 숨김 필드 `website`(허니팟, 채워져 있으면 성공한 척 응답 후 버림), 동일 출처 검사, IP당 1시간 5건 제한(`sys_get_temp_dir()` 파일)
+- Google Analytics: `js/analytics.js`의 `GA4_ID`에 측정 ID(`G-...`)를 넣으면 전 페이지 활성화. 비어 있으면 아무것도 로드하지 않음. 예전 UA-127663147-1은 2023-07 수집 종료로 제거함 (2026-09-18)
+- 연락처 지도: API 키 없이 동작하는 Google Maps 임베드 iframe(`output=embed`) + 네이버 지도/카카오맵 링크 버튼. 예전 `js/map.js`(Maps JavaScript API, 키 없음 → 에러)와 MailChimp용 `php/subscribe.php`, `php/MCAPI.class.php`는 2026-09-18 삭제
 
 ## 도메인 / SSL
 
@@ -68,3 +75,12 @@ ssh taeyang 'PW=$(sed -n "s/.*'"'"'pass'"'"' => '"'"'\([^'"'"']*\)'"'"'.*/\1/p" 
 # 비밀번호를 아예 초기화(다음 접속 때 다시 설정 화면): ... -e "DELETE FROM gallery_settings WHERE k=\"admin_password_hash\""
 ```
 - 관리자 페이지는 `Referrer-Policy: same-origin`을 써야 함. `no-referrer`로 두면 브라우저가 폼 POST에 `Origin: null`을 보내 동일 출처 검사에 걸림 (2026-09-18 실제로 겪은 버그)
+
+## 성능 / SEO 규칙 (2026-09-18)
+
+- 각 HTML은 실제로 쓰는 CSS/JS만 로드함 (예: slit-slider·modernizr는 `index.html`만, jarallax는 서브페이지만, contact-form.js는 `contact.html`만). `js/theme-script.js`는 플러그인이 없으면 건너뛰도록 가드가 있으므로 새 페이지에 플러그인을 빼도 오류 없음
+- CSS/JS 링크에는 `?v=YYYYMMDD` 버전 문자열이 붙어 있음. `.htaccess`가 css/js 7일, 이미지 30일 브라우저 캐시를 걸므로 CSS/JS를 수정하면 5개 HTML의 `?v=` 값을 함께 올릴 것
+- 이미지는 커밋 전에 긴 변 1920px(갤러리 large는 1600px), JPEG 품질 82 정도로 줄여서 넣기. 원본 촬영 파일을 그대로 올리지 말 것
+- 갤러리 그리드의 폴백 `<img>`에는 `loading="lazy"`를 넣지 말 것 (isotope가 높이를 계산하기 전에 로드돼야 함). 그 외 본문 이미지는 lazy 사용
+- 페이지별 `<title>`/`description`/canonical/OG 태그가 있으니 페이지를 추가하면 같이 채우고 `sitemap.xml`에도 URL 추가
+- 로컬 미리보기: `.claude/launch.json`의 `static` (python http.server 8765). PHP(갤러리 API, 문의 폼)는 로컬에서 동작하지 않고 HTML 폴백만 보임

@@ -229,3 +229,12 @@ transform: translateY(-50%) rotate(90deg); -webkit-transform: translateY(-50%) r
 .img-side.img-left {left: 0;}
 .img-side {padding: 0; position: absolute!important; top: 0px; height: 100%; overflow: hidden; z-index: 9;}
 .img-side .owl-carousel, .img-side .owl-stage-outer, .img-side .owl-stage, .img-side .owl-stage, .img-side .owl-item, .img-side .owl-item .item{height: 100%}
+/* 연락처 지도 임베드 */
+.contact-3 .contact-box{position:static;top:auto;transform:none}
+.contact-3 .map-embed{margin-top:60px}
+.map-embed{display:block;width:100%;height:450px;border:0}
+.map-links{padding:20px 15px 130px;text-align:center} /* 하단 여백: 푸터 연락처 바(.contact-media)가 위로 절반 겹쳐 올라옴 */
+.map-links .btn{margin:5px 6px}
+@media (max-width:767px){.map-embed{height:300px}.map-links{padding-bottom:20px}}
+/* 문의 폼 스팸 방지용 숨김 필드 (사람에게는 보이지 않음) */
+.hp-field{position:absolute !important;left:-9999px !important;width:1px;height:1px;overflow:hidden;opacity:0}

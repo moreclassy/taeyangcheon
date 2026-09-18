@@ -83,6 +83,7 @@ function fullScreen() {
   HT Slit Slider
 --------------------------------------*/
 function slitslider() {
+  if (!$.fn.slitslider || !$('#slider').length) return;
   var Page = (function () {
     var $navArrows = $('#nav-arrows'),
       $nav = $('#nav-dots > span'),
@@ -142,6 +143,7 @@ function counter() {
   HT Owl Carousel
 --------------------------------------*/
 function owlcarousel() {
+  if (!$.fn.owlCarousel) return;
   $('.owl-carousel').each(function () {
     var $carousel = $(this);
     $carousel.owlCarousel({
@@ -180,6 +182,7 @@ function owlcarousel() {
   HT Audio Player
 --------------------------------------*/
 function lightgallery() {
+  if (!$.fn.audioPlayer) return;
   $('audio').audioPlayer();
 };
 
@@ -187,6 +190,7 @@ function lightgallery() {
   HT Magnific Popup
 --------------------------------------*/
 function magnificpopup() {
+  if (!$.fn.magnificPopup) return;
   $('.popup-gallery').magnificPopup({
     delegate: 'a.popup-img',
     type: 'image',
@@ -219,6 +223,7 @@ function magnificpopup() {
   HT Isotope
 --------------------------------------*/
 function isotope() {
+  if (!$.fn.isotope || !$('.grid').length) return;
   // init Isotope
   var $grid = $('.grid').isotope({
     itemSelector: '.grid-item',
@@ -331,6 +336,7 @@ function accordian() {
   HT Contact Form
 --------------------------------------*/
 function contactform() {
+  if (!$.fn.validator) return;
   $('#contact-form, #queto-form').validator();
   // when the form is submitted
   $('#contact-form, #queto-form').on('submit', function (e) {
@@ -338,10 +344,21 @@ function contactform() {
     if (!e.isDefaultPrevented()) {
       var url = "php/contact.php";
       // POST values in the background the the script URL
+      var $form = $(this);
+      var $btn = $form.find('button[type="submit"]').prop('disabled', true);
+      var showAlert = function (type, text) {
+        $form.find('.messages').html('<div class="alert alert-' + type + ' alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + text + '</div>');
+      };
       $.ajax({
         type: "POST",
         url: url,
-        data: $(this).serialize(),
+        data: $form.serialize(),
+        dataType: "json",
+        complete: function () { $btn.prop('disabled', false); },
+        error: function (xhr) {
+          var msg = (xhr.responseJSON && xhr.responseJSON.message) || '전송에 실패했습니다. 잠시 후 다시 시도하시거나 전화로 문의해주세요.';
+          showAlert('danger', msg);
+        },
         success: function (data) {
           // data = JSON object that contact.php returns
           // we recieve the type of the message: success x danger and apply it to the 
@@ -406,7 +423,7 @@ function masonry() {
   var $masonry = $('.masonry'),
     $itemElement = '.masonry-brick',
     $filters = $('.portfolio-filter');
-  if ($masonry.exists()) {
+  if ($masonry.exists() && $.fn.isotope) {
     $masonry.isotope({
       resizable: true,
       itemSelector: $itemElement,
@@ -425,40 +442,9 @@ function masonry() {
   HT Countdown
 --------------------------------------*/
 function countdown() {
+  if (!$.fn.countdown) return;
   $(".countdown").countdown('2018/09/23 00:00', function (event) {
     $(this).html(event.strftime('<li><span>%-D</span><p>Days</p></li>' + '<li><span>%-H</span><p>Hours</p></li>' + '<li><span>%-M</span><p>Minutes</p></li>' + '<li><span>%S</span><p>Seconds</p></li>'));
-  });
-};
-
-/*------------------------------------
-  HT Mailchimp
---------------------------------------*/
-function mailchimp() {
-  // jQuery Validation
-  $("#newslatter").validate({
-    // if valid, post data via AJAX
-    submitHandler: function (form) {
-      $.post("php/subscribe.php", {
-        fname: $("#fname").val(),
-        lname: $("#lname").val(),
-        email: $("#email").val()
-      }, function (data) {
-        $('#response').html(data);
-      });
-    },
-    // all fields are required
-    rules: {
-      fname: {
-        required: true
-      },
-      lname: {
-        required: true
-      },
-      email: {
-        required: true,
-        email: true
-      }
-    }
   });
 };
 
@@ -466,6 +452,7 @@ function mailchimp() {
   HT jarallax
 --------------------------------------*/
 function jarallax() {
+  if (!$.fn.jarallax) return;
   $('.jarallax').jarallax({});
 };
 
@@ -473,6 +460,7 @@ function jarallax() {
   HT Particles
 --------------------------------------*/
 function particles() {
+  if (!$.fn.particleground || !$('#particles').length) return;
   $('#particles').particleground({
     dotColor: '#555',
     lineColor: 'rgba(255,255,255,0.1)'
@@ -490,14 +478,13 @@ $(document).ready(function () {
   lightgallery(),
   magnificpopup(),
   scrolltop(),
-  headerheight()
+  headerheight(),
   fxheader(),
   databgcolor(),
   accordian(),
   contactform(),
   progressbar(),
   countdown(),
-  mailchimp(),
   jarallax(),
   particles();
 });

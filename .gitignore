@@ -6,3 +6,6 @@ backup/
 php/gallery/config.php
 images/uploads/*
 !images/uploads/.htaccess
+.DS_Store
+Thumbs.db
+.claude/

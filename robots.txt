@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /php/
+
+Sitemap: https://taeyang1000.com/sitemap.xml
