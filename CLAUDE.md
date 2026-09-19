@@ -81,7 +81,7 @@ scp -r css js images taeyang:~/www/
 
 - taeyang1000.com은 2026-09-18 가비아에서 카페24로 기관이전됨 (카페24 `나의 서비스 관리 > 도메인관리`에서 관리, 만료 2029-03-11)
 - SSL은 카페24 `SSL Basic`(Let's Encrypt, apex + www 포함) 사용. 카페24가 호스팅 종료일까지 자동 갱신하므로 직접 갱신 작업 없음
-- 레포 루트 `.htaccess`가 http → https 301 리다이렉트를 담당하며 `~/www/.htaccess`로 배포됨. 인증서가 없는 상태에서 올리면 사이트가 끊기므로 주의
+- 레포 루트 `.htaccess`가 http → https, www → apex(`https://taeyang1000.com`) 301 리다이렉트를 담당하며 `~/www/.htaccess`로 배포됨 (www 통합은 2026-09-19, 배포 전 서버 사본 `~/.htaccess.bak-20260919`). 인증서가 없는 상태에서 올리면 사이트가 끊기므로 주의
 
 ## 갤러리 관리 (DB 기반 사진 업로드)
 

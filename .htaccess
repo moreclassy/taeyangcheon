@@ -1,7 +1,9 @@
-# HTTP -> HTTPS 리다이렉트 (SSL Basic 인증서 설치 후 배포)
+# HTTP -> HTTPS, www -> apex 리다이렉트 (한 번의 301 로 https://taeyang1000.com/... 으로 통일)
+# 검색엔진이 www 와 apex 를 별개 사이트로 보지 않게 하기 위함. SSL Basic 인증서가 www 도 포함하므로 https://www 접속도 안전하게 넘어감
 RewriteEngine On
-RewriteCond %{HTTPS} !=on
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^ https://taeyang1000.com%{REQUEST_URI} [R=301,L]
 
 # 브라우저 캐시 (정적 파일). css/js 는 HTML 에서 ?v= 버전 문자열로 갱신
 <IfModule mod_expires.c>
