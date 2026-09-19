@@ -62,6 +62,7 @@ scp -r css js images taeyang:~/www/
 - `php/contact.php`는 로컬에 PHP CLI가 없어 문법 검사를 못 함. `contact_next.php`로 올린 뒤 허니팟 필드 `website`를 채운 POST(메일을 보내지 않고 success JSON만 반환)로 200을 확인하고 `mv`로 교체할 것
 - 검색엔진 소유 확인 메타태그는 `build.py`의 `SITE_VERIFICATION`(네이버 서치어드바이저 / Google Search Console HTML 태그 content 값)에 넣고 빌드. 비어 있으면 출력 안 됨
 - 푸터 외부 채널(유튜브·네이버 블로그 등) 링크는 `build.py`의 `SOCIAL` 목록에 추가하고 빌드
+- 검색엔진 등록 현황: 네이버 서치어드바이저(HTML 태그 인증, 2026-09-19), Google Search Console URL 접두어 속성 `https://taeyang1000.com/`(HTML 태그 인증, sitemap.xml 제출 완료, 메인 페이지 색인 요청, 2026-09-19. 사용자의 Chrome 구글 계정으로 등록). 2026-09-07 구글 크롤링이 4xx로 실패한 이력이 있음(서버 이전 전) → 색인 보고서에서 4xx 오류가 다시 나오면 서버 상태 확인
 - 모바일(lg 미만)에서는 `footer.html`의 `.call-bar`(전화 상담 / 온라인 문의) 하단 고정 바가 모든 페이지에 표시됨. 스타일은 `css/default-theme.css` 끝부분
 - GA4 측정 ID가 설정되면 전화 링크 클릭(`phone_call`, `js/analytics.js`)과 문의 폼 성공(`generate_lead`, `site_type` 파라미터, `theme-script.js`)이 이벤트로 기록됨. GA4에서 두 이벤트를 전환으로 표시하면 됨
 - 스팸 방지: 숨김 필드 `website`(허니팟, 채워져 있으면 성공한 척 응답 후 버림), 동일 출처 검사, IP당 1시간 5건 제한(`sys_get_temp_dir()` 파일)
