@@ -3,7 +3,7 @@
  * 비어 있으면 아무것도 로드하지 않는다. (기존 Universal Analytics UA-127663147-1 은 2023-07 수집 종료) */
 (function () {
   'use strict';
-  var GA4_ID = '';
+  var GA4_ID = 'G-0V0BMQL618';
   if (!GA4_ID) return;
   var s = document.createElement('script');
   s.async = true;
@@ -17,5 +17,7 @@
   document.addEventListener('click', function (e) {
     var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
     if (a) window.gtag('event', 'phone_call', { phone_number: a.getAttribute('href').slice(4) });
+    var pdf = e.target && e.target.closest ? e.target.closest('a[href$=".pdf"]') : null;
+    if (pdf) window.gtag('event', 'file_download', { file_name: pdf.getAttribute('href').split('/').pop(), file_extension: 'pdf' });
   });
 })();

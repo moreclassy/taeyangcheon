@@ -20,6 +20,7 @@ RewriteRule ^ https://taeyang1000.com%{REQUEST_URI} [R=301,L]
   ExpiresByType image/webp "access plus 30 days"
   ExpiresByType image/svg+xml "access plus 30 days"
   ExpiresByType image/x-icon "access plus 30 days"
+  ExpiresByType application/pdf "access plus 1 day"
   ExpiresByType font/woff2 "access plus 1 year"
   ExpiresByType font/woff "access plus 1 year"
   ExpiresByType font/ttf "access plus 1 year"

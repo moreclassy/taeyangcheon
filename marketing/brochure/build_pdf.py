@@ -5,7 +5,7 @@ brochure.html 의 {{IMG}} 를 레포 루트 경로로, {{QR}} 를 (qrcode 모듈
 headless Chrome 으로 A4 한 장 PDF 를 만든다.
 
     python3 marketing/brochure/build_pdf.py
-    → marketing/brochure/태양천_그루빙_공법소개서.pdf
+    → files/taeyang_grooving_brochure.pdf (사이트의 '소개서 다운로드' 버튼이 이 파일을 가리킴)
 """
 import base64
 import io
@@ -17,7 +17,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 CHROME = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
-OUT = HERE / '태양천_그루빙_공법소개서.pdf'
+OUT = ROOT / 'files' / 'taeyang_grooving_brochure.pdf'
 
 
 def qr_tag(url: str) -> str:
@@ -31,6 +31,7 @@ def qr_tag(url: str) -> str:
 
 
 def main() -> int:
+    OUT.parent.mkdir(exist_ok=True)
     html = (HERE / 'brochure.html').read_text(encoding='utf-8')
     html = html.replace('{{IMG}}', ROOT.as_uri()).replace('{{QR}}', qr_tag('https://taeyang1000.com/cases.html'))
     with tempfile.TemporaryDirectory() as tmp:

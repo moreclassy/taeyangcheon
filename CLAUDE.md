@@ -66,7 +66,7 @@ scp -r css js images taeyang:~/www/
 - 모바일(lg 미만)에서는 `footer.html`의 `.call-bar`(전화 상담 / 온라인 문의) 하단 고정 바가 모든 페이지에 표시됨. 스타일은 `css/default-theme.css` 끝부분
 - GA4 측정 ID가 설정되면 전화 링크 클릭(`phone_call`, `js/analytics.js`)과 문의 폼 성공(`generate_lead`, `site_type` 파라미터, `theme-script.js`)이 이벤트로 기록됨. GA4에서 두 이벤트를 전환으로 표시하면 됨
 - 스팸 방지: 숨김 필드 `website`(허니팟, 채워져 있으면 성공한 척 응답 후 버림), 동일 출처 검사, IP당 1시간 5건 제한(`sys_get_temp_dir()` 파일)
-- Google Analytics: `js/analytics.js`의 `GA4_ID`에 측정 ID(`G-...`)를 넣으면 전 페이지 활성화. 비어 있으면 아무것도 로드하지 않음. 예전 UA-127663147-1은 2023-07 수집 종료로 제거함 (2026-09-18)
+- Google Analytics: `js/analytics.js`의 `GA4_ID`에 측정 ID(`G-...`)를 넣으면 전 페이지 활성화. 비어 있으면 아무것도 로드하지 않음. 예전 UA-127663147-1은 2023-07 수집 종료로 제거함 (2026-09-18). 2026-09-19 GA4 속성 생성·연결 완료: 계정 `태양천 그루빙`(a408814078), 속성 p555091674, 웹 스트림 15805900437, 측정 ID `G-0V0BMQL618`(숫자 0). 사용자의 Chrome 구글 계정 소유. 새 GA4 UI는 이벤트가 한 번 수집된 뒤에야 `관리 > 데이터 표시 > 이벤트`에서 별표로 주요 이벤트 지정 가능 → `generate_lead`, `phone_call`이 목록에 나타나면 별표 켜기. analytics.js를 고치면 `head.html`의 `js/analytics.js?v=` 올리기
 - 연락처 지도: API 키 없이 동작하는 Google Maps 임베드 iframe(`output=embed`) + 네이버 지도/카카오맵 링크 버튼. 예전 `js/map.js`(Maps JavaScript API, 키 없음 → 에러)와 MailChimp용 `php/subscribe.php`, `php/MCAPI.class.php`는 2026-09-18 삭제
 
 ## 시공 실적 (DB 기반, records.html)
@@ -80,7 +80,7 @@ scp -r css js images taeyang:~/www/
 
 ## 홍보 자료
 
-- A4 공법 소개서: `marketing/brochure/brochure.html`(원본) → `python3 marketing/brochure/build_pdf.py` 로 `태양천_그루빙_공법소개서.pdf` 생성 (headless Chrome 사용, 한 장 초과 시 종료 코드 1). 사진은 레포 `images/` 를 그대로 참조하고, 전화번호·주소 등 문구는 HTML 에서 수정. `marketing/` 은 서버에 올리지 않음 (2026-09-19)
+- A4 공법 소개서: `marketing/brochure/brochure.html`(원본) → `python3 marketing/brochure/build_pdf.py` 로 `files/taeyang_grooving_brochure.pdf` 생성 (headless Chrome 사용, 한 장 초과 시 종료 코드 1). 사진은 레포 `images/` 를 그대로 참조하고, 전화번호·주소 등 문구는 HTML 에서 수정. `contact.html`·`cases.html` 의 "소개서 다운로드" 버튼이 이 PDF 를 가리키며(`download` 속성으로 한글 파일명 저장) GA4 `file_download` 이벤트가 기록됨. 고치면 `scp files/taeyang_grooving_brochure.pdf taeyang:~/www/files/`. `marketing/` 은 서버에 올리지 않음 (2026-09-19)
 
 ## 도메인 / SSL
 
