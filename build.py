@@ -42,7 +42,7 @@ VERSION_OVERRIDE = {
 #  - 네이버 서치어드바이저(searchadvisor.naver.com) → 사이트 등록 → "HTML 태그" 방식의 content 값
 #  - Google Search Console → 소유권 확인 → "HTML 태그" 방식의 content 값
 SITE_VERIFICATION = {
-    'naver-site-verification': '',
+    'naver-site-verification': '383d2463a8ec2ffb9ac13527a737443255339c44',
     'google-site-verification': '',
 }
 
