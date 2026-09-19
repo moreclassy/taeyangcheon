@@ -107,6 +107,7 @@ ssh taeyang 'PW=$(sed -n "s/.*'"'"'pass'"'"' => '"'"'\([^'"'"']*\)'"'"'.*/\1/p" 
 - 이미지는 커밋 전에 긴 변 1920px(갤러리 large는 1600px), JPEG 품질 82 정도로 줄여서 넣기. 원본 촬영 파일을 그대로 올리지 말 것
 - 갤러리 그리드의 폴백 `<img>`에는 `loading="lazy"`를 넣지 말 것 (isotope가 높이를 계산하기 전에 로드돼야 함). 그 외 본문 이미지는 lazy 사용
 - 페이지별 `<title>`/`description`/canonical/OG 태그는 `src/pages/*.html` 메타 블록에서 채워지고 `build.py`가 생성. 페이지를 추가하면 메타 블록을 채우고 `sitemap.xml`에도 URL 추가
+- `build.py`는 다시 생성된 페이지의 `sitemap.xml` `<lastmod>`를 오늘 날짜로 자동 갱신하므로 배포 시 `sitemap.xml`도 함께 올릴 것. 본문에 아코디언(`.accordion`, 현재 `index.html`)이 있으면 질문·답변을 뽑아 FAQPage JSON-LD를 자동 생성함(답변 안의 `<a>` 링크는 제외). 문구는 HTML 한 곳만 고치면 됨 (2026-09-19)
 - `cases.html`(현장 유형별 시공 사례)은 `images/portfolio/field/` 사진을 앵커 `#school #curve #slope #busstop #golf #parking #harbor` 7개 섹션으로 묶은 정적 페이지. 페이지 전용 CSS는 `src/pages/cases.html`의 `<!--head-extra-->` 안 `<style>`. 갤러리 DB와 연동되지 않으므로 사례를 추가하려면 `src/pages/cases.html` 수정 후 빌드
 - 교통사고 통계 문구(`index.html` 아코디언, `about.html`)는 2024년 사망자 2,521명·10만 명당 5.3명, 2025년 2,549명 기준(2026-09-18 갱신). 매년 초 도로교통공단 발표 후 갱신
 - `.htaccess` 보안 헤더: HSTS(1년, includeSubDomains 없음), nosniff, X-Frame-Options SAMEORIGIN, Permissions-Policy. Referrer-Policy 는 정적 파일에만 걸어 `admin/index.php` 의 PHP 헤더와 충돌하지 않게 함

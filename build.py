@@ -23,7 +23,9 @@ src/pages/*.html (본문 + 메타 블록) 과 src/partials/*.html (head / header
     <!--head-extra-->  ... <head> 끝부분(CSS 뒤)에 그대로 들어갈 HTML (JSON-LD, 페이지 전용 <style>) ...  <!--/head-extra-->
     ... 본문: <!--header end--> 와 <!--footer start--> 사이에 들어갈 HTML ...
 """
+import datetime
 import html
+import json
 import re
 import sys
 from pathlib import Path
@@ -43,7 +45,7 @@ VERSION_OVERRIDE = {
 #  - Google Search Console → 소유권 확인 → "HTML 태그" 방식의 content 값
 SITE_VERIFICATION = {
     'naver-site-verification': '383d2463a8ec2ffb9ac13527a737443255339c44',
-    'google-site-verification': '',
+    'google-site-verification': 'YI51ssCGxZnsuRKgWVNdtVSzHfZ7aKftsKRJPyr7nvA',
 }
 
 # 푸터에 표시할 외부 채널 링크 (아이콘 클래스, 표시 이름, URL). 비어 있으면 출력하지 않는다.
@@ -97,7 +99,12 @@ NAV = [
     ('contact', 'contact.html', '연락처'),
 ]
 
+SITEMAP = ROOT / 'sitemap.xml'
+
 META_RE = re.compile(r'^<!--page\n(.*?)\n-->\n?', re.S)
+# 본문 아코디언(FAQ) → FAQPage 구조화 데이터 자동 생성용
+FAQ_Q_RE = re.compile(r'<a data-toggle="collapse"[^>]*>(.*?)</a>', re.S)
+FAQ_A_RE = re.compile(r'<div class="card-body">(.*?)</div>', re.S)
 EXTRA_RE = re.compile(r'<!--head-extra-->\n?(.*?)\n?<!--/head-extra-->\n?', re.S)
 
 
@@ -161,6 +168,50 @@ def render_social():
     return f'<ul class="list-inline footer-social">{items}</ul>'
 
 
+def strip_tags(s: str) -> str:
+    s = re.sub(r'<[^>]+>', '', s)
+    s = html.unescape(s)
+    s = re.sub(r'\s+', ' ', s).strip()
+    return s.rstrip(' →').strip()
+
+
+def render_faq(body: str) -> str:
+    """본문에 아코디언(.accordion)이 있으면 질문·답변을 뽑아 FAQPage JSON-LD 를 만든다.
+    HTML 의 문구가 바뀌면 구조화 데이터도 같이 바뀌므로 따로 관리할 필요가 없다."""
+    if 'class="accordion' not in body:
+        return ''
+    qs = [strip_tags(q) for q in FAQ_Q_RE.findall(body)]
+    # 답변 끝의 안내 링크(<a>…</a>)는 답변 본문이 아니므로 제외
+    ans = [strip_tags(re.sub(r'<a [^>]*>.*?</a>', '', a, flags=re.S)) for a in FAQ_A_RE.findall(body)]
+    if not qs or len(qs) != len(ans):
+        raise SystemExit(f'FAQ 질문 {len(qs)}개 / 답변 {len(ans)}개 수가 맞지 않습니다')
+    data = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        'mainEntity': [
+            {'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}}
+            for q, a in zip(qs, ans)
+        ],
+    }
+    return '<script type="application/ld+json">\n' + json.dumps(data, ensure_ascii=False, indent=1) + '\n</script>'
+
+
+def update_sitemap(changed: list):
+    """이번 빌드에서 다시 생성된 페이지의 <lastmod> 를 오늘 날짜로 갱신한다."""
+    if not changed or not SITEMAP.exists():
+        return
+    today = datetime.date.today().isoformat()
+    text = SITEMAP.read_text(encoding='utf-8')
+    for name in changed:
+        loc = SITE + '/' + ('' if name == 'index.html' else name)
+        pat = re.compile(r'(<loc>' + re.escape(loc) + r'</loc><lastmod>)[^<]*(</lastmod>)')
+        text, n = pat.subn(lambda m: m.group(1) + today + m.group(2), text)
+        if n == 0:
+            print(f'경고: sitemap.xml 에 {loc} 항목이 없습니다')
+    SITEMAP.write_text(text, encoding='utf-8')
+    print(f'sitemap.xml lastmod 갱신 ({today}): ' + ', '.join(changed))
+
+
 def render_nav(active: str):
     items = []
     for key, href, label in NAV:
@@ -192,6 +243,9 @@ def build_page(src_path: Path) -> str:
     footer = (SRC / 'partials' / 'footer.html').read_text(encoding='utf-8')
 
     preload = meta.get('preload', '')
+    faq = render_faq(body)
+    if faq:
+        extra = (extra + '\n' + faq) if extra else faq
     values = {
         'title': html.escape(meta['title'], quote=False),
         'title_attr': html.escape(meta['title']),
@@ -217,6 +271,7 @@ def main(argv):
     if not pages:
         raise SystemExit('src/pages/*.html 이 없습니다')
     stale = []
+    changed = []
     for src_path in pages:
         out_path = ROOT / src_path.name
         rendered = build_page(src_path)
@@ -226,6 +281,7 @@ def main(argv):
                 stale.append(out_path.name)
         elif current != rendered:
             out_path.write_text(rendered, encoding='utf-8')
+            changed.append(out_path.name)
             print(f'생성: {out_path.name}')
         else:
             print(f'변경 없음: {out_path.name}')
@@ -234,6 +290,8 @@ def main(argv):
             print('빌드 결과와 다른 파일: ' + ', '.join(stale) + '  → python3 build.py 실행')
             return 1
         print('모든 페이지가 최신 상태입니다')
+    else:
+        update_sitemap(changed)
     return 0
 
 
