@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>태양천 그루빙 공법 소개서</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 210mm; height: 297mm; }
+  body {
+    font-family: "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+    color: #222; font-size: 9.7pt; line-height: 1.45; background: #fff;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    word-break: keep-all;
+  }
+  .page { width: 210mm; height: 297mm; padding: 10mm 11mm 9mm; display: flex; flex-direction: column; gap: 4mm; overflow: hidden; }
+
+  /* header */
+  .hd { display: flex; align-items: flex-end; justify-content: space-between; border-bottom: 2.2pt solid #f9a305; padding-bottom: 2.4mm; }
+  .hd .brand { font-size: 20pt; font-weight: 800; letter-spacing: -0.5pt; color: #1d1d1d; }
+  .hd .brand span { color: #f9a305; }
+  .hd .sub { font-size: 10pt; color: #444; margin-top: 1mm; }
+  .hd .contact { text-align: right; font-size: 8.4pt; color: #333; line-height: 1.5; }
+  .hd .contact b { font-size: 12.5pt; color: #1d1d1d; letter-spacing: 0.2pt; }
+
+  /* intro */
+  .intro { display: grid; grid-template-columns: 1fr 58mm; gap: 4mm; align-items: stretch; }
+  .intro p { font-size: 9.4pt; }
+  .intro .lead { font-size: 11.5pt; font-weight: 700; color: #1d1d1d; margin-bottom: 1.2mm; }
+  .intro .hero { width: 58mm; height: 37mm; object-fit: cover; border-radius: 2mm; }
+
+  h2 { font-size: 10.5pt; font-weight: 800; color: #1d1d1d; margin-bottom: 1.6mm; display: flex; align-items: center; gap: 2mm; }
+  h2::before { content: ""; display: inline-block; width: 3mm; height: 3mm; background: #f9a305; border-radius: 0.6mm; }
+
+  /* methods */
+  .methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+  .m { border: 0.6pt solid #ddd; border-radius: 2mm; padding: 2.4mm 2.8mm 2.4mm; }
+  .m .name { font-weight: 800; font-size: 9.8pt; margin-bottom: 1mm; }
+  .m .name small { font-weight: 500; color: #777; font-size: 7.8pt; margin-left: 1mm; }
+  .m p { font-size: 8.8pt; color: #333; }
+  .grv { height: 11mm; margin: 0 0 1.6mm; border-radius: 1mm; background: #6e6e6e; position: relative; overflow: hidden; }
+  .grv.v { background: repeating-linear-gradient(90deg, #6e6e6e 0 2.2mm, #2b2b2b 2.2mm 2.9mm); }
+  .grv.h { background: repeating-linear-gradient(180deg, #6e6e6e 0 1.6mm, #2b2b2b 1.6mm 2.1mm); }
+  .grv.r { background: repeating-linear-gradient(180deg, #6e6e6e 0 0.9mm, #2b2b2b 0.9mm 1.4mm, #6e6e6e 1.4mm 2.6mm, #2b2b2b 2.6mm 3.1mm, #6e6e6e 3.1mm 4.8mm, #2b2b2b 4.8mm 5.3mm); }
+
+  /* sites */
+  .sites { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.6mm; }
+  .s { border-radius: 2mm; overflow: hidden; border: 0.6pt solid #ddd; }
+  .s img { width: 100%; height: 27mm; object-fit: cover; display: block; }
+  .s .t { font-weight: 800; font-size: 8.6pt; padding: 1.4mm 2mm 0.4mm; }
+  .s p { font-size: 8.1pt; color: #333; padding: 0 2mm 1.8mm; line-height: 1.38; }
+  .s.cta { background: #1d1d1d; color: #fff; border-color: #1d1d1d; padding: 2.4mm 2.4mm; display: flex; flex-direction: column; justify-content: center; }
+  .s.cta .t { color: #f9a305; padding: 0 0 1mm; font-size: 9pt; }
+  .s.cta p { color: #eee; padding: 0; font-size: 7.8pt; }
+
+  /* two columns: strengths + process */
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+  .str { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 3mm; }
+  .str div { font-size: 8.7pt; color: #333; padding-left: 3.2mm; position: relative; }
+  .str div::before { content: ""; position: absolute; left: 0; top: 1.5mm; width: 1.6mm; height: 1.6mm; border-radius: 50%; background: #f9a305; }
+  .str b { display: block; color: #1d1d1d; font-size: 8.8pt; }
+  .proc { display: flex; gap: 1.6mm; align-items: stretch; }
+  .proc div { flex: 1; background: #f6f6f6; border-radius: 1.6mm; padding: 2.2mm 1.6mm; text-align: center; font-size: 8.2pt; color: #333; position: relative; }
+  .proc div b { display: block; font-size: 8.6pt; color: #1d1d1d; margin-bottom: 0.4mm; }
+  .proc div i { display: block; font-style: normal; font-size: 7pt; color: #f9a305; font-weight: 800; margin-bottom: 0.4mm; }
+  .note { margin-top: 1.8mm; font-size: 7.9pt; color: #444; }
+
+  /* footer */
+  .ft { margin-top: auto; border-top: 0.8pt solid #ddd; padding-top: 2.2mm; display: flex; justify-content: space-between; align-items: center; gap: 4mm; }
+  .ft .l { font-size: 8pt; color: #333; line-height: 1.5; }
+  .ft .l b { font-size: 9.2pt; color: #1d1d1d; }
+  .ft .r { display: flex; align-items: center; gap: 2.5mm; }
+  .ft .r img { width: 17mm; height: 17mm; }
+  .ft .r .q { font-size: 7.4pt; color: #555; text-align: right; line-height: 1.4; }
+  .ft .r .q b { display: block; color: #1d1d1d; font-size: 8pt; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hd">
+    <div>
+      <div class="brand">태양천 <span>그루빙</span></div>
+      <div class="sub">도로 미끄럼 방지 그루빙(Grooving) 공법 소개서</div>
+    </div>
+    <div class="contact">
+      시공 상담 · 무료 현장 견적<br>
+      <b>010-5152-2253</b> &nbsp;/&nbsp; 010-7363-1008<br>
+      taeyangcheun@naver.com &nbsp;·&nbsp; taeyang1000.com
+    </div>
+  </div>
+
+  <div class="intro">
+    <div>
+      <p class="lead">홈 하나로 빗길·결빙·급커브 사고를 줄입니다</p>
+      <p>그루빙은 1960년대 미국 항공우주국(NASA)이 항공기 활주로 안전을 위해 개발한 노면 표면처리 공법입니다. 포장면에 일정한 간격과 깊이의 홈을 절삭해 타이어 패턴과 같은 효과를 내며, 수막현상 방지, 배수 향상, 결빙 억제, 조향 안정, 제동거리 단축 효과가 있습니다. 한 번 시공하면 별도 유지관리 없이 효과가 지속되어 사고 다발 구간에 비용 대비 효과가 가장 확실한 대책입니다. 국내 교통사고 사망자는 2025년 2,549명으로 다시 늘었으며, 빗길·졸음·경사로·급커브 구간이 주요 원인입니다.</p>
+    </div>
+    <img class="hero" src="{{IMG}}/images/about/01.jpg" alt="">
+  </div>
+
+  <div>
+    <h2>공법 3종 — 현장 조건에 맞게 방향·간격·깊이를 설계합니다</h2>
+    <div class="methods">
+      <div class="m">
+        <div class="grv v"></div>
+        <div class="name">종방향 그루빙 <small>Longitudinal</small></div>
+        <p>주행 방향의 홈. 커브, 경사면, 옆바람 구간, 교량에 적합. 타이어가 홈에 물려 코너링 조향이 안정되고 수막이 제거되어 미끄럼 사고를 막습니다. 결빙 시 얼음막이 홈으로 분단됩니다.</p>
+      </div>
+      <div class="m">
+        <div class="grv h"></div>
+        <div class="name">횡방향 그루빙 <small>Transverse</small></div>
+        <p>도로 폭 방향의 홈. 교차로, 횡단보도, 요금소, 내리막 램프 앞에 시공. 젖은 노면에서 제동거리를 단축하고 타이어 진동·소음으로 운전자에게 감속을 알립니다.</p>
+      </div>
+      <div class="m">
+        <div class="grv r"></div>
+        <div class="name">감속·경고음 요철 공법 <small>Rumble</small></div>
+        <p>홈 간격을 달리해 주행 시 경고음과 진동을 만듭니다. 졸음운전 방지, 감속 경고, 위험 구간 진입 안내에 사용하며 횡방향 그루빙과 조합해 시공합니다.</p>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <h2>적용 현장 — 태양천이 실제 시공한 유형</h2>
+    <div class="sites">
+      <div class="s"><img src="{{IMG}}/images/portfolio/field/school.jpeg" alt=""><div class="t">어린이 보호구역</div><p>미끄럼 방지 포장 위 종방향 시공, 횡단보도 앞 횡방향 추가로 빗길 제동거리 단축·감속 유도</p></div>
+      <div class="s"><img src="{{IMG}}/images/portfolio/field/curve2.jpeg" alt=""><div class="t">급커브 · 산악도로</div><p>곡선 전 구간 종방향 시공. 장비 2대 동시 투입으로 차로 통제 시간 절반 단축</p></div>
+      <div class="s"><img src="{{IMG}}/images/portfolio/field/residence.jpeg" alt=""><div class="t">급경사 이면도로</div><p>소형 장비로 좁은 골목 시공. 겨울 결빙 미끄럼과 오르막 헛바퀴를 줄여 주민 민원 해소</p></div>
+      <div class="s"><img src="{{IMG}}/images/portfolio/field/busstop.jpeg" alt=""><div class="t">버스 정류장 · 교차로</div><p>정차 구간 종방향 시공. 야간 작업으로 다음 날 첫차부터 정상 운행</p></div>
+      <div class="s"><img src="{{IMG}}/images/portfolio/field/golf.jpg" alt=""><div class="t">골프장 카트길</div><p>폭 2~3m 카트길 전 구간 종방향, 급한 내리막은 횡방향 병행. 휴장일 단기 시공</p></div>
+      <div class="s"><img src="{{IMG}}/images/portfolio/field/parking2.jpeg" alt=""><div class="t">주차장 램프</div><p>지하주차장 진입 램프 횡방향 시공. 실내는 분무 집진으로 분진·소음 억제</p></div>
+      <div class="s"><img src="{{IMG}}/images/portfolio/field/harbor.jpeg" alt=""><div class="t">항만 · 교량 대면적</div><p>배수 방향에 맞춘 45도·횡방향 시공, 교량 옆바람 구간은 종방향으로 조향 안정</p></div>
+      <div class="s cta"><div class="t">고속도로 · 국도 · 기타</div><p>요금소 진입부, 터널 출입구, 물류센터 램프, 선착장 등 미끄럼·결빙·과속 문제가 있는 모든 포장면에 적용할 수 있습니다.</p></div>
+    </div>
+  </div>
+
+  <div class="two">
+    <div>
+      <h2>태양천의 시공</h2>
+      <div class="str">
+        <div><b>40년 이상 경력 기술진</b>도로공사만 40년 이상. 현장을 보고 홈 방향·간격·깊이를 직접 설계</div>
+        <div><b>최신 장비, 2대 동시 투입</b>정확한 간격·깊이 절삭. 대면적은 공기 단축, 차로 통제 최소화</div>
+        <div><b>소형 장비 보유</b>폭 2~3m 카트길, 좁은 골목, 천장 낮은 지하주차장까지 진입</div>
+        <div><b>분진·소음 최소화</b>안개형 분무 집진으로 실내·주거지 민원 예방. 야간·휴장일 시공 가능</div>
+      </div>
+    </div>
+    <div>
+      <h2>진행 절차</h2>
+      <div class="proc">
+        <div><i>STEP 1</i><b>문의</b>현장 사진·위치·사고 유형 전달</div>
+        <div><i>STEP 2</i><b>현장 확인</b>공법 제안과 무료 견적</div>
+        <div><i>STEP 3</i><b>시공</b>야간·휴장일 협의, 통제 최소화</div>
+        <div><i>STEP 4</i><b>완료 보고</b>시공 사진·내역 제출</div>
+      </div>
+      <p class="note">지자체·공공기관 발주, 건설사·포장업체 하도급, 아파트 관리사무소, 골프장·물류센터 시설팀 문의를 환영합니다. 세금계산서 발행.</p>
+    </div>
+  </div>
+
+  <div class="ft">
+    <div class="l">
+      <b>태양천 그루빙</b> &nbsp; 사업자등록번호 575-59-00157<br>
+      서울특별시 강남구 삼성로107길 11-6 101호 &nbsp;·&nbsp; 전화 상담 매일 08:00~22:00
+    </div>
+    <div class="r">
+      <div class="q"><b>현장 유형별 시공 사례</b>taeyang1000.com/cases.html</div>
+      {{QR}}
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

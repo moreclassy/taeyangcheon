@@ -78,6 +78,10 @@ scp -r css js images taeyang:~/www/
 - 관리: https://taeyang1000.com/admin/ 의 "시공 실적" 카드 (추가/수정/공개 전환/삭제). API는 `admin/api.php`의 `records`, `record_save`, `record_public`, `record_delete`
 - 배포: `scp php/gallery/lib.php php/gallery/records_api.php taeyang:~/www/php/gallery/ && scp admin/* taeyang:~/www/admin/`. PHP CLI가 로컬·서버 모두 없어 문법 검사를 못 하므로, lib.php는 `lib_next.php` 같은 임시 이름으로 올려 임시 엔드포인트로 200 확인 후 교체할 것 (2026-09-18 이 방식으로 배포). admin.css/admin.js 수정 시 `admin/index.php`의 `?v=` 올리기
 
+## 홍보 자료
+
+- A4 공법 소개서: `marketing/brochure/brochure.html`(원본) → `python3 marketing/brochure/build_pdf.py` 로 `태양천_그루빙_공법소개서.pdf` 생성 (headless Chrome 사용, 한 장 초과 시 종료 코드 1). 사진은 레포 `images/` 를 그대로 참조하고, 전화번호·주소 등 문구는 HTML 에서 수정. `marketing/` 은 서버에 올리지 않음 (2026-09-19)
+
 ## 도메인 / SSL
 
 - taeyang1000.com은 2026-09-18 가비아에서 카페24로 기관이전됨 (카페24 `나의 서비스 관리 > 도메인관리`에서 관리, 만료 2029-03-11)
