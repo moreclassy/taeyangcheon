@@ -80,7 +80,7 @@ scp -r css js images taeyang:~/www/
 
 ## 홍보 자료
 
-- `marketing/docs/`: 대표자용 행정 가이드 문서(마크다운). 전문건설업 「지반조성·포장공사업」 등록 가이드(2026-09-19, 시행령 별표 2 기준. 그루빙 공사 입찰 자격의 전제 조건). 법령 개정 시 문서 상단 작성일과 기준을 함께 갱신
+- `marketing/docs/`: 대표자용 행정 가이드 문서(마크다운). 전문건설업 「지반조성·포장공사업」 등록 가이드(2026-09-19, 시행령 별표 2 기준. 그루빙 공사 입찰 자격의 전제 조건). 나라장터 조달업체 등록 킷(2026-09-19, 차세대 나라장터 기준. 건설업 등록 유무에 따른 A/B 경로). 법령 개정 시 문서 상단 작성일과 기준을 함께 갱신
 - A4 공법 소개서: `marketing/brochure/brochure.html`(원본) → `python3 marketing/brochure/build_pdf.py` 로 `files/taeyang_grooving_brochure.pdf` 생성 (headless Chrome 사용, 한 장 초과 시 종료 코드 1). 사진은 레포 `images/` 를 그대로 참조하고, 전화번호·주소 등 문구는 HTML 에서 수정. `contact.html`·`cases.html` 의 "소개서 다운로드" 버튼이 이 PDF 를 가리키며(`download` 속성으로 한글 파일명 저장) GA4 `file_download` 이벤트가 기록됨. 고치면 `scp files/taeyang_grooving_brochure.pdf taeyang:~/www/files/`. `marketing/` 은 서버에 올리지 않음 (2026-09-19)
 
 ## 도메인 / SSL
