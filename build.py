@@ -38,7 +38,7 @@ SRC = ROOT / 'src'
 SITE = 'https://taeyang1000.com'
 
 # CSS/JS 를 수정하면 여기 버전을 올린다 (.htaccess 가 css/js 를 7일 캐시함)
-VERSION = '20260926'
+VERSION = '20260927'
 VERSION_OVERRIDE = {
 }
 
