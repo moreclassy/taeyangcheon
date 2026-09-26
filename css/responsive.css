@@ -66,7 +66,6 @@ h6 {font-size: 16px; line-height: 22px;}
 .social-icons li a {height: 35px; line-height: 35px; width: 35px;}
 
 /*Footer*/
-footer .media-icon.style-2 li {min-height: 200px;}
 .footer-list li a{font-size: 13px;}
 
 }
@@ -105,12 +104,12 @@ h6 {font-size: 15px; line-height: 22px;}
 .navbar {justify-content: flex-end; width: 100%; border-radius: 0 !important;}
 .navbar-brand {left: 10px; margin-right: 0; position: absolute; top: 50%; padding: 0; transform: translateY(-50%); -webkit-transform: translateY(-50%); -o-transform: translateY(-50%); -ms-transform: translateY(-50%); -moz-transform: translateY(-50%);}
 .navbar-toggler {background: #ffffff; border-radius: 0; -webkit-box-shadow: 0 18px 42px 0 rgba(28, 30, 35, 0.15); -moz-box-shadow: 0 18px 42px 0 rgba(28, 30, 35, 0.15); box-shadow: 0 18px 42px 0 rgba(28, 30, 35, 0.15);}
-.navbar-toggler-icon {height: inherit; width: inherit;}
-.navbar-toggler-icon::before {color: #f9a305; content: ""; font-family: "themify"; font-size: 21px; font-style: normal; font-weight: normal; text-decoration: inherit;}
+.navbar-toggler-icon {height: 22px; width: 22px; display: block; color: #a66800;}
+.navbar-toggler-icon svg {display: block; width: 22px; height: 22px;}
 .navbar-nav .nav-item{margin: 0;}
-.navbar-nav .nav-link{padding: 10px !important; font-size: 16px;}
+.navbar-nav .nav-link{padding: 12px 10px !important; font-size: 16px; color: #1d1d1d;}
 .navbar-nav .nav-link:hover, .navbar-nav .active .nav-link,
-#header-wrap.fixed-header .navbar-nav .nav-link:hover, #header-wrap.fixed-header .navbar-nav .active .nav-link{background: #ffffff; color: #f9a305 !important;}
+#header-wrap.fixed-header .navbar-nav .nav-link:hover, #header-wrap.fixed-header .navbar-nav .active .nav-link{background: #ffffff; color: #a66800 !important;}
 .navbar-nav .nav-link .menu-label::before, .navbar-nav .nav-link .menu-label::after{display: none;}
 .navbar-nav.sm-collapsible .has-submenu{padding-top: 10px; padding-bottom: 10px;}
 .navbar-collapse {background:#f9a305; max-height: 400px; overflow: auto; border: medium none; left: 0; padding: 0; position: absolute; top: 50px; width: 100%;}
@@ -137,9 +136,7 @@ h6 {font-size: 15px; line-height: 22px;}
 .grid.columns-4 .grid-item, .masonry.columns-4 .masonry-brick {width: 33.333333%;}
 
 /*Footer*/
-.media-icon.style-2 li{width: 32.9%;}
 .copyright span{font-size: 12px;}
-.footer-2 .media-icon.style-2 li{min-height: 140px;}
 
 /*Contact*/
 .contact-2 .form-info {left: inherit; position: inherit; top: inherit; transform: inherit; width: 100%;}
@@ -160,7 +157,9 @@ h3 {font-size: 22px; line-height: 30px;}
 .hidden-sm{display: none !important;}
 .section-title h2{font-size: 32px; line-height: 32px;}
 .section-title p {font-size: 16px;}
-.page-title h1 {font-size: 30px; line-height: 30px;}
+.page-title {padding-top: 120px; padding-bottom: 50px;}
+.page-title h1 {font-size: 28px; line-height: 1.35;}
+.page-title h1 small {font-size: 15px; margin-top: 8px;}
 
 /*Margin*/
 .sm-mt-0{margin-top: 0 !important;}
@@ -224,13 +223,8 @@ h3 {font-size: 22px; line-height: 30px;}
 .html5-video video {width: auto;}
 
 /*Footer*/
-.contact-media{position: inherit; transform: inherit;}
-.media-icon.style-2 li{width: 100%; border-right: none;}
 .copyright span{font-size: 13px;}
 .footer-list li a{font-size: 14px;}
-footer .media-icon.style-2 li {min-height: inherit; padding: 30px; border-bottom: 1px dashed rgba(255, 255, 255, 0.5);}
-footer .media-icon.style-2 li:last-child {border-bottom: none;}
-.footer-2 .media-icon.style-2 li{min-height: inherit; border:none;}
 
 .media-holder .media-body h6{font-size: 18px;}
 
@@ -243,6 +237,7 @@ h2{font-size: 26px; line-height: 34px; margin-bottom: 10px;}
 h3 {font-size: 20px; line-height: 28px;}
 .section-title h2{font-size: 28px;}
 .page-title h1 {font-size: 24px;}
+.page-title h1 small {font-size: 14px;}
 
 /*Margin*/
 .xs-mt-0{}
@@ -271,7 +266,6 @@ h3 {font-size: 20px; line-height: 28px;}
 .fullscreen-banner .nav-dots{display: block;}
 .fullscreen-banner .nav-arrows{display: none;}
 .slider-2 .nav-dots{display: block;}
-.page-title {padding-top: 180px;}
 .page-breadcrumb {min-width: 260px;}
 .breadcrumb {padding: 10px; font-size: 13px; line-height: 26px;}
 
@@ -282,7 +276,8 @@ h3 {font-size: 20px; line-height: 28px;}
 /*Masonry*/
 .portfolio-filter button{width: 100%; margin-bottom: 5px; font-size: 14px; padding: 10px 7px;}
 .portfolio-filter button + button {margin-left: 0;}
-.grid.columns-3 .grid-item, .masonry.columns-3 .masonry-brick {width: 100%;}
+.grid.columns-3 .grid-item, .masonry.columns-3 .masonry-brick {width: 50%;}
+.grid .grid-item{padding: 5px;}
 .grid.columns-4 .grid-item, .masonry.columns-4 .masonry-brick {width: 100%;}
 
 /*Tab*/

@@ -13,13 +13,13 @@
   function itemHtml(it) {
     return '<div class="grid-item ' + esc(it.class) + '">' +
       '<div class="portfolio-item">' +
-        '<img src="' + esc(it.thumb) + '" alt="' + esc(it.title) + '" loading="lazy">' +
+        '<img src="' + esc(it.thumb) + '" alt="' + esc(it.title) + '" width="600" height="600" loading="lazy">' +
         '<div class="portfolio-hover">' +
           '<div class="portfolio-title"> <span>' + esc(it.span) + '</span>' +
-            '<h4>' + esc(it.title) + '</h4>' +
+            '<h3>' + esc(it.title) + '</h3>' +
           '</div>' +
           '<div class="portfolio-icon">' +
-            '<a class="popup popup-img" href="' + esc(it.large) + '" title="' + esc(it.title) + '"> <i class="flaticon-magnifier"></i></a>' +
+            '<a class="popup popup-img" href="' + esc(it.large) + '" title="' + esc(it.title) + '" aria-label="크게 보기: ' + esc(it.title) + '"> <i class="flaticon-magnifier" aria-hidden="true"></i></a>' +
           '</div>' +
         '</div>' +
       '</div>' +

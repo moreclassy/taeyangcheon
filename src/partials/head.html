@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{{title}}</title>
 <meta name="description" content="{{description}}" />
-<link rel="canonical" href="{{canonical}}" />
+{{robots}}<link rel="canonical" href="{{canonical}}" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="태양천 그루빙" />
 <meta property="og:locale" content="ko_KR" />
@@ -14,19 +14,30 @@
 <meta property="og:description" content="{{description}}" />
 <meta property="og:url" content="{{canonical}}" />
 <meta property="og:image" content="{{og_image}}" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="태양천 그루빙 · 도로 미끄럼 방지 그루빙 전문 시공 · 010-5152-2253" />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{title_attr}}" />
+<meta name="twitter:description" content="{{description}}" />
+<meta name="twitter:image" content="{{og_image}}" />
+<meta name="theme-color" content="#1b1b1b" />
 {{verification}}
+<link rel="preconnect" href="https://www.googletagmanager.com" />
+<link rel="dns-prefetch" href="https://www.google-analytics.com" />
 {{preload}}
 
-<!-- favicon icon -->
-<link rel="shortcut icon" href="images/favicon.ico" />
+<!-- favicon / 홈 화면 아이콘 (루트 절대경로: /favicon.ico 를 직접 요청하는 브라우저·크롤러 대응) -->
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" type="image/png" sizes="192x192" href="/images/icon-192.png" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
 <!-- inject css start -->
 {{css}}
 <!-- inject css end -->
 {{head_extra}}
-<!-- Google Analytics 4 (측정 ID는 js/analytics.js 에서 설정) -->
-<script src="js/analytics.js?v=20260919c"></script>
+<!-- Google Analytics 4 (측정 ID는 js/analytics.js 에서 설정). defer: 렌더링을 막지 않음 -->
+<script src="js/analytics.js?v=20260926" defer></script>
 
 </head>
 

@@ -13,11 +13,26 @@
   window.gtag = function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
   window.gtag('config', GA4_ID);
-  // 전화 링크 클릭을 전환 이벤트로 기록 (헤더·푸터·하단 문의 바·본문 공통)
+  // 링크 클릭 이벤트 (헤더·푸터·하단 문의 바·본문 공통)
+  //  phone_call(전화) · file_download(소개서 PDF) · email_click(메일) · map_click(네이버/카카오 지도, 구글은 contact.html)
+  //  inquiry_link(contact.html?type=…/purpose=… 로 가는 상담 링크) · kakao_chat(카카오톡 채널, 개설 후)
   document.addEventListener('click', function (e) {
-    var a = e.target && e.target.closest ? e.target.closest('a[href^="tel:"]') : null;
-    if (a) window.gtag('event', 'phone_call', { phone_number: a.getAttribute('href').slice(4) });
-    var pdf = e.target && e.target.closest ? e.target.closest('a[href$=".pdf"]') : null;
-    if (pdf) window.gtag('event', 'file_download', { file_name: pdf.getAttribute('href').split('/').pop(), file_extension: 'pdf' });
+    var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    var href = a.getAttribute('href');
+    if (href.indexOf('tel:') === 0) {
+      window.gtag('event', 'phone_call', { phone_number: href.slice(4) });
+    } else if (href.indexOf('mailto:') === 0) {
+      window.gtag('event', 'email_click', { email: href.slice(7) });
+    } else if (/\.pdf$/.test(href)) {
+      window.gtag('event', 'file_download', { file_name: href.split('/').pop(), file_extension: 'pdf' });
+    } else if (/map\.naver\.com|map\.kakao\.com/.test(href)) {
+      window.gtag('event', 'map_click', { map_provider: href.indexOf('naver') > -1 ? 'naver' : 'kakao' });
+    } else if (/pf\.kakao\.com/.test(href)) {
+      window.gtag('event', 'kakao_chat');
+    } else if (/contact\.html\?/.test(href)) {
+      var t = /[?&]type=([a-z0-9]+)/.exec(href), p = /[?&]purpose=([a-z0-9]+)/.exec(href);
+      window.gtag('event', 'inquiry_link', { site_type: t ? t[1] : '', purpose: p ? p[1] : '', link_text: (a.textContent || '').trim().slice(0, 40) });
+    }
   });
 })();

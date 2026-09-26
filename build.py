@@ -13,12 +13,15 @@ src/pages/*.html (본문 + 메타 블록) 과 src/partials/*.html (head / header
     title: 회사소개 | 태양천 그루빙
     description: ...
     canonical: /about.html          (사이트 루트 기준 경로. canonical 과 og:url 에 쓰임)
-    og_image: images/bg/about.jpg   (og:image. 도메인은 자동으로 붙음)
-    preload: images/bg/about.jpg    (첫 화면 배경. 생략 가능)
-    nav: about                      (NAV 의 key. 활성 메뉴 표시)
+    og_image: images/og/default.jpg (og:image 1200x630. 도메인은 자동으로 붙음)
+    preload: images/bg/about-mountain.jpg (첫 화면 배경. 생략 가능)
+    nav: about                      (NAV 의 key. 활성 메뉴 표시. none 이면 활성 메뉴 없음)
     css: owl-carousel               (플러그인 CSS key, 쉼표 구분. 공통 CSS 는 자동)
     js: owl-carousel, jarallax      (플러그인 JS key. jquery/popper/bootstrap → 여기 목록 → theme-script 순서)
     js_after: gallery               (theme-script 뒤에 올 JS key)
+    cta: yes                        (본문 끝에 src/partials/cta.html 공통 문의 밴드 삽입. 생략 가능)
+    noindex: yes                    (검색 제외 + sitemap 경고 생략. 404 페이지용)
+    abs_paths: yes                  (상대 경로를 / 로 시작하는 절대 경로로 바꿈. 어느 URL 에서 열려도 깨지지 않아야 하는 404 페이지용)
     -->
     <!--head-extra-->  ... <head> 끝부분(CSS 뒤)에 그대로 들어갈 HTML (JSON-LD, 페이지 전용 <style>) ...  <!--/head-extra-->
     ... 본문: <!--header end--> 와 <!--footer start--> 사이에 들어갈 HTML ...
@@ -35,9 +38,8 @@ SRC = ROOT / 'src'
 SITE = 'https://taeyang1000.com'
 
 # CSS/JS 를 수정하면 여기 버전을 올린다 (.htaccess 가 css/js 를 7일 캐시함)
-VERSION = '20260919'
+VERSION = '20260926'
 VERSION_OVERRIDE = {
-    'css/default-theme.css': '20260919',
 }
 
 # 검색엔진 사이트 소유 확인 메타태그. 값이 비어 있으면 출력하지 않는다.
@@ -48,18 +50,16 @@ SITE_VERIFICATION = {
     'google-site-verification': 'YI51ssCGxZnsuRKgWVNdtVSzHfZ7aKftsKRJPyr7nvA',
 }
 
-# 푸터에 표시할 외부 채널 링크 (아이콘 클래스, 표시 이름, URL). 비어 있으면 출력하지 않는다.
-# 예: ('fab fa-youtube', '유튜브', 'https://www.youtube.com/@...'),
-#     ('fas fa-pen-nib', '네이버 블로그', 'https://blog.naver.com/...'),
-#     ('fab fa-instagram', '인스타그램', 'https://www.instagram.com/...'),
+# 푸터에 표시할 외부 채널 링크 (표시 이름, URL). 비어 있으면 출력하지 않는다.
+# 예: ('네이버 블로그', 'https://blog.naver.com/...'),
+#     ('유튜브', 'https://www.youtube.com/@...'),
+#     ('카카오톡 채널', 'https://pf.kakao.com/...'),
+# (아이콘 폰트는 2026-09-26 제거했으므로 글자 링크로만 표시)
 SOCIAL = [
 ]
 
 CSS = {
     'bootstrap': 'css/bootstrap.min.css',
-    'fontawesome': 'css/fontawesome-all.css',
-    'animate': 'css/animate.css',
-    'themify-icons': 'css/themify-icons.css',
     'magnific-popup': 'css/magnific-popup/magnific-popup.css',
     'owl-carousel': 'css/owl-carousel/owl.carousel.css',
     'slit-slider': 'css/slit-slider/slit-slider.css',
@@ -68,7 +68,7 @@ CSS = {
     'default-theme': 'css/default-theme.css',
     'responsive': 'css/responsive.css',
 }
-CSS_COMMON_BEFORE = ['bootstrap', 'fontawesome', 'themify-icons']  # themify: 모바일 메뉴(navbar-toggler) 아이콘이 모든 페이지에서 사용
+CSS_COMMON_BEFORE = ['bootstrap']  # 아이콘은 header.html 의 인라인 SVG (FontAwesome·themify 아이콘 폰트는 2026-09-26 제거)
 CSS_COMMON_AFTER = ['base', 'shortcodes', 'default-theme', 'responsive']
 
 JS = {
@@ -90,7 +90,7 @@ JS_COMMON_BEFORE = ['jquery', 'popper', 'bootstrap']
 
 # 네비게이션 (순서대로). key 는 페이지 메타의 nav 값과 맞춘다
 NAV = [
-    ('home', 'index.html', 'Home'),
+    ('home', 'index.html', '홈'),
     ('about', 'about.html', '회사소개'),
     ('project', 'project.html', '갤러리'),
     ('cases', 'cases.html', '시공 사례'),
@@ -161,11 +161,10 @@ def render_social():
     if not SOCIAL:
         return ''
     items = ''.join(
-        f'<li><a href="{html.escape(url)}" target="_blank" rel="noopener" title="{html.escape(label)}">'
-        f'<i class="{icon}"></i> {html.escape(label)}</a></li>'
-        for icon, label, url in SOCIAL
+        f'<li><a href="{html.escape(url)}" target="_blank" rel="noopener">{html.escape(label)}</a></li>'
+        for label, url in SOCIAL
     )
-    return f'<ul class="list-inline footer-social">{items}</ul>'
+    return f'      <ul class="list-inline footer-social">{items}</ul>'
 
 
 def strip_tags(s: str) -> str:
@@ -197,7 +196,7 @@ def render_faq(body: str) -> str:
 
 
 def update_sitemap(changed: list):
-    """이번 빌드에서 다시 생성된 페이지의 <lastmod> 를 오늘 날짜로 갱신한다."""
+    """이번 빌드에서 다시 생성된 페이지의 <lastmod> 를 오늘 날짜로 갱신한다. (noindex 페이지는 호출 전에 제외)"""
     if not changed or not SITEMAP.exists():
         return
     today = datetime.date.today().isoformat()
@@ -210,6 +209,17 @@ def update_sitemap(changed: list):
             print(f'경고: sitemap.xml 에 {loc} 항목이 없습니다')
     SITEMAP.write_text(text, encoding='utf-8')
     print(f'sitemap.xml lastmod 갱신 ({today}): ' + ', '.join(changed))
+
+
+ABS_RE = re.compile(r'((?:href|src|data-bg-img)=")(?!https?:|/|#|mailto:|tel:|data:)([^"]+")')
+ABS_URL_RE = re.compile(r'(url\()(?![\'"]?(?:https?:|/|data:))([\'"]?)')
+
+
+def absolutize(page: str) -> str:
+    """상대 경로(css/…, images/…, contact.html)를 /css/… 처럼 사이트 루트 기준으로 바꾼다.
+    /없는/경로/ 같은 임의 URL 에서 열리는 404 페이지가 자산을 찾을 수 있게 하기 위함."""
+    page = ABS_RE.sub(lambda m: m.group(1) + '/' + m.group(2), page)
+    return ABS_URL_RE.sub(lambda m: m.group(1) + m.group(2) + '/', page)
 
 
 def render_nav(active: str):
@@ -235,12 +245,14 @@ def build_page(src_path: Path) -> str:
     for required in ('title', 'description', 'canonical', 'og_image', 'nav'):
         if required not in meta:
             raise SystemExit(f'{src_path.name}: 메타 "{required}" 누락')
-    if meta['nav'] not in {k for k, _, _ in NAV}:
+    if meta['nav'] not in {k for k, _, _ in NAV} | {'none'}:
         raise SystemExit(f'{src_path.name}: nav "{meta["nav"]}" 는 NAV 에 없음')
 
     head = (SRC / 'partials' / 'head.html').read_text(encoding='utf-8')
     header = (SRC / 'partials' / 'header.html').read_text(encoding='utf-8')
     footer = (SRC / 'partials' / 'footer.html').read_text(encoding='utf-8')
+    if meta.get('cta') == 'yes':
+        body = body + '\n\n' + (SRC / 'partials' / 'cta.html').read_text(encoding='utf-8').strip('\n')
 
     preload = meta.get('preload', '')
     faq = render_faq(body)
@@ -252,7 +264,8 @@ def build_page(src_path: Path) -> str:
         'description': html.escape(meta['description']),
         'canonical': SITE + meta['canonical'],
         'og_image': SITE + '/' + meta['og_image'].lstrip('/'),
-        'preload': f'<link rel="preload" as="image" href="{preload}" />' if preload else '',
+        'preload': f'<link rel="preload" as="image" href="{preload}" fetchpriority="high" />' if preload else '',
+        'robots': '<meta name="robots" content="noindex" />\n' if meta.get('noindex') == 'yes' else '',
         'head_extra': ('\n' + extra + '\n') if extra else '',
         'verification': render_verification(),
         'social': render_social(),
@@ -261,8 +274,17 @@ def build_page(src_path: Path) -> str:
         'js': render_js(split_list(meta.get('js', '')), split_list(meta.get('js_after', ''))),
         'body': body,
     }
-    page = fill(head, values) + fill(header, values) + '\n\n' + body + '\n\n' + fill(footer, values)
+    # 본문은 <main> 랜드마크로 감싼다 (header.html 의 '본문 바로가기' 링크 대상)
+    main = '<main id="content" tabindex="-1">\n\n' + body + '\n\n</main>'
+    page = fill(head, values) + fill(header, values) + '\n\n' + main + '\n\n' + fill(footer, values)
+    if meta.get('abs_paths') == 'yes':
+        page = absolutize(page)
     return page
+
+
+def is_noindex(src_path: Path) -> bool:
+    meta, _, _ = parse_page(src_path.read_text(encoding='utf-8'))
+    return meta.get('noindex') == 'yes'
 
 
 def main(argv):
@@ -291,7 +313,7 @@ def main(argv):
             return 1
         print('모든 페이지가 최신 상태입니다')
     else:
-        update_sitemap(changed)
+        update_sitemap([n for n in changed if not is_noindex(SRC / 'pages' / n)])
     return 0
 
 

@@ -6,15 +6,28 @@
  * - From 은 taeyang1000.com 주소를 쓴다. 도메인 SPF 에 서버 IP(112.175.85.160)가 등록되어 있어
  *   네이버 주소를 From 으로 위조하던 예전 방식보다 스팸 판정을 피할 수 있다.
  * - Reply-To 는 문의자 이메일 → 받은 메일에서 바로 답장 가능.
+ * - 수신자는 대표 메일 + 백업 메일 두 곳 (한 곳에서 놓쳐도 다른 곳에서 확인).
+ * - 대표 메일 발송이 성공하고 문의자가 이메일을 적었으면 '접수 확인' 메일을 보낸다.
+ *   확인 메일에는 문의자가 입력한 자유 글(이름·내용)을 넣지 않는다 (남의 주소로 광고 메일을 보내는 데 악용 방지).
  * - 스팸 방지: 숨김 필드(website) 허니팟, 동일 출처 검사, IP 당 1시간 5건 제한.
  */
 declare(strict_types=1);
 
-$sendTo   = 'taeyangcheun@naver.com';
+$sendTo   = 'taeyangcheun@naver.com, coderbhkim@gmail.com';  // 대표 메일, 백업 수신자
+$replyTo  = 'taeyangcheun@naver.com';  // 접수 확인 메일에 문의자가 회신하면 받을 주소
 $from     = 'noreply@taeyang1000.com';
 $fromName = '태양천 홈페이지';
 $subject  = '[태양천 홈페이지] 문의';
-$okMessage    = '태양천 그루빙에 문의해주셔서 감사합니다! 내용 확인 후 답장 드리도록 하겠습니다.';
+$okMessage    = '문의가 접수되었습니다. 영업일 기준 1일 이내에 연락드리겠습니다. 급한 문의는 전화 010-5152-2253(08~22시)으로 주세요.';
+$ackMessage   = ' 입력하신 이메일로 접수 확인 메일을 보냈습니다.';
+$purposes = [  // contact.html 의 문의 목적 select 와 맞춘다 (?purpose=partner 로 미리 선택)
+    'new' => '신규 시공 견적',
+    'partner' => '하도급·장비 투입 협력',
+    'docs' => '자료 요청',
+    'other' => '기타',
+];
+$pavements = ['asphalt' => '아스팔트', 'concrete' => '콘크리트', 'color' => '컬러(미끄럼 방지) 포장'];
+$timings   = ['1m' => '1개월 이내', '3m' => '1~3개월', 'later' => '3개월 이후'];
 $siteTypes = [  // contact.html 의 select 와 맞춘다
     'school' => '어린이 보호구역 · 통학로',
     'curve' => '급커브 · 산악도로',
@@ -90,6 +103,12 @@ $phone   = line_field('phone', 50);
 $siteType = line_field('site_type', 20);
 $siteTypeLabel = $siteTypes[$siteType] ?? '(미선택)';
 $location = line_field('location', 100);
+$org      = line_field('org', 100);
+$purpose  = line_field('purpose', 20);
+$purposeLabel  = $purposes[$purpose] ?? $purposes['new'];
+$pavementLabel = $pavements[line_field('pavement', 20)] ?? '(미선택)';
+$timingLabel   = $timings[line_field('timing', 20)] ?? '(미정)';
+$scale    = line_field('scale', 50);
 $message = $_POST['message'] ?? '';
 $message = is_string($message) ? mb_substr(trim(str_replace(["\r\n", "\r"], "\n", $message)), 0, 5000) : '';
 
@@ -103,11 +122,16 @@ if ($email !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
 // 메일 본문
 $body = "홈페이지 문의 폼으로 새 문의가 접수되었습니다.\n"
       . "=============================\n"
+      . "문의 목적: {$purposeLabel}\n"
       . "이름: {$name}\n"
+      . "소속·직책: " . ($org !== '' ? $org : '(미입력)') . "\n"
       . "이메일: " . ($email !== '' ? $email : '(미입력)') . "\n"
       . "전화번호: " . ($phone !== '' ? $phone : '(미입력)') . "\n"
       . "현장 유형: {$siteTypeLabel}\n"
       . "현장 위치: " . ($location !== '' ? $location : '(미입력)') . "\n"
+      . "포장 종류: {$pavementLabel}\n"
+      . "규모: " . ($scale !== '' ? $scale : '(미입력)') . "\n"
+      . "희망 시기: {$timingLabel}\n"
       . "\n문의내용:\n{$message}\n"
       . "\n-----------------------------\n"
       . "접수 시각: " . date('Y-m-d H:i:s') . "\n"
@@ -118,12 +142,13 @@ $headers = [
     'Content-Type: text/plain; charset=UTF-8',
     'Content-Transfer-Encoding: 8bit',
     'From: ' . mb_encode_mimeheader($fromName, 'UTF-8', 'B') . " <{$from}>",
-    'X-Mailer: PHP/' . PHP_VERSION,
 ];
 if ($email !== '') {
     $headers[] = 'Reply-To: ' . $email;
 }
-$encSubject = mb_encode_mimeheader($subject . ' - ' . ($siteTypes[$siteType] ?? '일반') . ' - ' . $name, 'UTF-8', 'B');
+$encSubject = mb_encode_mimeheader(
+    $subject . ' - ' . $purposeLabel . ' - ' . ($siteTypes[$siteType] ?? '일반') . ' - ' . $name . ($org !== '' ? " ({$org})" : ''),
+    'UTF-8', 'B');
 
 // -f 로 봉투 발신자(Return-Path)도 도메인 주소로 맞춰 SPF 가 통과되게 한다. 거부되면 기본값으로 재시도.
 $sent = @mail($sendTo, $encSubject, $body, implode("\r\n", $headers), '-f' . $from)
@@ -136,4 +161,28 @@ if (!$sent) {
 $recent[] = $now;
 @file_put_contents($rlFile, implode("\n", $recent) . "\n", LOCK_EX);
 
-respond('success', $okMessage);
+// 문의자에게 접수 확인 메일 (선택 목록 값과 시각만 넣고 자유 입력은 넣지 않음)
+$ackSent = false;
+if ($email !== '') {
+    $ackBody = "태양천 그루빙에 문의해 주셔서 감사합니다.\n\n"
+             . "아래와 같이 문의가 접수되었습니다. 영업일 기준 1일 이내에 담당자가 연락드리겠습니다.\n\n"
+             . "- 접수 시각: " . date('Y-m-d H:i') . "\n"
+             . "- 문의 목적: {$purposeLabel}\n"
+             . "- 현장 유형: {$siteTypeLabel}\n\n"
+             . "급한 문의는 전화 010-5152-2253 (08:00~22:00)으로 연락 주세요.\n"
+             . "현장 사진이 있으면 이 메일에 회신해 보내주셔도 됩니다.\n\n"
+             . "태양천 그루빙\n"
+             . "https://taeyang1000.com\n\n"
+             . "※ 문의하신 적이 없다면 이 메일은 무시하셔도 됩니다.\n";
+    $ackHeaders = [
+        'MIME-Version: 1.0',
+        'Content-Type: text/plain; charset=UTF-8',
+        'Content-Transfer-Encoding: 8bit',
+        'From: ' . mb_encode_mimeheader('태양천 그루빙', 'UTF-8', 'B') . " <{$from}>",
+        'Reply-To: ' . $replyTo,
+    ];
+    $ackSubject = mb_encode_mimeheader('[태양천 그루빙] 문의 접수 확인', 'UTF-8', 'B');
+    $ackSent = @mail($email, $ackSubject, $ackBody, implode("\r\n", $ackHeaders), '-f' . $from);
+}
+
+respond('success', $okMessage . ($ackSent ? $ackMessage : ''));

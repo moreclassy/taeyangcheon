@@ -32,7 +32,7 @@
           html += '<tr class="records-year"><th colspan="7">' + esc(y) + '</th></tr>';
         }
         var photo = r.thumb
-          ? '<a class="popup popup-img" href="' + esc(r.large) + '" title="' + esc(r.site_name) + '"><img src="' + esc(r.thumb) + '" alt="' + esc(r.site_name) + ' 시공 사진" loading="lazy"></a>'
+          ? '<a class="popup popup-img" href="' + esc(r.large) + '" title="' + esc(r.site_name) + '"><img src="' + esc(r.thumb) + '" alt="' + esc(r.site_name) + ' 시공 사진" width="64" height="48" loading="lazy"></a>'
           : '<span class="text-muted">-</span>';
         html += '<tr>' +
           '<td data-label="시공 시기">' + esc(ym(r.work_month)) + '</td>' +

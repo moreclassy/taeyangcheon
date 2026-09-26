@@ -7,7 +7,6 @@
     Table of Contents
 
   1. Predefined Variables
-  2. Preloader  
   3. FullScreen
   4. Slit Slider
   5. Counter
@@ -51,14 +50,6 @@ $.fn.exists = function () {
 };
 
 /*------------------------------------
-  HT PreLoader
---------------------------------------*/
-function preloader() {
-  $("#load").fadeOut();
-  $('#ht-preloader').delay(0).fadeOut('slow');
-};
-
-/*------------------------------------
   HT FullScreen
 --------------------------------------*/
 function fullScreen() {
@@ -86,8 +77,11 @@ function slitslider() {
   if (!$.fn.slitslider || !$('#slider').length) return;
   var Page = (function () {
     var $navArrows = $('#nav-arrows'),
-      $nav = $('#nav-dots > span'),
+      $nav = $('#nav-dots > button'),
       slitslider = $('#slider').slitslider({
+        // 자동 넘김·방향키 가로채기 없음 (접근성). 사진은 #nav-dots 버튼으로 바꿈
+        autoplay: false,
+        keyboard: false,
         onBeforeChange: function (slide, pos) {
           $nav.removeClass('nav-dot-current');
           $nav.eq(pos).addClass('nav-dot-current');
@@ -146,6 +140,10 @@ function owlcarousel() {
   if (!$.fn.owlCarousel) return;
   $('.owl-carousel').each(function () {
     var $carousel = $(this);
+    // owl 이 이전/다음 버튼에 붙이는 role="presentation" 을 떼어 스크린리더가 버튼으로 읽게 함
+    $carousel.on('initialized.owl.carousel', function () {
+      $carousel.find('.owl-nav button').removeAttr('role');
+    });
     $carousel.owlCarousel({
       items: $carousel.data("items"),
       slideBy: $carousel.data("slideby"),
@@ -156,7 +154,7 @@ function owlcarousel() {
       nav: $carousel.data("nav"),
       autoplay: $carousel.data("autoplay"),
       autoplayTimeout: $carousel.data("autoplay-timeout"),
-      navText: ['<span class="fas fa-long-arrow-alt-left"><span>', '<span class="fas fa-long-arrow-alt-right"></span>'],
+      navText: ['<svg class="icon" aria-hidden="true"><use href="#i-arrow-left"/></svg><span class="sr-only">이전 사진</span>', '<svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg><span class="sr-only">다음 사진</span>'],
       responsive: {
         0: {
           items: $carousel.data('xs-items') ? $carousel.data('xs-items') : 1
@@ -194,15 +192,19 @@ function magnificpopup() {
   $('.popup-gallery').magnificPopup({
     delegate: 'a.popup-img',
     type: 'image',
-    tLoading: 'Loading image #%curr%...',
+    tLoading: '사진을 불러오는 중...',
+    tClose: '닫기 (Esc)',
     mainClass: 'mfp-img-mobile',
     gallery: {
       enabled: true,
       navigateByImgClick: true,
-      preload: [0, 1] // Will preload 0 - before current, and 1 after the current image
+      preload: [0, 1], // Will preload 0 - before current, and 1 after the current image
+      tPrev: '이전 사진 (왼쪽 방향키)',
+      tNext: '다음 사진 (오른쪽 방향키)',
+      tCounter: '%curr% / %total%'
     },
     image: {
-      tError: '<a href="%url%">The image #%curr%</a> could not be loaded.',
+      tError: '<a href="%url%">사진</a>을 불러오지 못했습니다.',
       titleSrc: function (item) {
         return item.el.attr('title') + '<small>by 태양천 그루빙</small>';
       }
@@ -279,16 +281,7 @@ function scrolltop() {
   });
 };
 
-/*------------------------------------
-  HT Banner Section
---------------------------------------*/
-function headerheight() {
-  $('.fullscreen-banner .align-center, .nav-arrows span').each(function () {
-    var headerHeight = $('.header').height();
-    // headerHeight+=15; // maybe add an offset too?
-    $(this).css('padding-top', headerHeight + 'px');
-  });
-};
+/* HT Banner Section: 히어로 글자를 헤더 높이만큼 내리던 headerheight() 는 CSS(.fullscreen-banner .align-center padding-top)로 대체 (로드 후 글자가 밀리는 CLS 원인) */
 
 /*------------------------------------
   HT Fixed Header
@@ -329,7 +322,7 @@ function accordian() {
       $(this).removeClass('active');
     }
   });
-  $('.accordion .card-header a').prepend('<span></span>');
+  $('.accordion .card-header a').prepend('<span aria-hidden="true"></span>');
 };
 
 /*------------------------------------
@@ -347,6 +340,7 @@ function contactform() {
       var $form = $(this);
       var $btn = $form.find('button[type="submit"]').prop('disabled', true);
       var siteType = $form.find('[name="site_type"]').val() || '';
+      var purpose = $form.find('[name="purpose"]').val() || '';
       var showAlert = function (type, text) {
         $form.find('.messages').html('<div class="alert alert-' + type + ' alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>' + text + '</div>');
       };
@@ -375,7 +369,7 @@ function contactform() {
             $('#contact-form, #queto-form')[0].reset();
             // GA4 전환 이벤트 (js/analytics.js 에 측정 ID가 설정된 경우에만 동작)
             if (data.type === 'success' && typeof window.gtag === 'function') {
-              window.gtag('event', 'generate_lead', { site_type: siteType });
+              window.gtag('event', 'generate_lead', { site_type: siteType, purpose: purpose });
             }
           }
         }
@@ -458,7 +452,8 @@ function countdown() {
 --------------------------------------*/
 function jarallax() {
   if (!$.fn.jarallax) return;
-  $('.jarallax').jarallax({});
+  // 모바일은 패럴랙스 없이 배경을 바로 표시 (배경 이미지는 HTML inline style 로 먼저 칠해 둠)
+  $('.jarallax').jarallax({ disableParallax: /iPad|iPhone|iPod|Android/ });
 };
 
 /*------------------------------------
@@ -483,7 +478,6 @@ $(document).ready(function () {
   lightgallery(),
   magnificpopup(),
   scrolltop(),
-  headerheight(),
   fxheader(),
   databgcolor(),
   accordian(),
@@ -499,7 +493,6 @@ $window.resize(function () {
 });
 
 $(window).on('load', function () {
-  preloader(),
   isotope(),
   masonry();
 });

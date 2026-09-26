@@ -1,16 +1,22 @@
-<body>
+<body id="top">
+
+<!-- 인라인 SVG 아이콘 (FontAwesome·themify 아이콘 폰트 대체. Feather Icons 기반, MIT License) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+  <symbol id="i-chevron-up" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></symbol>
+  <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+</svg>
 
 <!-- page wrapper start -->
 
 <div class="page-wrapper">
 
-<!-- preloader start -->
-
-<div id="ht-preloader">
-  <div class="loader clear-loader"><img src="images/loader.gif" alt=""></div>
-</div>
-
-<!-- preloader end -->
+<a class="skip-link" href="#content">본문 바로가기</a>
 
 
 <!--header start-->
@@ -22,18 +28,25 @@
           <div class="col-md-4">
             <div class="topbar-link text-left">
               <ul class="list-inline">
-                <li class="list-inline-item"><a href="mailto:taeyangcheun@naver.com"><i class="far fa-envelope-open"></i>taeyangcheun@naver.com</a>
+                <li class="list-inline-item"><a href="mailto:taeyangcheun@naver.com"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg> taeyangcheun@naver.com</a>
                 </li>
                 <li class="list-inline-item">
-                  <a href="tel:01051522253"> <i class="fas fa-mobile-alt"></i>010-5152-2253</a> / <a href="tel:01073631008">010-7363-1008</a>
+                  <a href="tel:01051522253"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> 010-5152-2253</a> / <a href="tel:01073631008">010-7363-1008</a>
                 </li>
               </ul>
             </div>
           </div>
           <div class="col-md-4 col-sm-6 text-center">
             <a class="navbar-brand logo mr-0" href="index.html">
-              <h1>태양천 그루빙</h1>
+              <span class="logo-text">태양천 그루빙</span>
             </a>
+          </div>
+          <div class="col-md-4 d-none d-md-block">
+            <div class="topbar-link text-right">
+              <ul class="list-inline mb-0">
+                <li class="list-inline-item"><a href="files/taeyang_grooving_brochure.pdf" download="태양천_그루빙_공법소개서.pdf"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg> 공법 소개서 (PDF)</a></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -43,17 +56,22 @@
         <div class="row">
           <div class="col-lg-12">
             <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg">
+            <nav class="navbar navbar-expand-lg" aria-label="주 메뉴">
               <a class="navbar-brand logo" href="index.html">
-                <h1>태양천 그루빙</h1>
+                <span class="logo-text">태양천 그루빙</span>
               </a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="메뉴 열기"> <span class="navbar-toggler-icon"><svg class="icon" aria-hidden="true"><use href="#i-menu"/></svg></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <!-- Left nav -->
                 <ul class="nav navbar-nav ml-auto">
 {{nav}}
                 </ul>
+                <!-- 데스크톱 상시 문의 버튼 (모바일은 footer.html 의 하단 문의 바) -->
+                <div class="header-cta d-none d-lg-flex">
+                  <a class="btn btn-theme btn-radius" href="tel:01051522253"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> 010-5152-2253</a>
+                  <a class="btn btn-border btn-radius d-none d-xl-inline-flex" href="contact.html">온라인 문의</a>
+                </div>
               </div>
             </nav>
           </div>

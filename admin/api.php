@@ -101,5 +101,5 @@ try {
     gallery_json(['error' => $e->getMessage()], 400);
 } catch (Throwable $e) {
     error_log('[gallery admin] ' . $e->getMessage());
-    gallery_json(['error' => $e->getMessage()], 500);
+    gallery_json(['error' => '서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.'], 500);  // 예외 내용(경로·SQL)은 로그에만
 }

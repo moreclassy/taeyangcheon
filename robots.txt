@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
+# 갤러리·시공 실적 JSON 은 페이지가 XHR 로 불러오므로 검색엔진 렌더링에 필요 (Disallow: /php/ 보다 먼저)
+Allow: /php/gallery/api.php
+Allow: /php/gallery/records_api.php
 Disallow: /admin/
 Disallow: /php/
 

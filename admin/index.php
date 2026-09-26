@@ -90,15 +90,15 @@ $csrf = ($fatal === null && $mode === 'admin') ? gallery_csrf_token() : '';
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="태양천 갤러리">
-<link rel="apple-touch-icon" href="../images/logo-m.png">
-<link rel="icon" href="../images/favicon.ico">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="icon" href="../favicon.ico">
 <title>태양천 갤러리·실적 관리</title>
 <link rel="stylesheet" href="admin.css?v=2">
 </head>
 <body data-mode="<?= h($mode) ?>" data-csrf="<?= h($csrf) ?>" data-categories='<?= h(json_encode($categories, JSON_UNESCAPED_UNICODE)) ?>' data-record-types='<?= h(json_encode($recordTypes, JSON_UNESCAPED_UNICODE)) ?>' data-record-methods='<?= h(json_encode($recordMethods, JSON_UNESCAPED_UNICODE)) ?>'>
 
 <header class="topbar">
-  <div class="brand"><img src="../images/logo-m.png" alt=""><span>태양천 갤러리·실적 관리</span></div>
+  <div class="brand"><img src="../images/icon-192.png" alt=""><span>태양천 갤러리·실적 관리</span></div>
   <?php if ($mode === 'admin'): ?>
   <nav>
     <a href="../project.html" target="_blank" rel="noopener">사이트 보기</a>

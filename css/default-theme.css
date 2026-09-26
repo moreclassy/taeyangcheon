@@ -27,21 +27,20 @@
 /* ------------------------
     General
 ------------------------*/
-@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,400i,500,600,700,800,900');
-
-body {font-family: 'Poppins', sans-serif; font-weight: normal; font-style: normal; font-size: 14px; line-height: 1.5; color:#282929;}
+/* 한글 웹폰트를 따로 받지 않고 시스템 글꼴을 쓴다 (예전 Poppins @import 는 렌더 차단 0.9초, 한글에는 적용 안 됨). 2026-09-26 */
+body {font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', 'Noto Sans KR', 'Segoe UI', Roboto, sans-serif; font-weight: normal; font-style: normal; font-size: 14px; line-height: 1.5; color:#282929; word-break: keep-all; overflow-wrap: break-word;}
 
 
 /* ------------------------
     Typography
 ------------------------*/
-h1, h2, h3, h4, h5, h6{font-weight:normal; margin-top: 0px; margin-bottom: 0px; text-transform: capitalize;}
+h1, h2, h3, h4, h5, h6{font-weight:normal; margin-top: 0px; margin-bottom: 0px;}
 h1 a, h2 a, h3 a, h4 a, h5 a, h6 a { color: inherit; }
-h1 { font-size: 54px; font-style: normal; line-height: 60px; font-weight: 700; text-transform: capitalize; color: #f9a305;}
-h2 { font-size: 40px; font-style: normal; line-height: 46px; font-weight: 500; color: #282925; text-transform: capitalize; margin-bottom: 10px; position: relative;}
+h1 { font-size: 54px; font-style: normal; line-height: 60px; font-weight: 700; color: #f9a305;}
+h2 { font-size: 40px; font-style: normal; line-height: 46px; font-weight: 500; color: #282925; margin-bottom: 10px; position: relative;}
 h3 { font-size: 30px; font-style: normal; line-height: 36px; }
-h4 { font-size: 24px; font-style: normal; text-transform: uppercase; margin-bottom: 10px; font-weight: 500; line-height: 30px; color: #282925;}
-h5 { font-size: 18px; font-style: normal; text-transform: uppercase; margin-bottom: 10px; font-weight: 500; line-height: 25px; color: #282925;}
+h4 { font-size: 24px; font-style: normal; margin-bottom: 10px; font-weight: 500; line-height: 30px; color: #282925;}
+h5 { font-size: 18px; font-style: normal; margin-bottom: 10px; font-weight: 500; line-height: 25px; color: #282925;}
 h6 { font-size: 16px; font-style: normal; line-height: 24px; }
 ul { margin: 0px; padding: 0px; }
 
@@ -76,7 +75,7 @@ section{padding: 80px 0;}
 /* ------------------------
     Text color
 ------------------------*/
-.text-theme{color:#f9a305;}
+.text-theme{color:#a66800;} /* 흰 배경 위 글자는 대비 4.5:1 이상인 진한 주황. 어두운 배경은 아래 .dark-bg 규칙 */
 .text-black{color:#282925 !important;}
 .text-grey{color:#aaaaaa;}
 .text-yellow{color:#f9a305;}
@@ -120,7 +119,7 @@ section{padding: 80px 0;}
 /* ------------------------
     Banner
 ------------------------*/
-.fullscreen-banner{position: relative;}
+.fullscreen-banner{position: relative; min-height: 100vh;} /* JS(fullScreen) 가 높이를 정하기 전에도 같은 높이를 잡아 레이아웃 점프(CLS)를 막는다 */
 [data-bg-img]{background-size: cover; background-position: center center; background-repeat: no-repeat;}
 .align-center{position: absolute; top: 50%; width: 100%; z-index: 9;}
 .align-end{position: absolute; bottom: 0; width: 100%; z-index: 9;}
@@ -179,17 +178,18 @@ section{padding: 80px 0;}
 
 .form-group{margin-bottom: 20px; position: relative;}
  label{font-size: 14px; color: #333}
-.form-control{height: 50px; border-radius: 0; font-size: 13px; background: none; border: none; border-bottom: 2px solid #f5f5f5; box-shadow: none;}
+.form-control{height: 50px; border-radius: 0; font-size: 16px; background: none; border: none; border-bottom: 2px solid #f5f5f5; box-shadow: none;}
 .grey-bg .form-control{background: #ffffff}
 textarea.form-control{height: 150px;}
-.form-control:focus{box-shadow: none; border-color: #f9a305;}
+.form-control:focus{box-shadow: none; border-color: #a66800;}
 select.form-control {/*-moz-appearance: none; -webkit-appearance: none; appearance: none;*/ height: 50px !important;}
 #map {width: 100%; height: 100%;}
 iframe{width: 100%; border: none; pointer-events: none;}
 .iframe-h{height: 500px !important;}
 .iframe-h-2{height: 900px !important;}
-.help-block.with-errors {position: absolute; color: red; right: 0; font-size: 10px; line-height: 14px;}
-.form-control::-moz-placeholder{color: #555}
+.help-block.with-errors {position: static; color: #c00000; font-size: 13px; line-height: 18px;}
+.help-block.with-errors:not(:empty){margin-top: 5px;}
+.form-control::placeholder{color: #767676}
 
 .contact-btn {cursor: pointer; display: inline-block; position: fixed; right: -39px; top: 50%; z-index: 99; 
 transform: translateY(-50%) rotate(90deg); -webkit-transform: translateY(-50%) rotate(90deg); -o-transform: translateY(-50%) rotate(90deg); -ms-transform: translateY(-50%) rotate(90deg); -moz-transform: translateY(-50%) rotate(90deg);}
@@ -231,21 +231,158 @@ transform: translateY(-50%) rotate(90deg); -webkit-transform: translateY(-50%) r
 .img-side .owl-carousel, .img-side .owl-stage-outer, .img-side .owl-stage, .img-side .owl-stage, .img-side .owl-item, .img-side .owl-item .item{height: 100%}
 /* 연락처 지도 임베드 */
 .contact-3 .contact-box{position:static;top:auto;transform:none}
-.contact-3 .map-embed{margin-top:60px}
-.map-embed{display:block;width:100%;height:450px;border:0}
-.map-links{padding:20px 15px 130px;text-align:center} /* 하단 여백: 푸터 연락처 바(.contact-media)가 위로 절반 겹쳐 올라옴 */
+.contact-3 .map-embed, .contact-3 .map-facade{margin-top:60px}
+.map-embed{display:block;width:100%;height:450px;border:0;pointer-events:auto}
+.map-links{padding:20px 15px 60px;text-align:center}
 .map-links .btn{margin:5px 6px}
 @media (max-width:767px){.map-embed{height:300px}.map-links{padding-bottom:20px}}
 /* 문의 폼 스팸 방지용 숨김 필드 (사람에게는 보이지 않음) */
 .hp-field{position:absolute !important;left:-9999px !important;width:1px;height:1px;overflow:hidden;opacity:0}
 /* 모바일 하단 고정 문의 바 (footer.html .call-bar, lg 이상은 d-lg-none 으로 숨김) */
 .call-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:998;box-shadow:0 -2px 12px rgba(0,0,0,.18)}
-.call-bar a{flex:1;text-align:center;padding:14px 8px;font-weight:600;font-size:15px;color:#fff;background:#f9a305}
-.call-bar a.call-bar-form{background:#1d1d1d}
-.call-bar a i{margin-right:6px}
-.call-bar a:hover{color:#fff;opacity:.92}
+.call-bar a{flex:1;text-align:center;padding:14px 8px;font-weight:700;font-size:15px;color:#1d1d1d;background:#f9a305}
+.call-bar a.call-bar-form{background:#1d1d1d;color:#fff}
+.call-bar a .icon{margin-right:6px}
+.call-bar a:hover{color:#1d1d1d;opacity:.92}
+.call-bar a.call-bar-form:hover{color:#fff}
 @media (max-width:991px){body{padding-bottom:52px}#scroll-top .top{bottom:70px}}
 /* 푸터 외부 채널 링크 (build.py SOCIAL) */
 .footer-social{margin-bottom:8px}
 .footer-social li{display:inline-block;padding:0 12px}
 .footer-social li a i{margin-right:4px;font-size:14px}
+
+
+/* ------------------------------------------------
+    2026-09-26 사이트 개선 (marketing/docs/웹사이트_개선_로드맵_2026-09-20.md)
+------------------------------------------------ */
+
+/* 인라인 SVG 아이콘 (FontAwesome·themify 아이콘 폰트 대체, header.html 의 <symbol>) */
+.icon{display:inline-block; width:1em; height:1em; vertical-align:-0.125em; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0;}
+
+/* 본문 바로가기 · main 포커스 · 키보드 포커스 표시 (P1-23) */
+.skip-link{position:absolute; left:12px; top:-80px; z-index:100000; background:#1d1d1d; color:#fff !important; padding:12px 18px; font-weight:700; border-radius:0 0 4px 4px;}
+.skip-link:focus{top:0;}
+#content:focus{outline:none !important;}
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, [tabindex]:focus-visible{outline:3px solid #1d1d1d !important; outline-offset:2px;}
+.dark-bg :focus-visible, .page-title :focus-visible, .header :focus-visible, .fullscreen-banner :focus-visible, footer :focus-visible, .form-info :focus-visible, .call-bar :focus-visible, .map-facade :focus-visible{outline-color:#ffffff !important;}
+.map-facade :focus-visible{outline-color:#1d1d1d !important;}
+
+/* 헤더 로고: h1 → span (페이지마다 h1 은 본문 제목 하나만, P0-6). 예전 h1 크기 그대로 */
+.logo-text{display:block; font-size:54px; line-height:60px; font-weight:700; color:#f9a305; white-space:nowrap;}
+@media (max-width:1200px){.logo-text{font-size:50px; line-height:56px;}}
+@media (max-width:992px){.logo-text{line-height:60px;}}
+@media (max-width:767px){.logo-text{font-size:36px; line-height:42px;}}
+@media (max-width:576px){.logo-text{font-size:28px; line-height:36px;}}
+
+/* 스크롤 후 고정 헤더: 로고를 줄여 메뉴·문의 버튼이 한 줄에 들어가게 */
+#header-wrap.fixed-header .logo-text{font-size:32px; line-height:40px;}
+@media (min-width:992px) and (max-width:1199.98px){.navbar-nav .nav-item{margin:0 9px;} .header-cta{margin-left:12px;}}
+
+/* 데스크톱 헤더 상시 CTA (P1-6) */
+.header-cta{display:flex; align-items:center; gap:10px; margin-left:24px;}
+.header-cta .btn{padding:8px 16px; font-size:14px; line-height:1.4; white-space:nowrap; display:inline-flex; align-items:center; gap:6px;}
+.header-cta .btn + .btn{margin-left:0;}
+.header-cta .btn-border{color:#fff; border-color:rgba(255,255,255,0.7);}
+.topbar-link.text-right li a{font-size:13px;}
+
+/* 히어로: 헤더 높이만큼 내리는 여백을 CSS 로 고정 (예전에는 JS 가 로드 후 계산해 글자가 밀림) */
+@media (min-width:768px){.fullscreen-banner .align-center{padding-top:70px;}}
+.fullscreen-banner .banner-text a:not(.btn){color:#f9a305;}
+.fullscreen-banner .banner-text a:not(.btn):hover{color:#ffffff;}
+.banner-links{margin-top:18px; font-size:14px;}
+.banner-links a{margin-right:14px;}
+
+/* 테마색 대비 (P1-8): 흰·회색 배경 글자는 #a66800, 주황 배경 위 글자는 #1d1d1d, 어두운 배경은 #f9a305 유지 */
+.dark-bg .text-theme, [data-overlay] .text-theme{color:#f9a305;}
+.btn.btn-theme, .fullscreen-banner .btn.btn-theme, .dark-bg .btn.btn-theme{color:#1d1d1d;}
+.btn.btn-theme:hover, .fullscreen-banner .btn.btn-theme:hover, .dark-bg .btn.btn-theme:hover{color:#ffffff;}
+.btn.btn-border{color:#282925;}
+.dark-bg .btn.btn-border, .fullscreen-banner .btn.btn-border, [data-overlay] .btn.btn-border{color:#ffffff;}
+.btn .icon{margin-right:4px;}
+.tab .nav-tabs .nav-link.active, .tab .nav-tabs .nav-link:hover, .tab.style-2 .nav-tabs .nav-link.active, .tab.style-2 .nav-tabs .nav-link:hover, .tab.style-2 .nav-tabs .nav-link.active:hover, .tab.style-2 .nav-tabs .nav-link.active:focus{color:#1d1d1d;}
+.service-flip-desc .btn-simple, .theme-bg .btn-simple{color:#1d1d1d;}
+
+/* 헤딩 단계 정리 (h5/h6/h4 → h3) 후에도 예전 크기 유지 (P0-6) */
+.accordion .card-header h3{font-size:16px; line-height:24px; margin:0;}
+.featured-title h3{font-size:18px; line-height:25px; font-weight:500; margin-bottom:15px;}
+.dark-bg .featured-title h3{color:#ffffff;}
+.portfolio-title h3{font-size:20px; line-height:28px; font-weight:500; color:#ffffff; margin:0;}
+.tab-content h3{font-size:24px; line-height:32px; font-weight:500; margin-bottom:10px; color:#282925;}
+.portfolio-item img{height:auto;}
+.team-images img{height:auto;}
+
+/* 서비스 카드: hover 로 뒤집히던 플립 카드를 정적 카드로 (터치·키보드에서도 내용이 보이게, P2-5) */
+.service-card{background:#fff; height:100%; display:flex; flex-direction:column; border-bottom:3px solid #f9a305; box-shadow:5px 8px 30px 0 rgba(31,35,37,0.08);}
+.service-card img{width:100%; height:210px; object-fit:cover; display:block;}
+.service-card-body{padding:24px 24px 28px; flex:1; display:flex; flex-direction:column;}
+.service-card h3{font-size:20px; line-height:28px; font-weight:600; color:#282925; margin-bottom:10px;}
+.service-card p{flex:1;}
+.service-card .more{font-weight:600; color:#a66800;}
+.service-card .more:hover{color:#1d1d1d;}
+
+/* 섹션 하단 내부 링크 (P1-11) */
+.related-links{margin-top:24px; padding-top:20px; border-top:1px solid #eee;}
+.related-links a{display:inline-block; margin:4px 18px 4px 0; font-weight:600;}
+.grey-bg .related-links{border-top-color:#e5e5e5;}
+.section-more{text-align:center;}
+.section-more .btn{margin:5px;}
+
+/* 공통 하단 CTA 밴드 (src/partials/cta.html, 페이지 메타 cta: yes, P1-7) */
+.cta-band{padding:70px 0;}
+.cta-band .section-title{margin-bottom:24px;}
+.cta-band p{color:rgba(255,255,255,0.85); word-break:keep-all;}
+.cta-band .btn{margin:5px;}
+@media (max-width:767px){.cta-band{padding:50px 0;} .cta-band .btn{display:block; margin:0 0 12px;}}
+
+/* 문의 폼: 보이는 label·필수 표시·16px·큰 제출 버튼 (P0-9) */
+.contact-main label{display:block; font-weight:600; font-size:14px; color:#282925; margin-bottom:6px;}
+.contact-main label .req{color:#c00000; margin-left:2px;}
+.contact-main label .opt{font-weight:400; color:#666; font-size:13px; margin-left:4px;}
+.contact-main .form-control{height:48px; border:1px solid #cfcfcf; border-radius:4px; padding:10px 12px; background:#fff;}
+.contact-main textarea.form-control{height:150px;}
+.contact-main .form-group{margin-bottom:18px;}
+.form-note{font-size:13px; color:#666; margin-top:-8px; margin-bottom:18px;}
+.phone-tip{background:#fff6e5; border-left:3px solid #f9a305; padding:12px 14px; margin-bottom:22px; font-size:15px; color:#282925;}
+.phone-tip a{font-weight:700; color:#1d1d1d;}
+#contact-form .btn-submit{display:block; width:100%; padding:15px; font-size:17px; font-weight:700;}
+.form-steps{margin:0 0 22px; padding-left:20px; font-size:14px; color:#555;}
+
+/* 구글 지도 facade: 클릭해야 iframe 을 불러옴 (접속만으로 472KB·구글 쿠키 발생 방지, P1-18) */
+.map-facade{position:relative; min-height:280px; display:flex; align-items:center; justify-content:center; text-align:center; padding:40px 20px;
+  background-color:#ecebe6; background-image:linear-gradient(rgba(255,255,255,0.55) 2px, transparent 2px), linear-gradient(90deg, rgba(255,255,255,0.55) 2px, transparent 2px); background-size:48px 48px;}
+.map-facade .map-card{background:#fff; padding:24px 28px; box-shadow:0 6px 24px rgba(0,0,0,0.12); border-radius:6px; max-width:440px;}
+.map-facade .map-card strong{display:block; font-size:17px; color:#1d1d1d; margin-bottom:4px;}
+.map-facade .map-card p{margin-bottom:14px; color:#444;}
+.map-facade .btn + .btn{margin-left:6px;}
+
+/* 푸터: 주황 3칸 블록 → 한 줄 연락처 + 사업자 정보 (P0-10, P1-6) */
+.footer .footer-main{padding:40px 0 30px;}
+.footer-contact-list{display:flex; flex-wrap:wrap; justify-content:center; gap:10px 34px; margin:0 0 16px; padding:0; list-style:none; color:#dddddd; font-size:15px;}
+.footer-contact-list li{display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px;}
+.footer-contact-list li > i{color:#f9a305; font-size:20px; line-height:1;}
+.footer-contact-list .label{color:#aaaaaa; font-size:13px;}
+.footer-contact-list a{color:#ffffff;}
+.footer-contact-list a:hover{color:#f9a305;}
+.footer-contact-list small{color:#aaaaaa; font-size:13px;}
+.footer-links{display:flex; flex-wrap:wrap; justify-content:center; gap:6px 22px; margin:0 0 16px; padding:0; list-style:none; font-size:14px;}
+.footer-links a{color:#f9a305;}
+.footer-links a:hover{color:#ffffff;}
+.footer-biz{text-align:center; color:#aaaaaa; font-size:13px; margin:0;}
+.footer-biz span + span::before{content:"·"; margin:0 8px; color:#666;}
+.footer-social{text-align:center;}
+@media (max-width:767px){.footer-contact-list{flex-direction:column; align-items:flex-start; max-width:360px; margin-left:auto; margin-right:auto;} .footer-biz span{display:block;} .footer-biz span + span::before{display:none;}}
+
+/* 움직임 줄이기 설정을 켠 사용자 (P2-5) */
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+}
+
+/* 히어로 사진 선택 버튼 (slit-slider #nav-dots, 자동 넘김 없음) */
+.nav-dots button{background:#ffffff; position:relative; display:inline-block; width:12px; height:12px; margin:0 9px; padding:0; border:0; border-radius:0; cursor:pointer; vertical-align:middle;}
+.nav-dots button::before{border:2px solid #f9a305; opacity:0; content:""; height:20px; width:20px; left:-4px; top:-4px; position:absolute;}
+.nav-dots button::after{content:""; position:absolute; left:-10px; top:-10px; right:-10px; bottom:-10px;}
+.nav-dots button.nav-dot-current, .nav-dots button:hover{background:#f9a305;}
+.nav-dots button.nav-dot-current::before, .nav-dots button:hover::before{opacity:1;}
+a[href^="tel:"]{white-space:nowrap;}
+@media (max-width:991px){.fullscreen-banner .nav-dots{bottom:72px;}}
+.footer{border-top:1px solid rgba(255,255,255,0.08);}

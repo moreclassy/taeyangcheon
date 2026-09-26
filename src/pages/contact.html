@@ -1,25 +1,25 @@
 <!--page
-title: 연락처 · 시공 문의 | 태양천 그루빙
-description: 그루빙 시공 상담·견적 문의. 전화 010-5152-2253, 이메일 taeyangcheun@naver.com, 서울 강남구 삼성로107길.
+title: 그루빙 시공 문의·견적 상담 | 태양천 그루빙
+description: 그루빙 시공 상담·견적 문의. 전화 010-5152-2253(08~22시), 온라인 문의 폼. 서울 강남구 삼성로107길. 하도급·협력 문의 가능.
 canonical: /contact.html
-og_image: images/bg/contact.jpg
-preload: images/bg/contact.jpg
+og_image: images/og/default.jpg
+preload: images/bg/hero-busstop.jpg
 nav: contact
 js: jarallax, contact-form
 -->
 <!--page title start-->
 
-<section class="page-title o-hidden text-center jarallax" data-overlay="7" data-bg-img="images/bg/contact.jpg" data-speed="-0.2">
+<section class="page-title o-hidden text-center jarallax" data-overlay="7" style="background-image:url(images/bg/hero-busstop.jpg)" data-speed="-0.2">
   <div class="container">
     <div class="row">
-      <div class="col-lg-8 col-md-12 ml-auto mr-auto">
-        <h1 class="title mb-0">Contact <span>Us</span></h1>
+      <div class="col-lg-10 col-md-12 ml-auto mr-auto">
+        <h1 class="title mb-0">그루빙 시공 <span>문의·견적 상담</span></h1>
       </div>
     </div>
   </div>
 </section>
 
-<!--page title end--> 
+<!--page title end-->
 
 
 <!--body content start-->
@@ -34,72 +34,130 @@ js: jarallax, contact-form
       <div class="row row-eq-height no-gutters box-shadow">
         <div class="col-lg-6 col-md-12 order-lg-12">
           <div class="contact-main">
-            <h2 class="title mb-4">온라인 <span>문의</span></h2> 
+            <h2 class="title mb-4">온라인 <span>문의</span></h2>
+            <p class="phone-tip">전화가 빠릅니다: <a href="tel:01051522253">010-5152-2253</a> (08~22시)</p>
             <form id="contact-form" method="post" action="php/contact.php">
-              <div class="messages"></div>
+              <div class="messages" role="status" aria-live="polite"></div>
               <div class="form-group">
-                <input id="form_name" type="text" name="name" class="form-control" placeholder="이름" required="required" data-error="이름을 입력해주세요.">
-                <div class="help-block with-errors"></div>
-              </div>
-              <div class="form-group">
-                <input id="form_email" type="email" name="email" class="form-control" placeholder="이메일" required="required" data-error="올바른 이메일 주소를 입력해주세요.">
-                <div class="help-block with-errors"></div>
-              </div>
-              <div class="form-group">
-                <input id="form_phone" type="tel" name="phone" class="form-control" placeholder="전화번호" required="required" data-error="전화번호를 입력해주세요.">
-                <div class="help-block with-errors"></div>
-              </div>
-              <div class="form-group">
-                <select id="form_site_type" name="site_type" class="form-control" required="required" data-error="현장 유형을 선택해주세요.">
-                  <option value="" selected disabled>현장 유형 선택</option>
-                  <option value="school">어린이 보호구역 · 통학로</option>
-                  <option value="curve">급커브 · 산악도로</option>
-                  <option value="slope">급경사 이면도로 · 주택가</option>
-                  <option value="busstop">버스 정류장 · 교차로</option>
-                  <option value="golf">골프장 카트길</option>
-                  <option value="parking">주차장 램프 · 지하주차장</option>
-                  <option value="harbor">항만 · 교량 대면적</option>
-                  <option value="highway">고속도로 · 국도</option>
+                <label for="form_purpose">문의 목적</label>
+                <select id="form_purpose" name="purpose" class="form-control">
+                  <option value="new" selected>신규 시공 견적</option>
+                  <option value="partner">하도급·장비 투입 협력</option>
+                  <option value="docs">자료 요청 (소개서·실적 등)</option>
                   <option value="other">기타</option>
                 </select>
-                <div class="help-block with-errors"></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-sm-6">
+                  <label for="form_name">이름<span class="req" aria-hidden="true">*</span></label>
+                  <input id="form_name" type="text" name="name" class="form-control" autocomplete="name" required="required" data-error="이름을 입력해주세요.">
+                  <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="form_org">소속·직책<span class="opt">선택</span></label>
+                  <input id="form_org" type="text" name="org" class="form-control" autocomplete="organization" placeholder="예: ○○시 도로과 주무관" maxlength="100">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-sm-6">
+                  <label for="form_phone">전화번호<span class="req" aria-hidden="true">*</span></label>
+                  <input id="form_phone" type="tel" name="phone" class="form-control" autocomplete="tel" inputmode="tel" required="required" data-error="전화번호를 입력해주세요.">
+                  <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="form_email">이메일<span class="opt">선택 · 견적서 수신용</span></label>
+                  <input id="form_email" type="email" name="email" class="form-control" autocomplete="email" data-error="올바른 이메일 주소를 입력해주세요.">
+                  <div class="help-block with-errors"></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-sm-6">
+                  <label for="form_site_type">현장 유형<span class="req" aria-hidden="true">*</span></label>
+                  <select id="form_site_type" name="site_type" class="form-control" required="required" data-error="현장 유형을 선택해주세요.">
+                    <option value="" selected disabled>선택해주세요</option>
+                    <option value="school">어린이 보호구역 · 통학로</option>
+                    <option value="curve">급커브 · 산악도로</option>
+                    <option value="slope">급경사 이면도로 · 주택가</option>
+                    <option value="busstop">버스 정류장 · 교차로</option>
+                    <option value="golf">골프장 카트길</option>
+                    <option value="parking">주차장 램프 · 지하주차장</option>
+                    <option value="harbor">항만 · 교량 대면적</option>
+                    <option value="highway">고속도로 · 국도</option>
+                    <option value="other">기타</option>
+                  </select>
+                  <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group col-sm-6">
+                  <label for="form_location">현장 위치<span class="opt">선택</span></label>
+                  <input id="form_location" type="text" name="location" class="form-control" placeholder="예: 경기 용인시" maxlength="100">
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group col-sm-4">
+                  <label for="form_pavement">포장 종류<span class="opt">선택</span></label>
+                  <select id="form_pavement" name="pavement" class="form-control">
+                    <option value="" selected>모름 · 미정</option>
+                    <option value="asphalt">아스팔트</option>
+                    <option value="concrete">콘크리트</option>
+                    <option value="color">컬러(미끄럼 방지) 포장</option>
+                  </select>
+                </div>
+                <div class="form-group col-sm-4">
+                  <label for="form_scale">규모<span class="opt">선택</span></label>
+                  <input id="form_scale" type="text" name="scale" class="form-control" placeholder="예: 길이 200m" maxlength="50">
+                </div>
+                <div class="form-group col-sm-4">
+                  <label for="form_timing">희망 시기<span class="opt">선택</span></label>
+                  <select id="form_timing" name="timing" class="form-control">
+                    <option value="" selected>미정</option>
+                    <option value="1m">1개월 이내</option>
+                    <option value="3m">1~3개월</option>
+                    <option value="later">3개월 이후</option>
+                  </select>
+                </div>
               </div>
               <div class="form-group">
-                <input id="form_location" type="text" name="location" class="form-control" placeholder="현장 위치 (예: 경기 용인시 · 선택)" maxlength="100">
-              </div>
-              <div class="form-group">
-                <textarea id="form_message" name="message" class="form-control" placeholder="문의내용" rows="4" required="required" data-error="문의내용을 입력해주세요."></textarea>
+                <label for="form_message">문의내용<span class="req" aria-hidden="true">*</span></label>
+                <textarea id="form_message" name="message" class="form-control" placeholder="예) 아파트 지하주차장 진입 램프 2곳, 길이 약 30m입니다. 비 오는 날 미끄럼 사고가 잦아 그루빙을 검토하고 있습니다." rows="4" required="required" data-error="문의내용을 입력해주세요."></textarea>
                 <div class="help-block with-errors"></div>
               </div>
               <div class="hp-field" aria-hidden="true"><label for="form_website">홈페이지</label><input id="form_website" type="text" name="website" tabindex="-1" autocomplete="off" data-validate="false"></div>
-              <button type="submit" class="btn btn-border btn-radius"><span>문의하기</span></button>
+              <p class="form-note"><span class="req" aria-hidden="true">*</span> 표시는 필수 항목입니다. 현장 사진이 있으면 접수 후 연락드릴 때 문자나 이메일로 보내주세요.</p>
+              <button type="submit" class="btn btn-theme btn-radius btn-submit"><span>문의 보내기</span></button>
             </form>
           </div>
         </div>
-        <div class="col-lg-6 col-md-12 dark-bg text-white px-5 py-5 jarallax form-info order-lg-1 align-item-middle" data-bg-img="images/bg/04.jpg" data-overlay="8" data-speed="-0.2">
+        <div class="col-lg-6 col-md-12 dark-bg text-white px-5 py-5 jarallax form-info order-lg-1 align-item-middle" style="background-image:url(images/bg/panel-golf.jpg)" data-overlay="8" data-speed="-0.2">
           <div>
             <h2 class="title text-white">그루빙 <span>시공 상담</span></h2>
-            <p>그루빙 기술에 대한 문의나, 시공을 위한 상담을 원하시는 분은 연락주세요.</p>
-            <p>전화 문의 응대 시간 : 오전 8시 ~ 오후 10시</p>
+            <p>그루빙 기술에 대한 문의나 시공 상담을 원하시는 분은 연락주세요. 지자체·공공기관 발주, 건설사·포장업체 하도급, 아파트 관리사무소, 골프장 시설팀 문의를 받습니다.</p>
+            <p>전화 문의 응대 시간: 오전 8시 ~ 오후 10시</p>
             <ul class="contact-info list-unstyled mt-4">
-              <li class="mb-4"><i class="flaticon-paper-plane"></i><span>주소:</span>
+              <li class="mb-4"><i class="flaticon-paper-plane" aria-hidden="true"></i><span>주소</span>
                 <p>서울특별시 강남구 삼성로107길 11-6 101호</p>
               </li>
-              <li class="mb-4"><i class="flaticon-phone-call"></i><span>전화:</span><a href="tel:01051522253">010-5152-2253</a> / <a href="tel:01073631008">010-7363-1008</a>
+              <li class="mb-4"><i class="flaticon-phone-call" aria-hidden="true"></i><span>전화</span><a href="tel:01051522253">010-5152-2253</a> / <a href="tel:01073631008">010-7363-1008</a>
               </li>
-              <li><i class="flaticon-message"></i><span>이메일</span><a href="mailto:taeyangcheun@naver.com">taeyangcheun@naver.com</a>
+              <li><i class="flaticon-message" aria-hidden="true"></i><span>이메일</span><a href="mailto:taeyangcheun@naver.com">taeyangcheun@naver.com</a>
               </li>
             </ul>
-            <a class="btn btn-theme btn-radius mt-4" href="files/taeyang_grooving_brochure.pdf" download="태양천_그루빙_공법소개서.pdf"><i class="fas fa-file-pdf"></i> 공법 소개서 다운로드 (PDF, A4 1장)</a>
+            <a class="btn btn-theme btn-radius mt-4" href="files/taeyang_grooving_brochure.pdf" download="태양천_그루빙_공법소개서.pdf"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg> 공법 소개서 다운로드 (PDF, A4 1장)</a>
           </div>
         </div>
       </div>
     </div>
   </div>
   <div class="container-fluid p-0 md-mt-5">
-    <div class="row">
+    <div class="row no-gutters">
       <div class="col-sm-12">
-        <iframe class="map-embed" title="태양천 그루빙 위치 (서울특별시 강남구 삼성로107길 11-6)" src="https://maps.google.com/maps?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EB%82%A8%EA%B5%AC+%EC%82%BC%EC%84%B1%EB%A1%9C107%EA%B8%B8+11-6&amp;z=16&amp;hl=ko&amp;output=embed" loading="lazy" allowfullscreen></iframe>
+        <!-- 구글 지도는 버튼을 눌러야 불러옴 (페이지 접속만으로 472KB 전송·구글 쿠키가 생기지 않게). 네이버·카카오 링크가 기본 동선 -->
+        <div class="map-facade" id="map-facade">
+          <div class="map-card">
+            <strong><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg> 태양천 그루빙 사무실</strong>
+            <p>서울특별시 강남구 삼성로107길 11-6 101호<br><small>구글 지도는 버튼을 누르면 불러옵니다.</small></p>
+            <button type="button" class="btn btn-theme btn-radius" id="map-load" data-src="https://maps.google.com/maps?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C+%EA%B0%95%EB%82%A8%EA%B5%AC+%EC%82%BC%EC%84%B1%EB%A1%9C107%EA%B8%B8+11-6&amp;z=16&amp;hl=ko&amp;output=embed">구글 지도 열기</button>
+          </div>
+        </div>
         <div class="map-links">
           <a class="btn btn-theme btn-radius" href="https://map.naver.com/p/search/%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%82%BC%EC%84%B1%EB%A1%9C107%EA%B8%B8%2011-6" target="_blank" rel="noopener">네이버 지도에서 보기</a>
           <a class="btn btn-border btn-radius" href="https://map.kakao.com/?q=%EC%84%9C%EC%9A%B8%ED%8A%B9%EB%B3%84%EC%8B%9C%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%82%BC%EC%84%B1%EB%A1%9C107%EA%B8%B8%2011-6" target="_blank" rel="noopener">카카오맵에서 보기</a>
@@ -112,14 +170,31 @@ js: jarallax, contact-form
 <!--contact end-->
 
 <script>
-/* 시공 사례·광고 링크의 ?type=school 등으로 현장 유형을 미리 선택 */
+/* 시공 사례·광고 링크의 ?type=school, 푸터 '협력사·하도급 문의' 의 ?purpose=partner 로 항목을 미리 선택 */
 (function () {
-  var m = /[?&]type=([a-z]+)/.exec(window.location.search);
-  var s = document.getElementById('form_site_type');
-  if (m && s && s.querySelector('option[value="' + m[1] + '"]')) s.value = m[1];
+  function preset(param, id) {
+    var m = new RegExp('[?&]' + param + '=([a-z0-9]+)').exec(window.location.search);
+    var s = document.getElementById(id);
+    if (m && s && s.querySelector('option[value="' + m[1] + '"]')) s.value = m[1];
+  }
+  preset('type', 'form_site_type');
+  preset('purpose', 'form_purpose');
+
+  /* 구글 지도 facade: 클릭 시에만 iframe 삽입 */
+  var btn = document.getElementById('map-load');
+  if (btn) btn.addEventListener('click', function () {
+    var f = document.createElement('iframe');
+    f.className = 'map-embed';
+    f.title = '태양천 그루빙 위치 (서울특별시 강남구 삼성로107길 11-6)';
+    f.src = btn.getAttribute('data-src');
+    f.setAttribute('allowfullscreen', '');
+    var box = document.getElementById('map-facade');
+    box.parentNode.replaceChild(f, box);
+    if (typeof window.gtag === 'function') window.gtag('event', 'map_click', { map_provider: 'google' });
+  });
 })();
 </script>
 
 </div>
 
-<!--body content end--> 
+<!--body content end-->
