@@ -86,6 +86,7 @@ scp -r css js images taeyang:~/www/
 ## 홍보 자료
 
 - `marketing/docs/웹사이트_개선_로드맵_2026-09-20.md`: 사이트 개선 로드맵(P0/P1/P2 52항목, Lighthouse 측정 근거, 대표자 확인 항목). 항목을 구현하면 문서의 해당 항목에 완료일을 적어 갱신
+- `marketing/docs/사업확장_아이디어_2026-09-27.md`: 사업 확장 아이디어(6개 관점 51개 판정 → 21개 유지, 선행 게이트 G-0~G-3, 대표자 신규 질문 N1~N15). 홍보계획과 중복되는 내용은 장 번호로만 참조. 아이디어를 실행·검증하면 해당 항목에 결과와 날짜를 적어 갱신
 - `marketing/docs/`: 대표자용 행정 가이드 문서(마크다운). 전문건설업 「지반조성·포장공사업」 등록 가이드(2026-09-19, 시행령 별표 2 기준. 그루빙 공사 입찰 자격의 전제 조건). 나라장터 조달업체 등록 킷(2026-09-19, 차세대 나라장터 기준. 건설업 등록 유무에 따른 A/B 경로). 법령 개정 시 문서 상단 작성일과 기준을 함께 갱신
 - A4 공법 소개서: `marketing/brochure/brochure.html`(원본) → `python3 marketing/brochure/build_pdf.py` 로 `files/taeyang_grooving_brochure.pdf` 생성 (headless Chrome 사용, 한 장 초과 시 종료 코드 1). 사진은 레포 `images/` 를 긴 변 520px·품질 66 으로 줄인 임시 사본으로 넣음(1.57MB → 약 1.0MB, 나머지는 한글 글꼴). 하단 QR 은 `https://taeyang1000.com/cases.html?utm_source=brochure&utm_medium=print&utm_campaign=brochure` (`pip install qrcode` 필요, 없으면 QR 없이 생성). 전화번호·주소·상호·대표 등 문구는 HTML 에서 수정. `contact.html`·`cases.html` 의 "소개서 다운로드" 버튼이 이 PDF 를 가리키며(`download` 속성으로 한글 파일명 저장) GA4 `file_download` 이벤트가 기록됨. 고치면 `scp files/taeyang_grooving_brochure.pdf taeyang:~/www/files/`. `marketing/` 은 서버에 올리지 않음 (2026-09-19)
 
