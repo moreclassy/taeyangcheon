@@ -76,6 +76,7 @@ scp -r css js images taeyang:~/www/
 
 ## 시공 실적 (DB 기반, records.html)
 
+- **현재 숨김 (2026-10-16)**: 공개할 실적이 없어 `build.py` `NAV` 항목을 주석 처리, 페이지 메타 `nav: none` + `noindex: yes`, `sitemap.xml` 항목과 about·cases 의 "연도별 시공 실적 보기" 링크 삭제. 페이지 파일은 남아 있어 URL 로 직접 열 수 있음(관리자 화면 링크용). 실적을 공개할 때 이 다섯 곳을 되돌리고 빌드
 - `records.html`은 `js/records.js`가 `php/gallery/records_api.php`에서 공개 실적(JSON)을 받아 연도별 표로 그림. 실적이 없거나 API가 실패하면 HTML에 있는 "정리 중" 안내와 갤러리·사례 링크가 그대로 보임
 - 테이블 `gallery_records`(`php/gallery/lib.php`의 `gallery_records_ensure_schema`가 자동 생성). 컬럼: `work_month`(YYYY-MM, NULL 가능), `site_name`, `location`, `client`, `site_type`, `method`, `scale`, `note`, `photo_id`(갤러리 사진 FK, 삭제 시 NULL), `is_public`
 - 현장 유형(`gallery_record_types`)과 공법(`gallery_record_methods`) 목록은 lib.php에 하드코딩. 유형 key는 `cases.html`의 앵커(school/curve/slope/busstop/golf/parking/harbor)와 맞춰 두었고 highway/other 추가

@@ -94,7 +94,7 @@ NAV = [
     ('about', 'about.html', '회사소개'),
     ('project', 'project.html', '갤러리'),
     ('cases', 'cases.html', '시공 사례'),
-    ('records', 'records.html', '시공 실적'),
+    # ('records', 'records.html', '시공 실적'),  # 공개 실적이 생길 때까지 숨김 (2026-10-16). 되살릴 때 records 메타의 nav·noindex, sitemap, about·cases 링크도 복구
     ('info', 'info.html', '그루빙이란?'),
     ('contact', 'contact.html', '연락처'),
 ]
