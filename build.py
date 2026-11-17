@@ -308,6 +308,8 @@ def build_page(src_path: Path) -> str:
         'head_extra': ('\n' + extra + '\n') if extra else '',
         'verification': render_verification(),
         'social': render_social(),
+        # 푸터 저작권 연도. 빌드한 해가 들어가고, 해가 바뀌면 footer.html 의 인라인 스크립트가 브라우저에서 올려 준다
+        'year': str(datetime.date.today().year),
         'css': render_css(split_list(meta.get('css', ''))),
         'nav': render_nav(meta['nav']),
         'js': render_js(split_list(meta.get('js', '')), split_list(meta.get('js_after', ''))),

@@ -58,4 +58,10 @@ ErrorDocument 404 /404.html
   <FilesMatch "\.(html|css|js|jpe?g|png|gif|webp|svg|ico|xml|txt|woff2?|ttf|eot)$">
     Header set Referrer-Policy "strict-origin-when-cross-origin"
   </FilesMatch>
+  # CSP 시험 단계(2026-11-18~): 차단하지 않고 위반만 php/csp-report.php → ~/csp-reports.log 로 기록.
+  # 1~2주 기록을 보고 문제가 없으면 헤더 이름을 Content-Security-Policy 로 바꿔 적용 (정적 HTML 에만. admin/*.php 는 제외)
+  # 외부 자원: GA4(googletagmanager·google-analytics), 연락처의 구글 지도 iframe(maps.google.com → www.google.com)
+  <FilesMatch "\.html$">
+    Header set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://*.google.com; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.google.com; frame-src https://maps.google.com https://www.google.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; report-uri /php/csp-report.php"
+  </FilesMatch>
 </IfModule>

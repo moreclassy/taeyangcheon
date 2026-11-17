@@ -8,8 +8,8 @@
 - 2026-09-18에 PHP 7.3 → 8.4로 변경하면서 서버가 이전됨 (구 서버 `uws7-087`). 서버 이전 시 SSH 호스트키가 바뀌므로 `ssh-keygen -R taeyang1000.com` 후 재접속
 - 제한된 셸이라 `whoami`, `wc` 등 일부 명령 없음
 - 계정: `qudgk02`
-- SSH 키: 레포 루트의 `qudgk02_key_20260918.pem` (`.gitignore`로 제외됨, 권한 600 유지)
-- 카페24 SSH 키는 발급 후 30일 만료 (현재 키 만료일 2026-10-18). 만료되면 `나의 서비스 관리 > FTP/Shell 접속설정 > 인증키 재발급`(본인인증 필요)으로 새 pem을 받아 같은 파일명으로 교체
+- SSH 키: 레포 루트의 `qudgk02_key_20261118.pem` (`.gitignore`로 제외됨, 권한 600 유지)
+- 카페24 SSH 키는 발급 후 30일 만료 (현재 키 `qudgk02_key_20261118.pem` 발급 2026-11-18, 만료일 2026-12-18. 이전 키 20260918 은 2026-11-18 에 거부됨). 만료되면 `나의 서비스 관리 > FTP/Shell 접속설정 > 인증키 재발급`(본인인증 필요)으로 새 pem을 받아 같은 파일명으로 교체
 - SSH 30일 미접속 시 자동 차단됨
 - `~/.ssh/config`에 `taeyang` 별칭이 등록되어 있음:
 
@@ -17,7 +17,7 @@
 Host taeyang
     HostName taeyang1000.com
     User qudgk02
-    IdentityFile /Users/byungha/repositories/taeyangcheon/qudgk02_key_20260918.pem
+    IdentityFile /Users/byungha/repositories/taeyangcheon/qudgk02_key_20261118.pem
     IdentitiesOnly yes
 ```
 
@@ -26,7 +26,7 @@ Host taeyang
 ```bash
 ssh taeyang
 # 별칭 없이 직접 접속할 때
-ssh -i qudgk02_key_20260918.pem qudgk02@taeyang1000.com
+ssh -i qudgk02_key_20261118.pem qudgk02@taeyang1000.com
 ```
 
 ## 배포
@@ -67,17 +67,18 @@ scp -r css js images taeyang:~/www/
 - `php/contact.php`는 로컬에 PHP CLI가 없어 문법 검사를 못 함. `contact_next.php`로 올린 뒤 허니팟 필드 `website`를 채운 POST(메일을 보내지 않고 success JSON만 반환)로 200을 확인하고 `mv`로 교체할 것
 - 검색엔진 소유 확인 메타태그는 `build.py`의 `SITE_VERIFICATION`(네이버 서치어드바이저 / Google Search Console HTML 태그 content 값)에 넣고 빌드. 비어 있으면 출력 안 됨
 - 푸터 외부 채널(유튜브·네이버 블로그 등) 링크는 `build.py`의 `SOCIAL` 목록에 추가하고 빌드
-- 검색엔진 등록 현황: 네이버 서치어드바이저(HTML 태그 인증, 2026-09-19), Google Search Console URL 접두어 속성 `https://taeyang1000.com/`(HTML 태그 인증, sitemap.xml 제출 완료, 메인 페이지 색인 요청, 2026-09-19. 사용자의 Chrome 구글 계정으로 등록). 2026-09-07 구글 크롤링이 4xx로 실패한 이력이 있음(서버 이전 전) → 색인 보고서에서 4xx 오류가 다시 나오면 서버 상태 확인
+- 검색엔진 등록 현황: 네이버 서치어드바이저(HTML 태그 인증, 2026-09-19), Google Search Console URL 접두어 속성 `https://taeyang1000.com/`(HTML 태그 인증, sitemap.xml 제출 완료, 메인 페이지 색인 요청, 2026-09-19. 사용자의 Chrome 구글 계정으로 등록). 2026-09-07 구글 크롤링이 4xx로 실패한 이력이 있음(서버 이전 전) → 색인 보고서에서 4xx 오류가 다시 나오면 서버 상태 확인 2026-11-18: GSC heating.html 색인 요청·about/cases/contact/project 색인 요청(4개 모두 "발견됨-색인 안 됨", 크롤링 이력 없음)·sitemap 재제출, 네이버 서치어드바이저 heating.html 수집 요청·sitemap 재제출(대표), 네이버 스마트플레이스·구글 비즈니스 프로필 등록 완료(대표), 파워링크 소재 '무료' 확인 완료(대표). 네이버 도메인(searchadvisor·searchad·search.naver.com)은 Claude 브라우저에서 열리지 않음
+- 푸터 저작권 연도(2026-11-18): `footer.html` 의 `{{year}}` 에 빌드한 해가 들어가고, 해가 바뀌면 인라인 스크립트가 브라우저에서 올려 줌(재배포 없이도 맞음)
 - 모바일(lg 미만)에서는 `footer.html`의 `.call-bar`(전화 상담 / 온라인 문의) 하단 고정 바가 모든 페이지에 표시됨. 스타일은 `css/default-theme.css` 끝부분
 - GA4 측정 ID가 설정되면 전화 링크 클릭(`phone_call`, `js/analytics.js`)과 문의 폼 성공(`generate_lead`, `site_type`·`purpose` 파라미터, `theme-script.js`)이 이벤트로 기록됨. GA4에서 두 이벤트를 전환으로 표시하면 됨. 그 밖에 `email_click`(mailto), `map_click`(`map_provider` naver/kakao/google), `inquiry_link`(`contact.html?type=…/purpose=…` 링크), `kakao_chat`(`pf.kakao.com` 링크, 채널 개설 후), `file_download`(PDF) (2026-09-26). 모든 링크 이벤트에 `button_location`(헤더 상단 연락처·헤더 전화 버튼·모바일 하단 바·상담 밴드·푸터·연락처 카드·문의 폼 위 안내·메인 첫 화면·본문) 이 붙음. 자리 판별 목록은 `analytics.js` 의 `PLACES`(위에서부터 먼저 맞는 것). GA4 `관리 > 맞춤 정의` 에 이벤트 범위 맞춤 측정기준 '버튼 위치'(`button_location`) 등록 완료(2026-11-18, 등록 이후 데이터만 보임). 보고서 > 참여도 > 이벤트 > `phone_call` 에서 측정기준을 '버튼 위치'로 바꿔 봄. 새 자리를 추가할 때 GA4 쪽은 손댈 필요 없음
-- 스팸 방지: 숨김 필드 `website`(허니팟, 채워져 있으면 성공한 척 응답 후 버림), 동일 출처 검사, IP당 1시간 5건 제한(`sys_get_temp_dir()` 파일), 문의내용에 한글이 한 글자도 없으면 외국어 스팸으로 보고 성공한 척 응답 후 버림(2026-10-20)
-- 개인정보(2026-11-18): `privacy.html`(src `src/pages/privacy.html`, `nav: none`, sitemap 등록) 개인정보처리방침. 푸터 사업자 정보 줄 끝에 굵은 링크(`.footer-privacy`). 문의 폼에 수집·이용 안내 박스 + 필수 체크박스 `privacy=1`, `php/contact.php` 가 없으면 422(허니팟 다음, 전송 제한 전에 검사), 대표 메일 본문에 동의 기록. 보유 기간 "문의 처리 완료 후 1년"(계약 기록은 5년), 위탁 카페24·네이버·Google, 국외 이전 Google(Gmail 백업 수신·GA4), 보호책임자 대표 김병하. 수집 항목·수신 메일·분석 도구·보유 기간을 바꾸면 `src/pages/privacy.html`(시행일 포함)과 `src/pages/contact.html` 안내 박스를 같이 고칠 것
+- 스팸 방지: 숨김 필드 `website`(허니팟, 채워져 있으면 성공한 척 응답 후 버림), 동일 출처 검사, IP당 1시간 5건 제한(`sys_get_temp_dir()` 파일), 문의내용에 한글이 한 글자도 없으면 외국어 스팸으로 보고 성공한 척 응답 후 버림(2026-10-20) 2026-11-18: `X-Requested-With: XMLHttpRequest`(jQuery AJAX 가 자동으로 붙임) 없으면 403(허니팟·동의 검사 뒤라 허니팟 상태 점검 POST 는 헤더 없이 200), IP 전송 제한은 검증 통과 건만 세고 `flock` 안에서 읽기·검사·예약(동시 8건 중 정확히 5건 통과 확인), 발송 실패 시 예약 반환. 서버 `REMOTE_ADDR` 는 실제 접속자 IP(프록시 XFF 없음, 2026-11-18 확인). curl 로 시험할 때는 `-H "X-Requested-With: XMLHttpRequest"`
+- 개인정보(2026-11-18): `privacy.html`(src `src/pages/privacy.html`, `nav: none`, sitemap 등록) 개인정보처리방침. 푸터 사업자 정보 줄 끝에 굵은 링크(`.footer-privacy`). 문의 폼에 수집·이용 안내 박스 + 필수 체크박스 `privacy=1`, `php/contact.php` 가 없으면 422(허니팟 다음, 전송 제한 전에 검사), 대표 메일 본문에 동의 기록. 보유 기간 "문의 처리 완료 후 1년"(계약 기록은 5년), 위탁 카페24·네이버·Google, 국외 이전 Google(Gmail 백업 수신·GA4), 보호책임자 대표 김병하. 수집 항목·수신 메일·분석 도구·보유 기간을 바꾸면 `src/pages/privacy.html`(시행일 포함)과 `src/pages/contact.html` 안내 박스를 같이 고칠 것 보유 기간 1년은 대표 확인 완료(2026-11-18)
 - Google Analytics: `js/analytics.js`의 `GA4_ID`에 측정 ID(`G-...`)를 넣으면 전 페이지 활성화. 비어 있으면 아무것도 로드하지 않음. 예전 UA-127663147-1은 2023-07 수집 종료로 제거함 (2026-09-18). 2026-09-19 GA4 속성 생성·연결 완료: 계정 `태양천 그루빙`(a408814078), 속성 p555091674, 웹 스트림 15805900437, 측정 ID `G-0V0BMQL618`(숫자 0). 사용자의 Chrome 구글 계정 소유. 새 GA4 UI는 이벤트가 한 번 수집된 뒤에야 `관리 > 데이터 표시 > 이벤트`에서 별표로 주요 이벤트 지정 가능 → `generate_lead`, `phone_call`이 목록에 나타나면 별표 켜기. analytics.js를 고치면 `head.html`의 `js/analytics.js?v=` 올리기
 - 연락처 지도: 주소 카드 + '구글 지도 열기' 버튼(facade). 버튼을 눌러야 Google Maps 임베드 iframe(`output=embed`, API 키 없음)을 넣음 → 접속만으로 472KB·구글 쿠키가 생기지 않음 (2026-09-26). 기본 동선은 아래 네이버 지도/카카오맵 링크 버튼. 예전 `js/map.js`(Maps JavaScript API, 키 없음 → 에러)와 MailChimp용 `php/subscribe.php`, `php/MCAPI.class.php`는 2026-09-18 삭제
 
 ## 시공 실적 (DB 기반, records.html)
 
-- **현재 숨김 (2026-10-16)**: 공개할 실적이 없어 `build.py` `NAV` 항목을 주석 처리, 페이지 메타 `nav: none` + `noindex: yes`, `sitemap.xml` 항목과 about·cases 의 "연도별 시공 실적 보기" 링크 삭제. 페이지 파일은 남아 있어 URL 로 직접 열 수 있음(관리자 화면 링크용). 실적을 공개할 때 이 다섯 곳을 되돌리고 빌드
+- **현재 숨김 (2026-10-16)**: 공개할 실적이 없어 `build.py` `NAV` 항목을 주석 처리, 페이지 메타 `nav: none` + `noindex: yes`, `sitemap.xml` 항목과 about·cases 의 "연도별 시공 실적 보기" 링크 삭제. 페이지 파일은 남아 있어 URL 로 직접 열 수 있음(관리자 화면 링크용). 실적을 공개할 때 이 다섯 곳을 되돌리고 빌드 공개 시점은 도로포장업(지반조성·포장공사업) 등록 후로 대표가 결정(2026-11-18)
 - `records.html`은 `js/records.js`가 `php/gallery/records_api.php`에서 공개 실적(JSON)을 받아 연도별 표로 그림. 실적이 없거나 API가 실패하면 HTML에 있는 "정리 중" 안내와 갤러리·사례 링크가 그대로 보임
 - 테이블 `gallery_records`(`php/gallery/lib.php`의 `gallery_records_ensure_schema`가 자동 생성). 컬럼: `work_month`(YYYY-MM, NULL 가능), `site_name`, `location`, `client`, `site_type`, `method`, `scale`, `note`, `photo_id`(갤러리 사진 FK, 삭제 시 NULL), `is_public`
 - 현장 유형(`gallery_record_types`)과 공법(`gallery_record_methods`) 목록은 lib.php에 하드코딩. 유형 key는 `cases.html`의 앵커(school/curve/slope/busstop/golf/parking/harbor)와 맞춰 두었고 highway/other 추가
@@ -136,7 +137,7 @@ ssh taeyang 'PW=$(sed -n "s/.*'"'"'pass'"'"' => '"'"'\([^'"'"']*\)'"'"'.*/\1/p" 
 - `heating.html`(열선 홈파기, 2026-11-16): '열선 홈파기·열선홈파기·열선 커팅' 검색용 전용 페이지. 메뉴에는 없고(`nav: none`) 푸터 링크·메인 서비스 카드(첫 번째, 가로 슬라이드)·info `#heating`·cases `#parking`·index JSON-LD `hasOfferCatalog` 에서 연결. 문구는 '홈 커팅만 시공, 열선 포설·결선·전원 연결은 전기공사업체'로 범위를 한정함(전기공사업법 위험, `marketing/docs/사업확장_아이디어_2026-09-27.md` 4-4). 이 범위를 넓히는 문구(열선 시공·설치 등)는 넣지 말 것. 상담 링크는 `contact.html?type=other`(별도 site_type 키 없음)
 - 문구 규칙(2026-11-18): '무료 견적'·'상담 무료' 등 '무료' 표현은 사이트·소개서·메타 설명 어디에도 쓰지 않음(대표 결정). 견적 안내는 "현장 확인 후 견적을 드립니다"까지만
 - 교통사고 통계 문구(`index.html` 아코디언, `about.html`)는 2024년 사망자 2,521명·10만 명당 5.3명, 2025년 2,549명 기준(2026-09-18 갱신). 매년 초 도로교통공단 발표 후 갱신
-- `.htaccess` 보안 헤더: HSTS(1년, includeSubDomains 없음), nosniff, X-Frame-Options SAMEORIGIN, Permissions-Policy. Referrer-Policy 는 정적 파일에만 걸어 `admin/index.php` 의 PHP 헤더와 충돌하지 않게 함
+- `.htaccess` 보안 헤더: HSTS(1년, includeSubDomains 없음), nosniff, X-Frame-Options SAMEORIGIN, Permissions-Policy. Referrer-Policy 는 정적 파일에만 걸어 `admin/index.php` 의 PHP 헤더와 충돌하지 않게 함 CSP 는 시험 단계(2026-11-18~): `.html` 에만 `Content-Security-Policy-Report-Only`, 위반은 `php/csp-report.php` → 웹 루트 밖 `~/csp-reports.log`(256KB 상한, `ssh taeyang 'tail ~/csp-reports.log'`). 1~2주 뒤 로그를 보고 헤더 이름을 `Content-Security-Policy` 로 바꿔 적용. 첫날 보고는 jarallax 의 `Function("return this")`(try/catch 안이라 차단돼도 동작 영향 없음)뿐. 디렉터리 목록은 서버 기본값이 이미 403 이라 `Options -Indexes` 는 넣지 않음(AllowOverride 제한 시 500 위험). 관리자 로그인 잠금은 IP별이 아닌 전체 잠금 유지(무차별 대입에 더 안전, 잠기면 SSH 로 해제). 2026-11-18 배포 전 사본 `~/www/.htaccess.bak-20261118`
 - 로컬 미리보기: `.claude/launch.json`의 `static` (python http.server 8765). PHP(갤러리 API, 문의 폼)는 로컬에서 동작하지 않고 HTML 폴백만 보임
 - `robots.txt` 는 `/php/` 를 막되 `Allow: /php/gallery/api.php`, `Allow: /php/gallery/records_api.php` 를 먼저 둠(갤러리·실적 JSON 을 검색엔진이 렌더링할 수 있게). `.htaccess` 는 `hosting_index.html`(카페24 기본 파일, 내부 호스트명 노출)을 mod_rewrite 로 403 처리 (2026-09-26)
 - 갤러리 DB 사진 제목 일부가 자모 분리(NFD) 한글로 들어가 있음(예전 macOS 파일명에서 복사). 검색에 불리하므로 관리자 화면에서 제목을 다시 입력하면 NFC 로 저장됨. `seed.php`·HTML 폴백은 2026-09-26 NFC 로 정리

@@ -10,7 +10,8 @@
  * - 대표 메일 발송이 성공하고 문의자가 이메일을 적었으면 '접수 확인' 메일을 보낸다.
  *   확인 메일에는 문의자가 입력한 자유 글(이름·내용)을 넣지 않는다 (남의 주소로 광고 메일을 보내는 데 악용 방지).
  * - 개인정보 수집·이용 동의 체크박스(privacy=1)가 없으면 422. 처리방침은 privacy.html (보유 기간 문의 처리 완료 후 1년).
- * - 스팸 방지: 숨김 필드(website) 허니팟, 동일 출처 검사, IP 당 1시간 5건 제한,
+ * - 스팸 방지: 숨김 필드(website) 허니팟, 동일 출처 검사, X-Requested-With(AJAX) 검사,
+ *   IP 당 1시간 5건 제한(검증 통과 건만, flock 으로 동시 전송 안전),
  *   문의내용에 한글이 한 글자도 없으면(외국어 스팸) 성공한 척 응답하고 버림.
  */
 declare(strict_types=1);
@@ -89,19 +90,14 @@ if (($_POST['privacy'] ?? '') !== '1') {
     respond('danger', '개인정보 수집·이용에 동의해주셔야 문의를 접수할 수 있습니다. 동의하지 않으시면 전화(010-5152-2253)로 문의해주세요.', 422);
 }
 
-// IP 당 전송 횟수 제한
-$ip     = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
-$rlFile = sys_get_temp_dir() . '/taeyang_contact_' . md5($ip);
+// 자바스크립트(jQuery AJAX)로 보낸 요청만 받는다. jQuery 는 같은 출처 요청에 X-Requested-With 를 붙인다.
+// Origin·Sec-Fetch 헤더 없이 바로 POST 하는 봇을 걸러낸다 (허니팟 검사 뒤라 상태 점검용 허니팟 POST 는 헤더 없이도 200).
+if (($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') !== 'XMLHttpRequest') {
+    respond('danger', '문의를 보내지 못했습니다. 브라우저에서 자바스크립트를 켜고 다시 시도하시거나 전화(010-5152-2253)로 문의해주세요.', 403);
+}
+
+$ip     = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';  // 2026-11-18 확인: 프록시 뒤에서도 실제 접속자 IP 가 들어옴 (X-Forwarded-For 없음)
 $now    = time();
-$recent = [];
-if (is_file($rlFile)) {
-    foreach (file($rlFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $t) {
-        if ((int)$t > $now - $rateLimitWin) $recent[] = (int)$t;
-    }
-}
-if (count($recent) >= $rateLimitMax) {
-    respond('danger', '문의가 너무 자주 접수되었습니다. 잠시 후 다시 시도하시거나 전화로 문의해주세요.', 429);
-}
 
 // 입력값 검증
 $name    = line_field('name', 100);
@@ -163,16 +159,45 @@ $encSubject = mb_encode_mimeheader(
     $subject . ' - ' . $purposeLabel . ' - ' . ($siteTypes[$siteType] ?? '일반') . ' - ' . $name . ($org !== '' ? " ({$org})" : ''),
     'UTF-8', 'B');
 
+// IP 당 전송 횟수 제한: 파일 잠금 안에서 읽기·검사·자리 예약을 한 번에 해 동시 전송에도 한도를 넘지 않게 한다.
+// 검증을 통과한 문의만 센다 (입력 오류로 다시 보내는 사람은 한도를 쓰지 않음). 메일 발송이 실패하면 예약을 되돌린다.
+$rlFile = sys_get_temp_dir() . '/taeyang_contact_' . md5($ip);
+$rl = @fopen($rlFile, 'c+');
+if ($rl !== false && flock($rl, LOCK_EX)) {
+    $recent = [];
+    foreach (preg_split('/\R/', (string)stream_get_contents($rl)) ?: [] as $line) {
+        if ((int)$line > $now - $rateLimitWin) $recent[] = (int)$line;
+    }
+    if (count($recent) >= $rateLimitMax) {
+        flock($rl, LOCK_UN);
+        fclose($rl);
+        respond('danger', '문의가 너무 자주 접수되었습니다. 잠시 후 다시 시도하시거나 전화로 문의해주세요.', 429);
+    }
+    $write = static function (array $times) use ($rl): void {
+        ftruncate($rl, 0);
+        rewind($rl);
+        fwrite($rl, $times ? implode("\n", $times) . "\n" : '');
+        fflush($rl);
+    };
+    $write(array_merge($recent, [$now]));
+} else {
+    if ($rl !== false) fclose($rl);
+    $rl = false;  // 잠금 파일을 못 열면 제한 없이 진행 (문의를 놓치는 것보다 낫다)
+}
+
 // -f 로 봉투 발신자(Return-Path)도 도메인 주소로 맞춰 SPF 가 통과되게 한다. 거부되면 기본값으로 재시도.
 $sent = @mail($sendTo, $encSubject, $body, implode("\r\n", $headers), '-f' . $from)
      || mail($sendTo, $encSubject, $body, implode("\r\n", $headers));
 
+if ($rl !== false) {
+    if (!$sent) $write($recent);  // 발송 실패 시 예약한 자리를 돌려준다
+    flock($rl, LOCK_UN);
+    fclose($rl);
+}
+
 if (!$sent) {
     respond('danger', '메일 전송에 실패했습니다. 전화(010-5152-2253)로 문의해주시면 빠르게 답변드리겠습니다.', 500);
 }
-
-$recent[] = $now;
-@file_put_contents($rlFile, implode("\n", $recent) . "\n", LOCK_EX);
 
 // 문의자에게 접수 확인 메일 (선택 목록 값과 시각만 넣고 자유 입력은 넣지 않음)
 $ackSent = false;
