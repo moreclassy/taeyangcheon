@@ -123,6 +123,11 @@
 .service-nav .icon{width:20px; height:20px;}
 @media (max-width:991px){.service-slide{flex-basis:calc((100% - 30px) / 2);}}
 @media (max-width:767px){.service-track{gap:16px;} .service-slide{flex-basis:85%;}}
+/* 히어로: 발주처 유형·무료 견적 한 줄 (모바일에서는 2열) */
+.hero-points{list-style:none; padding:0; margin:-6px 0 26px; display:flex; flex-wrap:wrap; gap:8px 10px;}
+.hero-points li{color:#fff; font-size:14px; line-height:1.4; padding:6px 12px; border:1px solid rgba(255,255,255,0.45); border-radius:20px; background:rgba(0,0,0,0.25);}
+.hero-points li:last-child{border-color:#f9a305; color:#f9a305; font-weight:600;}
+@media (max-width:575px){.hero-points{gap:6px;} .hero-points li{font-size:13px; padding:5px 10px;}}
 @media (prefers-reduced-motion:reduce){.service-track{scroll-behavior:auto;}}
 </style>
 <script type="application/ld+json">
@@ -284,17 +289,21 @@
       <div class="row">
         <div class="col-xl-10 col-lg-10 col-md-12 ml-auto mr-auto">
           <div class="banner-text">
-            <h1 class="text-white mb-4 title"><span>40년 이상 경력</span>의 기술진이 <br/> 당신의 안전을 책임집니다</h1>
+            <h1 class="text-white mb-4 title">도로 미끄럼 방지 <br/><span>그루빙</span> 전문 시공</h1>
             <p class="lead text-white">
-              태양천 그루빙은 도로공사 경력 40년 이상의 기술진이 직접 시공하는 노면 미끄럼 방지 그루빙 업체입니다.
+              빗길·급커브·경사로·어린이 보호구역 노면에 홈을 내 미끄럼 사고를 줄입니다.
               <br/>
-              서울·경기부터 지방 현장까지 전국 시공하며, 지자체·도로관리기관·건설사·골프장·아파트 관리주체의 발주를 받습니다.
-              <br/>
-              <a href="tel:01051522253"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> 010-5152-2253</a> / <a href="tel:01073631008">010-7363-1008</a>
+              도로공사 경력 40년 이상의 기술진이 직접 시공하며, 서울·경기부터 지방 현장까지 전국 시공합니다.
             </p>
-            <a class="btn btn-theme btn-radius" href="about.html">회사 소개</a>
-            <a class="btn btn-border btn-radius" href="contact.html">문의하기</a>
-            <p class="banner-links mb-0"><a href="files/taeyang_grooving_brochure.pdf" download="태양천_그루빙_공법소개서.pdf"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg> 공법 소개서 (PDF, A4 1장)</a></p>
+            <ul class="hero-points">
+              <li>지자체·도로관리기관</li>
+              <li>건설사·포장업체 하도급</li>
+              <li>골프장·아파트 관리주체</li>
+              <li>현장 확인 후 무료 견적</li>
+            </ul>
+            <a class="btn btn-theme btn-radius" href="contact.html">시공 상담·견적 문의</a>
+            <a class="btn btn-border btn-radius" href="tel:01051522253"><svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg> 010-5152-2253</a>
+            <p class="banner-links mb-0"><a href="cases.html">현장 유형별 시공 사례</a><a href="files/taeyang_grooving_brochure.pdf" download="태양천_그루빙_공법소개서.pdf"><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg> 공법 소개서 (PDF, A4 1장)</a></p>
           </div>
         </div>
       </div>
