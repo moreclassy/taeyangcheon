@@ -26,10 +26,9 @@
     '</div>';
   }
 
+  // 현재 선택된 필터(전체/보유장비/그루빙 시공)를 새로 그린 항목에도 적용 (theme-script.js 의 applyGalleryFilter)
   function relayout($grid) {
-    if (!$.fn.isotope || !$grid.data('isotope')) return; // 아직 isotope 초기화 전이면 초기화 시점에 반영됨
-    var filter = $('.portfolio-filter .is-checked').attr('data-filter') || '*';
-    $grid.isotope('reloadItems').isotope({ filter: filter });
+    if (typeof window.applyGalleryFilter === 'function') window.applyGalleryFilter($grid);
   }
 
   $(function () {
@@ -42,13 +41,6 @@
       if (!res || !res.items || !res.items.length) return;
       $grid.html(res.items.map(itemHtml).join(''));
       relayout($grid);
-      var pending = 0;
-      $grid.find('img').each(function () {
-        if (this.complete) return;
-        pending++;
-        $(this).one('load error', function () { if (--pending === 0) relayout($grid); });
-      });
-      if (pending) setTimeout(function () { relayout($grid); }, 1500); // 일부 이벤트가 누락돼도 한 번 더
     });
   });
 })(jQuery);

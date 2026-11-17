@@ -42,7 +42,7 @@ SRC = ROOT / 'src'
 SITE = 'https://taeyang1000.com'
 
 # CSS/JS 를 수정하면 여기 버전을 올린다 (.htaccess 가 css/js 를 7일 캐시함)
-VERSION = '20261118b'
+VERSION = '20261118c'
 VERSION_OVERRIDE = {
 }
 
@@ -84,7 +84,6 @@ JS = {
     'owl-carousel': ['js/owl-carousel/owl.carousel.min.js'],
     'slit-slider': ['js/slit-slider/jquery.ba-cond.min.js', 'js/slit-slider/jquery.slitslider.js'],
     'jarallax': ['js/jarallax/jarallax.min.js'],
-    'isotope': ['js/isotope/isotope.pkgd.min.js'],
     'contact-form': ['js/contact-form/contact-form.js'],
     'theme-script': ['js/theme-script.js'],
     'gallery': ['js/gallery.js'],

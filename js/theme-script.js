@@ -222,43 +222,34 @@ function magnificpopup() {
 };
 
 /*------------------------------------
-  HT Isotope
+  HT Gallery filter
+  2026-11-18: Isotope(상용 라이선스 필요) 대신 직접 구현. 갤러리 사진이 모두 같은 크기의 정사각형이고
+  .grid 가 Bootstrap .row(flex-wrap) 라서 줄 배치는 CSS 만으로 같고, 필터는 .is-hidden 클래스로 숨긴다.
+  js/gallery.js 가 DB 에서 항목을 다시 그린 뒤 window.applyGalleryFilter() 로 현재 필터를 다시 적용한다.
 --------------------------------------*/
-function isotope() {
-  if (!$.fn.isotope || !$('.grid').length) return;
-  // init Isotope
-  var $grid = $('.grid').isotope({
-    itemSelector: '.grid-item',
-    layoutMode: 'fitRows',
-  });
-  // filter functions
-  var filterFns = {
-    // show if number is greater than 50
-    numberGreaterThan50: function () {
-      var number = $(this).find('.number').text();
-      return parseInt(number, 10) > 50;
-    },
-    // show if name ends with -ium
-    ium: function () {
-      var name = $(this).find('.name').text();
-      return name.match(/ium$/);
-    }
-  };
-  // bind filter button click
-  $('.portfolio-filter').on('click', 'button', function () {
-    var filterValue = $(this).attr('data-filter');
-    // use filterFn if matches value
-    filterValue = filterFns[filterValue] || filterValue;
-    $grid.isotope({
-      filter: filterValue
+function applyGalleryFilter($grid) {
+  ($grid || $('.grid')).each(function () {
+    var $g = $(this);
+    var $filter = $g.closest('section, .container, body').find('.portfolio-filter').first();
+    var sel = $filter.find('.is-checked').attr('data-filter') || '';
+    $g.children('.grid-item').each(function () {
+      $(this).toggleClass('is-hidden', sel !== '' && sel !== '*' && !$(this).is(sel));
     });
   });
-  // change is-checked class on buttons
-  $('.portfolio-filter').each(function (i, buttonGroup) {
-    var $buttonGroup = $(buttonGroup);
-    $buttonGroup.on('click', 'button', function () {
-      $buttonGroup.find('.is-checked').removeClass('is-checked');
-      $(this).addClass('is-checked');
+}
+window.applyGalleryFilter = applyGalleryFilter;
+
+function galleryfilter() {
+  $('.portfolio-filter').each(function () {
+    var $filter = $(this);
+    var $grid = $filter.closest('section, .container, body').find('.grid').first();
+    $filter.find('button').each(function () {
+      this.setAttribute('aria-pressed', $(this).hasClass('is-checked') ? 'true' : 'false');
+    });
+    $filter.on('click', 'button', function () {
+      $filter.find('button').removeClass('is-checked').attr('aria-pressed', 'false');
+      $(this).addClass('is-checked').attr('aria-pressed', 'true');
+      applyGalleryFilter($grid);
     });
   });
 };
@@ -416,28 +407,6 @@ function progressbar() {
 };
 
 /*------------------------------------
-  HT Masonry
---------------------------------------*/
-function masonry() {
-  var $masonry = $('.masonry'),
-    $itemElement = '.masonry-brick',
-    $filters = $('.portfolio-filter');
-  if ($masonry.exists() && $.fn.isotope) {
-    $masonry.isotope({
-      resizable: true,
-      itemSelector: $itemElement,
-    });
-    // bind filter button click
-    $filters.on('click', 'button', function () {
-      var filterValue = $(this).attr('data-filter');
-      $masonry.isotope({
-        filter: filterValue
-      });
-    });
-  }
-};
-
-/*------------------------------------
   HT Countdown
 --------------------------------------*/
 function countdown() {
@@ -477,6 +446,7 @@ $(document).ready(function () {
   counter(),
   lightgallery(),
   magnificpopup(),
+  galleryfilter(),
   scrolltop(),
   fxheader(),
   databgcolor(),
@@ -490,9 +460,4 @@ $(document).ready(function () {
 
 $window.resize(function () {
   fullScreen();
-});
-
-$(window).on('load', function () {
-  isotope(),
-  masonry();
 });
