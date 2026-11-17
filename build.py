@@ -5,7 +5,10 @@ src/pages/*.html (본문 + 메타 블록) 과 src/partials/*.html (head / header
 레포 루트의 *.html 을 생성한다. 헤더·푸터·네비게이션·CSS/JS 버전은 여기와 partials 한 곳에서만 관리한다.
 
     python3 build.py           # 전체 페이지 생성
-    python3 build.py --check   # 생성 결과가 현재 루트 HTML 과 다르면 종료 코드 1 (커밋 전 확인용)
+    python3 build.py --check   # 생성 결과가 현재 루트 HTML 과 다르거나 sitemap lastmod 가 내용과 안 맞으면 종료 코드 1 (커밋 전 확인용)
+
+sitemap.xml 의 <lastmod> 는 페이지 고유 내용(title·description·head-extra·본문)이 바뀐 날짜만 반영한다.
+공통 헤더·푸터·CTA·CSS/JS 버전만 바뀐 경우에는 그대로 둔다. 기준값은 src/sitemap-lastmod.json.
 
 페이지 소스 형식 (src/pages/about.html):
 
@@ -27,6 +30,7 @@ src/pages/*.html (본문 + 메타 블록) 과 src/partials/*.html (head / header
     ... 본문: <!--header end--> 와 <!--footer start--> 사이에 들어갈 HTML ...
 """
 import datetime
+import hashlib
 import html
 import json
 import re
@@ -100,6 +104,7 @@ NAV = [
 ]
 
 SITEMAP = ROOT / 'sitemap.xml'
+LASTMOD_STATE = SRC / 'sitemap-lastmod.json'  # 페이지별 내용 해시 + lastmod (sitemap_lastmods 참고)
 
 META_RE = re.compile(r'^<!--page\n(.*?)\n-->\n?', re.S)
 # 본문 아코디언(FAQ) → FAQPage 구조화 데이터 자동 생성용
@@ -195,20 +200,54 @@ def render_faq(body: str) -> str:
     return '<script type="application/ld+json">\n' + json.dumps(data, ensure_ascii=False, indent=1) + '\n</script>'
 
 
-def update_sitemap(changed: list):
-    """이번 빌드에서 다시 생성된 페이지의 <lastmod> 를 오늘 날짜로 갱신한다. (noindex 페이지는 호출 전에 제외)"""
-    if not changed or not SITEMAP.exists():
-        return
+def content_hash(src_path: Path) -> str:
+    """페이지 고유 내용(title·description·head-extra·본문)의 해시. 공통 헤더·푸터·CTA·CSS/JS 버전은 넣지 않는다.
+    공백 차이(들여쓰기 정리 등)는 무시한다."""
+    meta, extra, body = parse_page(src_path.read_text(encoding='utf-8'))
+    parts = [meta.get('title', ''), meta.get('description', ''), extra, body]
+    norm = '\x00'.join(re.sub(r'\s+', ' ', p).strip() for p in parts)
+    return hashlib.sha256(norm.encode('utf-8')).hexdigest()[:16]
+
+
+def sitemap_lastmods(pages: list, write: bool):
+    """sitemap.xml 의 <lastmod> 를 페이지 고유 내용이 바뀐 날로 맞춘다.
+    src/sitemap-lastmod.json 에 페이지별 {hash, lastmod} 를 저장해 두고, 해시가 달라진 페이지만 오늘 날짜로 바꾼다.
+    (푸터 링크 하나만 고쳐도 전 페이지 lastmod 가 바뀌면 구글이 lastmod 를 믿지 않게 되므로)
+    write=False(--check) 이면 아무것도 쓰지 않고 맞지 않는 페이지 이름 목록을 돌려준다."""
+    state = json.loads(LASTMOD_STATE.read_text(encoding='utf-8')) if LASTMOD_STATE.exists() else {}
     today = datetime.date.today().isoformat()
-    text = SITEMAP.read_text(encoding='utf-8')
-    for name in changed:
+    text = SITEMAP.read_text(encoding='utf-8') if SITEMAP.exists() else ''
+    stale, bumped = [], []
+    for src_path in pages:
+        name = src_path.name
+        if is_noindex(src_path):
+            state.pop(name, None)
+            continue
+        h = content_hash(src_path)
+        entry = state.get(name)
+        if not entry or entry.get('hash') != h:
+            stale.append(name)
+            entry = {'hash': h, 'lastmod': today}
+            state[name] = entry
+            bumped.append(name)
         loc = SITE + '/' + ('' if name == 'index.html' else name)
-        pat = re.compile(r'(<loc>' + re.escape(loc) + r'</loc><lastmod>)[^<]*(</lastmod>)')
-        text, n = pat.subn(lambda m: m.group(1) + today + m.group(2), text)
-        if n == 0:
+        pat = re.compile(r'(<loc>' + re.escape(loc) + r'</loc><lastmod>)([^<]*)(</lastmod>)')
+        m = pat.search(text)
+        if not m:
             print(f'경고: sitemap.xml 에 {loc} 항목이 없습니다')
-    SITEMAP.write_text(text, encoding='utf-8')
-    print(f'sitemap.xml lastmod 갱신 ({today}): ' + ', '.join(changed))
+            continue
+        if m.group(2) != entry['lastmod']:
+            if name not in stale:
+                stale.append(name)
+            text = text[:m.start(2)] + entry['lastmod'] + text[m.end(2):]
+    if not write:
+        return stale
+    LASTMOD_STATE.write_text(json.dumps(dict(sorted(state.items())), ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+    if text:
+        SITEMAP.write_text(text, encoding='utf-8')
+    if bumped:
+        print(f'sitemap.xml lastmod 갱신 ({today}): ' + ', '.join(bumped))
+    return stale
 
 
 ABS_RE = re.compile(r'((?:href|src|data-bg-img)=")(?!https?:|/|#|mailto:|tel:|data:)([^"]+")')
@@ -308,12 +347,17 @@ def main(argv):
         else:
             print(f'변경 없음: {out_path.name}')
     if check:
-        if stale:
-            print('빌드 결과와 다른 파일: ' + ', '.join(stale) + '  → python3 build.py 실행')
+        stale_lastmod = sitemap_lastmods(pages, write=False)
+        if stale_lastmod:
+            print('sitemap lastmod 가 내용과 맞지 않는 페이지: ' + ', '.join(stale_lastmod))
+        if stale or stale_lastmod:
+            if stale:
+                print('빌드 결과와 다른 파일: ' + ', '.join(stale))
+            print('→ python3 build.py 실행')
             return 1
         print('모든 페이지가 최신 상태입니다')
     else:
-        update_sitemap([n for n in changed if not is_noindex(SRC / 'pages' / n)])
+        sitemap_lastmods(pages, write=True)
     return 0
 
 
