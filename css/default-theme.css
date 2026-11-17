@@ -369,6 +369,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .footer-links a:hover{color:#ffffff;}
 .footer-biz{text-align:center; color:#aaaaaa; font-size:13px; margin:0;}
 .footer-biz span + span::before{content:"·"; margin:0 8px; color:#666;}
+.footer-biz a.footer-privacy{color:#ffffff; font-weight:700;}
+.footer-biz a.footer-privacy:hover{color:#f9a305;}
 .footer-social{text-align:center;}
 @media (max-width:767px){.footer-contact-list{flex-direction:column; align-items:flex-start; max-width:360px; margin-left:auto; margin-right:auto;} .footer-biz span{display:block;} .footer-biz span + span::before{display:none;}}
 

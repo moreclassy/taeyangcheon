@@ -34,12 +34,22 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
 <!-- inject css start -->
-<link href="css/bootstrap.min.css?v=20260927" rel="stylesheet" type="text/css" />
-<link href="css/base.css?v=20260927" rel="stylesheet" type="text/css" />
-<link href="css/shortcodes.css?v=20260927" rel="stylesheet" type="text/css" />
-<link href="css/default-theme.css?v=20260927" rel="stylesheet" type="text/css" />
-<link href="css/responsive.css?v=20260927" rel="stylesheet" type="text/css" />
+<link href="css/bootstrap.min.css?v=20261118" rel="stylesheet" type="text/css" />
+<link href="css/base.css?v=20261118" rel="stylesheet" type="text/css" />
+<link href="css/shortcodes.css?v=20261118" rel="stylesheet" type="text/css" />
+<link href="css/default-theme.css?v=20261118" rel="stylesheet" type="text/css" />
+<link href="css/responsive.css?v=20261118" rel="stylesheet" type="text/css" />
 <!-- inject css end -->
+
+<style>
+.privacy-summary{background:#f6f6f6; border:1px solid #e3e3e3; border-radius:4px; padding:12px 14px; font-size:13px; color:#444; margin-bottom:10px;}
+.privacy-summary strong{display:block; font-size:14px; color:#282925; margin-bottom:4px;}
+.privacy-summary ul{padding-left:18px; margin:0 0 6px;}
+.privacy-summary li{line-height:1.6;}
+.privacy-summary a{font-weight:600;}
+.contact-main label.consent-check{display:flex; align-items:center; gap:8px; font-size:15px; cursor:pointer; margin-bottom:0;}
+.consent-check input{width:20px; height:20px; flex:0 0 20px; margin:0; accent-color:#a66800;}
+</style>
 
 <!-- Google Analytics 4 (측정 ID는 js/analytics.js 에서 설정). defer: 렌더링을 막지 않음 -->
 <script src="js/analytics.js?v=20261118" defer></script>
@@ -252,6 +262,20 @@
                 <textarea id="form_message" name="message" class="form-control" placeholder="예) 아파트 지하주차장 진입 램프 2곳, 길이 약 30m입니다. 비 오는 날 미끄럼 사고가 잦아 그루빙을 검토하고 있습니다." rows="4" required="required" data-error="문의내용을 입력해주세요."></textarea>
                 <div class="help-block with-errors"></div>
               </div>
+              <div class="form-group privacy-consent">
+                <div class="privacy-summary" id="privacy-summary">
+                  <strong>개인정보 수집·이용 안내</strong>
+                  <ul>
+                    <li>수집 항목: 이름·전화번호·현장 유형·문의내용(필수), 문의 목적·소속·이메일·현장 위치·포장 종류·규모·희망 시기(선택), 접속 IP</li>
+                    <li>이용 목적: 문의 확인·연락·견적 상담, 스팸 방지</li>
+                    <li>보유 기간: 문의 처리 완료 후 1년</li>
+                    <li>동의하지 않으셔도 되지만, 그 경우 온라인 문의는 접수되지 않습니다(전화 문의는 가능).</li>
+                  </ul>
+                  <a href="privacy.html" target="_blank" rel="noopener">개인정보처리방침 전문 보기</a>
+                </div>
+                <label class="consent-check" for="form_privacy"><input id="form_privacy" type="checkbox" name="privacy" value="1" required="required" aria-describedby="privacy-summary" data-error="개인정보 수집·이용에 동의해주세요."> 위 개인정보 수집·이용에 동의합니다.<span class="req" aria-hidden="true">*</span></label>
+                <div class="help-block with-errors"></div>
+              </div>
               <div class="hp-field" aria-hidden="true"><label for="form_website">홈페이지</label><input id="form_website" type="text" name="website" tabindex="-1" autocomplete="off" data-validate="false"></div>
               <p class="form-note"><span class="req" aria-hidden="true">*</span> 표시는 필수 항목입니다. 현장 사진이 있으면 접수 후 연락드릴 때 문자나 이메일로 보내주세요.</p>
               <button type="submit" class="btn btn-theme btn-radius btn-submit"><span>문의 보내기</span></button>
@@ -349,7 +373,7 @@
         <li><a href="files/taeyang_grooving_brochure.pdf" download="태양천_그루빙_공법소개서.pdf">공법 소개서 (PDF)</a></li>
       </ul>
 
-      <p class="footer-biz"><span>상호: 태양천 그루빙 (개인사업자)</span><span>대표: 김병하</span><span>사업자등록번호: 575-59-00157</span><span>설립: 2017년 10월</span></p>
+      <p class="footer-biz"><span>상호: 태양천 그루빙 (개인사업자)</span><span>대표: 김병하</span><span>사업자등록번호: 575-59-00157</span><span>설립: 2017년 10월</span><span><a class="footer-privacy" href="privacy.html">개인정보처리방침</a></span></p>
     </div>
   </div>
   <div class="secondary-footer">
@@ -386,12 +410,12 @@
 
 
 <!-- inject js start -->
-<script src="js/jquery.3.3.1.min.js?v=20260927"></script>
-<script src="js/popper.min.js?v=20260927"></script>
-<script src="js/bootstrap.min.js?v=20260927"></script>
-<script src="js/jarallax/jarallax.min.js?v=20260927"></script>
-<script src="js/contact-form/contact-form.js?v=20260927"></script>
-<script src="js/theme-script.js?v=20260927"></script>
+<script src="js/jquery.3.3.1.min.js?v=20261118"></script>
+<script src="js/popper.min.js?v=20261118"></script>
+<script src="js/bootstrap.min.js?v=20261118"></script>
+<script src="js/jarallax/jarallax.min.js?v=20261118"></script>
+<script src="js/contact-form/contact-form.js?v=20261118"></script>
+<script src="js/theme-script.js?v=20261118"></script>
 <!-- inject js end -->
 
 </body>
