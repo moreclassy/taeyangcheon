@@ -132,6 +132,7 @@ ssh taeyang 'PW=$(sed -n "s/.*'"'"'pass'"'"' => '"'"'\([^'"'"']*\)'"'"'.*/\1/p" 
 - 페이지별 `<title>`/`description`/canonical/OG 태그는 `src/pages/*.html` 메타 블록에서 채워지고 `build.py`가 생성. 페이지를 추가하면 메타 블록을 채우고 `sitemap.xml`에도 URL 추가
 - `build.py`는 다시 생성된 페이지의 `sitemap.xml` `<lastmod>`를 오늘 날짜로 자동 갱신하므로 배포 시 `sitemap.xml`도 함께 올릴 것. 본문에 아코디언(`.accordion`, 현재 `index.html`)이 있으면 질문·답변을 뽑아 FAQPage JSON-LD를 자동 생성함(답변 안의 `<a>` 링크는 제외). 문구는 HTML 한 곳만 고치면 됨 (2026-09-19)
 - `cases.html`(현장 유형별 시공 사례)은 `images/portfolio/field/` 사진을 앵커 `#school #curve #slope #busstop #golf #parking #harbor` 7개 섹션으로 묶은 정적 페이지. 페이지 전용 CSS는 `src/pages/cases.html`의 `<!--head-extra-->` 안 `<style>`. 갤러리 DB와 연동되지 않으므로 사례를 추가하려면 `src/pages/cases.html` 수정 후 빌드
+- `heating.html`(열선 홈파기, 2026-11-16): '열선 홈파기·열선홈파기·열선 커팅' 검색용 전용 페이지. 메뉴에는 없고(`nav: none`) 푸터 링크·메인 서비스 카드(첫 번째, 가로 슬라이드)·info `#heating`·cases `#parking`·index JSON-LD `hasOfferCatalog` 에서 연결. 문구는 '홈 커팅만 시공, 열선 포설·결선·전원 연결은 전기공사업체'로 범위를 한정함(전기공사업법 위험, `marketing/docs/사업확장_아이디어_2026-09-27.md` 4-4). 이 범위를 넓히는 문구(열선 시공·설치 등)는 넣지 말 것. 상담 링크는 `contact.html?type=other`(별도 site_type 키 없음)
 - 교통사고 통계 문구(`index.html` 아코디언, `about.html`)는 2024년 사망자 2,521명·10만 명당 5.3명, 2025년 2,549명 기준(2026-09-18 갱신). 매년 초 도로교통공단 발표 후 갱신
 - `.htaccess` 보안 헤더: HSTS(1년, includeSubDomains 없음), nosniff, X-Frame-Options SAMEORIGIN, Permissions-Policy. Referrer-Policy 는 정적 파일에만 걸어 `admin/index.php` 의 PHP 헤더와 충돌하지 않게 함
 - 로컬 미리보기: `.claude/launch.json`의 `static` (python http.server 8765). PHP(갤러리 API, 문의 폼)는 로컬에서 동작하지 않고 HTML 폴백만 보임
