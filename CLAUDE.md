@@ -29,6 +29,18 @@ ssh taeyang
 ssh -i qudgk02_key_20261118.pem qudgk02@taeyang1000.com
 ```
 
+## 운영 일정 (2026-11-18)
+
+Claude 데스크톱 앱의 예약 작업(`~/.claude/scheduled-tasks/`)으로 아래 점검이 자동 실행된다(앱이 켜져 있을 때, 꺼져 있었으면 다음 실행 때). 예약 작업은 점검·백업·보고만 하고 서버 설정 변경·배포·삭제는 하지 않는다.
+
+- **매월 1일 10:00** `taeyang-monthly-check`: 서버·DB 백업을 `backup/` 에 받음(SSH 접속을 겸해 30일 미접속 차단 방지), 주요 페이지 200·문의 폼 허니팟 200 확인, `~/csp-reports.log` 요약, SSH 키 만료까지 남은 날 표시. 오래된 백업은 지우지 않으므로 `backup/` 용량(달마다 약 110MB)은 사람이 가끔 정리
+- **매월, 사람이 할 일**: 휴대폰으로 문의 폼 실제 전송 1건(메일 도착·접수 확인 메일 확인), Search Console 색인·실적과 GA4 `generate_lead`·`phone_call` 확인
+- **2026-11-25 10:00** `taeyang-csp-gsc-check` (1회): CSP 기록을 보고 `Content-Security-Policy-Report-Only` → `Content-Security-Policy` 전환 가능 여부 판단(전환은 사람이 승인한 뒤), about·cases·contact·project 색인 여부 확인
+- **2026-12-11 10:00** `taeyang-ssh-key-renew` (1회): SSH 키(만료 2026-12-18) 재발급 알림. 재발급은 대표 본인인증 필요 → 새 pem 을 레포 루트에 두고 `~/.ssh/config` 의 `taeyang` IdentityFile·이 문서의 파일명·만료일 갱신. 다음 키부터는 만료 7일 전 1회 작업을 새로 만들 것
+- **매년 1월 15일 10:00** `taeyang-yearly-stats`: 도로교통공단 전년도 교통사고 통계 발표 확인 → `src/pages/index.html` 아코디언·`src/pages/about.html`·`marketing/brochure/brochure.html` 문구 갱신 초안(배포는 사람이 확인 후). 저작권 연도는 자동이라 할 일 없음
+- **2026-12 말, 사람이 판단**: DMARC 보고서(`contact@taeyang1000.com`, 메일 앱 POP3)에서 문의 폼 메일의 SPF 통과를 보고 `p=none` → `p=quarantine` 검토
+- **만료일**: SSH 키 2026-12-18, 호스팅 2029-02-22(**자동연장 꺼져 있음** → 2029-01 에 연장), 도메인 2029-03-11, SSL 은 카페24 자동 갱신
+
 ## 배포
 
 - 서버 웹 루트: `/home/hosting_users/qudgk02/www` (`~/www`)
