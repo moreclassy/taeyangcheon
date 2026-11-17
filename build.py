@@ -42,7 +42,7 @@ SRC = ROOT / 'src'
 SITE = 'https://taeyang1000.com'
 
 # CSS/JS 를 수정하면 여기 버전을 올린다 (.htaccess 가 css/js 를 7일 캐시함)
-VERSION = '20261118'
+VERSION = '20261118b'
 VERSION_OVERRIDE = {
 }
 
@@ -76,7 +76,7 @@ CSS_COMMON_BEFORE = ['bootstrap']  # 아이콘은 header.html 의 인라인 SVG 
 CSS_COMMON_AFTER = ['base', 'shortcodes', 'default-theme', 'responsive']
 
 JS = {
-    'jquery': ['js/jquery.3.3.1.min.js'],
+    'jquery': ['js/jquery.3.7.1.min.js'],  # 2026-11-18 3.3.1 → 3.7.1 (Bootstrap 4.6.2, Popper 1.16.1)
     'popper': ['js/popper.min.js'],
     'bootstrap': ['js/bootstrap.min.js'],
     'modernizr': ['js/modernizr.js'],

@@ -42,7 +42,7 @@ scp -r css js images taeyang:~/www/
 
 - `~/www/hosting_index.html`은 카페24 기본 파일이라 레포에 없음. 건드리지 않기
 - `.pem` 파일은 절대 커밋하지 않기
-- `backup/`은 서버 전체 백업 tarball 보관용 (`.gitignore`로 제외). 서버에는 레포에 없는 이미지가 있으므로 서버를 초기화하는 작업 전에는 항상 `ssh taeyang 'cd ~ && tar czf - www' > backup/www-backup-YYYYMMDD.tar.gz`로 받아둘 것
+- `backup/`은 서버 전체 백업 tarball 보관용 (`.gitignore`로 제외). 서버에는 레포에 없는 이미지가 있으므로 서버를 초기화하는 작업 전에는 항상 `ssh taeyang 'cd ~ && tar czf - www' > backup/www-backup-YYYYMMDD.tar.gz`로 받아둘 것 2026-11-18 백업: `backup/www-backup-20261118.tar.gz`(110MB) + DB `backup/db-backup-20261118.sql.gz`(mysqldump, 서버 안에서 config.php 비밀번호를 `MYSQL_PWD` 로 읽어 실행). DB 는 이때 처음 받음 → 갤러리·실적 초안을 고치기 전에는 같은 방식으로 다시 받을 것
 - macOS `tar`로 서버에 올리면 `._*` 메타파일이 함께 생기므로 `COPYFILE_DISABLE=1 tar ...`로 만들거나 업로드 후 `find ~/www -name '._*' -exec rm -f {} +`로 정리
 - 공통 CSS/JS(`css/default-theme.css`, `js/theme-script.js`)를 고치면 `build.py`의 `VERSION`/`VERSION_OVERRIDE`를 올리고 다시 빌드해야 방문자 브라우저 캐시가 갱신됨 (css/js 는 1년·immutable 캐시라 안 올리면 1년 동안 옛 파일이 보임). `js/analytics.js` 는 `head.html` 의 `?v=` 를 직접 올림
 - 서버 설정 파일 백업: `.htaccess` 를 바꿀 때는 서버에서 `cp ~/www/.htaccess ~/www/.htaccess.bak-YYYYMMDD` 후 올리고 바로 `curl -I` 로 200·301·404 를 확인 (2026-09-26 배포 전 사본 `~/www/.htaccess.bak-20260926`, 전체 백업 `backup/www-backup-20260926.tar.gz`)
@@ -119,7 +119,7 @@ ssh taeyang 'PW=$(sed -n "s/.*'"'"'pass'"'"' => '"'"'\([^'"'"']*\)'"'"'.*/\1/p" 
 
 ## 성능 / SEO 규칙 (2026-09-18)
 
-- 각 HTML은 실제로 쓰는 CSS/JS만 로드함 (페이지 메타의 `css:`/`js:` 목록. 예: slit-slider·modernizr는 `index.html`만, jarallax는 서브페이지만, contact-form은 `contact.html`만).
+- 각 HTML은 실제로 쓰는 CSS/JS만 로드함 (페이지 메타의 `css:`/`js:` 목록. 예: slit-slider·modernizr는 `index.html`만, jarallax는 서브페이지만, contact-form은 `contact.html`만). 라이브러리(2026-11-18): jQuery 3.7.1(`js/jquery.3.7.1.min.js`), Bootstrap 4.6.2(css/js), Popper 1.16.1 — npm 공식 패키지에서 가져와 sourceMappingURL 줄만 제거. 테마 원본 bootstrap.min.css 는 `.container` 최대 폭을 1140→1170px 로 고친 빌드였으므로 그 값과 4.6 의 아코디언 헤더 `margin-bottom:-1px` 무효화를 `css/default-theme.css` 끝에 둠(데스크톱·모바일 전 페이지 높이가 업데이트 전과 같음을 확인). Bootstrap 을 다시 바꿀 때 이 두 줄 유지
 - 아이콘(2026-09-26): FontAwesome·themify 아이콘 폰트와 animate.css 는 삭제. 화살표·전화·메일·PDF·메뉴·핀 아이콘은 `header.html` 맨 위 SVG 스프라이트(`<symbol id="i-phone">` 등)를 `<svg class="icon" aria-hidden="true"><use href="#i-phone"/></svg>` 로 씀. 새 아이콘은 스프라이트에 `<symbol>` 추가. 연락처·기술력 섹션의 `flaticon-*` 은 그대로(`fonts/Flaticon.woff`·`.ttf`만 남김)
 - 글꼴(2026-09-26): 웹폰트 없이 시스템 글꼴(`-apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', …`), `body{word-break:keep-all}`. Google Fonts @import 는 렌더 차단 0.9초라 제거 — 다시 넣지 말 것
 - 색(2026-09-26): 흰·회색 배경 위 글자·링크는 `#a66800`(대비 4.56:1), 주황(`#f9a305`) 배경 위 글자는 `#1d1d1d`, `#f9a305` 는 면·아이콘·어두운 배경 위 글자에만. 페이지마다 `<h1>` 은 본문 제목 하나(헤더 로고는 `span.logo-text`), 그 아래 h2 → h3 순서
@@ -140,4 +140,4 @@ ssh taeyang 'PW=$(sed -n "s/.*'"'"'pass'"'"' => '"'"'\([^'"'"']*\)'"'"'.*/\1/p" 
 - `.htaccess` 보안 헤더: HSTS(1년, includeSubDomains 없음), nosniff, X-Frame-Options SAMEORIGIN, Permissions-Policy. Referrer-Policy 는 정적 파일에만 걸어 `admin/index.php` 의 PHP 헤더와 충돌하지 않게 함 CSP 는 시험 단계(2026-11-18~): `.html` 에만 `Content-Security-Policy-Report-Only`, 위반은 `php/csp-report.php` → 웹 루트 밖 `~/csp-reports.log`(256KB 상한, `ssh taeyang 'tail ~/csp-reports.log'`). 1~2주 뒤 로그를 보고 헤더 이름을 `Content-Security-Policy` 로 바꿔 적용. 첫날 보고는 jarallax 의 `Function("return this")`(try/catch 안이라 차단돼도 동작 영향 없음)뿐. 디렉터리 목록은 서버 기본값이 이미 403 이라 `Options -Indexes` 는 넣지 않음(AllowOverride 제한 시 500 위험). 관리자 로그인 잠금은 IP별이 아닌 전체 잠금 유지(무차별 대입에 더 안전, 잠기면 SSH 로 해제). 2026-11-18 배포 전 사본 `~/www/.htaccess.bak-20261118`
 - 로컬 미리보기: `.claude/launch.json`의 `static` (python http.server 8765). PHP(갤러리 API, 문의 폼)는 로컬에서 동작하지 않고 HTML 폴백만 보임
 - `robots.txt` 는 `/php/` 를 막되 `Allow: /php/gallery/api.php`, `Allow: /php/gallery/records_api.php` 를 먼저 둠(갤러리·실적 JSON 을 검색엔진이 렌더링할 수 있게). `.htaccess` 는 `hosting_index.html`(카페24 기본 파일, 내부 호스트명 노출)을 mod_rewrite 로 403 처리 (2026-09-26)
-- 갤러리 DB 사진 제목 일부가 자모 분리(NFD) 한글로 들어가 있음(예전 macOS 파일명에서 복사). 검색에 불리하므로 관리자 화면에서 제목을 다시 입력하면 NFC 로 저장됨. `seed.php`·HTML 폴백은 2026-09-26 NFC 로 정리
+- 갤러리 DB 사진 제목 일부가 자모 분리(NFD) 한글로 들어가 있음(예전 macOS 파일명에서 복사). 검색에 불리하므로 관리자 화면에서 제목을 다시 입력하면 NFC 로 저장됨. `seed.php`·HTML 폴백은 2026-09-26 NFC 로 정리 → 2026-11-18 DB 에서 일괄 정리 완료(사진 16건 + 실적 초안 site_name 16건을 seed.php 제목으로, 오탈자 '콘트리트'·'횡작업' 포함). 남은 NFD 0건
