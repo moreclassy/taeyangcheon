@@ -12,7 +12,34 @@
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
-  window.gtag('config', GA4_ID);
+  // 네이버 파워링크 클릭은 주소에 n_media·n_keyword·n_query 가 붙어 오는데 GA4 는 이걸 몰라서
+  // 광고 클릭을 naver/organic·블로그 referral·direct 로 섞어 센다. 그래서 GA4 에 넘기는 주소에만
+  // utm 을 덧붙여 광고 유입으로 집계되게 한다 (방문자가 보는 주소는 그대로).
+  //  source naver / medium cpc(검색 결과) · display(블로그·카페 등 콘텐츠 지면)
+  //  campaign powerlink_search · powerlink_content · powerlink_partner(다음·빙 등) · powerlink(출처 모름)
+  //  term = 광고 키워드(n_keyword), content = 방문자가 실제 검색한 말(n_query, 있을 때만)
+  function powerlinkLocation() {
+    var q = location.search;
+    if (!/[?&]n_media=/.test(q) || /[?&]utm_source=/.test(q)) return '';
+    function param(k) {
+      var m = new RegExp('[?&]' + k + '=([^&#]*)').exec(q);
+      if (!m) return '';
+      try { return decodeURIComponent(m[1].replace(/\+/g, ' ')); } catch (e) { return m[1]; }
+    }
+    var ref = '';
+    try { ref = document.referrer ? new URL(document.referrer).hostname : ''; } catch (e) { ref = ''; }
+    var medium = 'cpc', campaign = 'powerlink';
+    if (/(^|\.)search\.naver\.com$/.test(ref)) campaign = 'powerlink_search';
+    else if (/(^|\.)naver\.com$/.test(ref)) { medium = 'display'; campaign = 'powerlink_content'; }
+    else if (ref && ref !== location.hostname) campaign = 'powerlink_partner';
+    var utm = ['utm_source=naver', 'utm_medium=' + medium, 'utm_campaign=' + campaign];
+    var kw = param('n_keyword'), sq = param('n_query');
+    if (kw) utm.push('utm_term=' + encodeURIComponent(kw));
+    if (sq) utm.push('utm_content=' + encodeURIComponent(sq));
+    return location.origin + location.pathname + q + '&' + utm.join('&') + location.hash;
+  }
+  var adLoc = powerlinkLocation();
+  window.gtag('config', GA4_ID, adLoc ? { page_location: adLoc } : {});
   // 링크가 화면의 어느 자리에 있는지 (GA4 맞춤 측정기준 button_location 으로 등록해 보고서에서 봄)
   var PLACES = [
     ['.topbar-link', '헤더 상단 연락처'],
